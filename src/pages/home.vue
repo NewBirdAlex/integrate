@@ -161,7 +161,7 @@
             jfdt
         },
         mounted(){
-
+            console.log(this.$route.path)
         }
     }
 
