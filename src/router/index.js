@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import VueRouterTitle from 'vue-router-title'
 
 const Home = () => import('../pages/Home.vue');//首页
 const List = () => import('../pages/list.vue');
@@ -25,21 +26,23 @@ const Love = () => import('../pages/love.vue');//组织架构
 const LoveRank = () => import('../pages/loveRank.vue');//组织架构
 
 Vue.use(Router);
-
-export default new Router({
+const router = new Router({
     routes: [
         {
             path: '/',
             name: '',
             component: Home,
             meta:{
-                title:'shoyerukou'
+                title:'我的首页'
             }
         },
         {
             path: '/home',
             name: 'Home',
-            component: Home
+            component: Home,
+            meta:{
+                title:'我的首页'
+            }
         },
         {
             path: '/loveRank',
@@ -119,7 +122,10 @@ export default new Router({
         {
             path: '/work',
             name: 'Work',
-            component: Work
+            component: Work,
+            meta:{
+                title:'工作台'
+            }
         },
         {
             path: '/praise',
@@ -148,3 +154,6 @@ export default new Router({
         }
     ]
 })
+Vue.use(VueRouterTitle,{router});
+
+export default router
