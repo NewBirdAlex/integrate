@@ -3,6 +3,7 @@
         <h3 class="marginTop">
             {{content}}<span class="gray">{{subWord}}</span>
             <span class="red" v-if="need">*</span>
+            <slot></slot>
         </h3>
     </div>
 </template>
