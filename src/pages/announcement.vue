@@ -8,6 +8,7 @@
                    :num='index'
                    :content="item.content"
                    :inpType="item.type"
+                   :selRange="item.selRange"
                    @getData="getData"
         ></InputComp>
         <showRange></showRange>
@@ -43,7 +44,8 @@
                         need: true,
                         ph: "请输入公告内容",
                         content: "",
-                        type: 'textarea'
+                        type: 'textarea',
+                        selRange:[]
                     }
                 ]
             }

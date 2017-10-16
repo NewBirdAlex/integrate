@@ -123,16 +123,7 @@
             }
         }
     }
-    .triangle-down {
-        width: 0;
-        height: 0;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 10px solid @gray;
-        display: inline-block;
-        vertical-align: middle;
 
-    }
     .icon-jin{color:#ffe157}
     .icon-tong{color:#d5e3eb}
     .icon-yin{color:#f0c789}

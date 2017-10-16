@@ -18,13 +18,13 @@
             <subTitle :content="'附加图片'" :subWord="'（6/9）'"></subTitle>
             <div class="paddingAll bgWhite">
                 <!--<vue-core-image-upload-->
-                        <!--class="btn btn-primary"-->
-                        <!--:crop="false"-->
-                        <!--@imageuploaded="imageuploaded"-->
-                        <!--@imagechanged="imagechanged"-->
-                        <!--:data="{}"-->
-                        <!--:max-file-size="5242880"-->
-                        <!--url="http://101.198.151.190/api/upload.php" >-->
+                <!--class="btn btn-primary"-->
+                <!--:crop="false"-->
+                <!--@imageuploaded="imageuploaded"-->
+                <!--@imagechanged="imagechanged"-->
+                <!--:data="{}"-->
+                <!--:max-file-size="5242880"-->
+                <!--url="http://101.198.151.190/api/upload.php" >-->
                 <!--</vue-core-image-upload>-->
 
                 <!--element ui-->
@@ -41,7 +41,7 @@
             </div>
             <div class="marginTop"></div>
 
-            <subTitle :content="'表扬员工'" :subWord="'(默认申请自己的，可帮其他同事申请)'" :need="true"></subTitle>
+            <subTitle :content="'申请人'" :subWord="'(默认申请自己的，可帮其他同事申请)'" :need="true"></subTitle>
 
             <choosePeople v-for="(item,index) in peopleList" :name="item.name"
                           :key="index" :point="item.point" :range="item.range"
@@ -54,7 +54,7 @@
             </subTitle>
 
             <div class="marginTop paddingAll bgWhite fs30 borderBottom" @click="showStaff=!showStaff">
-                <strong>选择其他员工</strong>
+                <strong>选择其他申请人</strong>
                 <span class="fr rightArrow"><i class="icon iconfont icon-xiala1 gray"></i></span>
             </div>
 
@@ -109,7 +109,7 @@
                 dialogVisible: false,
                 inputData: [
                     {
-                        title: "表扬标题",
+                        title: "审批标题",
                         need: true,
                         ph: "请输入内容",
                         content: "",
@@ -117,7 +117,7 @@
                         selRange:[80,90,100]
                     },
                     {
-                        title: "表扬标题",
+                        title: "审批内容",
                         need: true,
                         ph: "请输入内容",
                         content: "",
@@ -125,8 +125,8 @@
                         selRange:[]
                     },
                     {
-                        title: "表扬内容",
-                        need: false,
+                        title: "审批备注",
+                        need: true,
                         ph: "请输入内容",
                         content: "",
                         type: 'textarea',

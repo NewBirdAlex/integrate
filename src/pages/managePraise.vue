@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <div class=" wrap">
             <InputComp v-for="(item,index) in inputData" :key="index"
                        :conttitle="item.title"
@@ -11,20 +10,20 @@
                        :inpType="item.type"
                        :selRange="item.selRange"
                        @getData="getData(item)"
-                       v-if="index <3"
+                       v-if="index <2"
             ></InputComp>
             <div class="marginTop"></div>
 
             <subTitle :content="'附加图片'" :subWord="'（6/9）'"></subTitle>
             <div class="paddingAll bgWhite">
                 <!--<vue-core-image-upload-->
-                        <!--class="btn btn-primary"-->
-                        <!--:crop="false"-->
-                        <!--@imageuploaded="imageuploaded"-->
-                        <!--@imagechanged="imagechanged"-->
-                        <!--:data="{}"-->
-                        <!--:max-file-size="5242880"-->
-                        <!--url="http://101.198.151.190/api/upload.php" >-->
+                <!--class="btn btn-primary"-->
+                <!--:crop="false"-->
+                <!--@imageuploaded="imageuploaded"-->
+                <!--@imagechanged="imagechanged"-->
+                <!--:data="{}"-->
+                <!--:max-file-size="5242880"-->
+                <!--url="http://101.198.151.190/api/upload.php" >-->
                 <!--</vue-core-image-upload>-->
 
                 <!--element ui-->
@@ -70,8 +69,17 @@
                        :inpType="item.type"
                        :selRange="item.selRange"
                        @getData="getData(item)"
-                       v-if="index ==3"
+                       v-if="index ==2"
             ></InputComp>
+
+            <div class="paddingAll bgWhite fs30">
+                <strong>奖扣时间</strong>
+                <span class="fr">2017-09-28</span>
+            </div>
+            <div class="marginTop gray ex paddingAll">
+                (管理员可无限制对员工进行奖扣积分，选择时间则该积分计算对应
+                时间，不选择则积分属于当天，可用于纠正员工积分)
+            </div>
         </div>
         <div class="confBtn">确定</div>
     </div>
@@ -80,6 +88,9 @@
     @import "../assets/css/common.less";
     @import "../assets/font/font1/iconfont.css";
     .fs36{font-size: 0.36rem!important;}
+    .ex{
+        line-height: 0.4rem;
+    }
     h3 {
         .tac;
         padding: 0.26rem;
@@ -109,7 +120,7 @@
                 dialogVisible: false,
                 inputData: [
                     {
-                        title: "表扬标题",
+                        title: "奖扣标题",
                         need: true,
                         ph: "请输入内容",
                         content: "",
@@ -117,15 +128,7 @@
                         selRange:[80,90,100]
                     },
                     {
-                        title: "表扬标题",
-                        need: true,
-                        ph: "请输入内容",
-                        content: "",
-                        type: 'input',
-                        selRange:[]
-                    },
-                    {
-                        title: "表扬内容",
+                        title: "奖扣内容",
                         need: false,
                         ph: "请输入内容",
                         content: "",

@@ -8,12 +8,15 @@ const Upload = () => import('../pages/upload.vue');
 const Count = () => import('../pages/count.vue');
 const Record = () => import('../pages/record.vue');//申请记录
 const OrderDetail = () => import('../pages/orderDetail.vue');//订单详情
-const Praise = () => import('../pages/praise.vue');//申请积分
+const Praise = () => import('../pages/praise.vue');//领导表扬
+const ManagePraise = () => import('../pages/managePraise.vue');//管理奖扣
+const Apply = () => import('../pages/apply.vue');//管理奖扣
 const SpList = () => import('../pages/spList.vue');//审批列表
 const SpDetail = () => import('../pages/spDetail.vue');//审批
 const Work = () => import('../pages/work.vue');//工作台
 const PublicMission = () => import('../pages/publicMission.vue');//发布任务
 const Announcement = () => import('../pages/announcement.vue');//发布公告
+const AnnouncementList = () => import('../pages/announcementList.vue');//公告列表
 const Person = () => import('../pages/person.vue');//个人中心
 const Board = () => import('../pages/board.vue');//个人公告
 const Infor = () => import('../pages/infor.vue');//个人信息
@@ -22,8 +25,8 @@ const MissionList = () => import('../pages/missionList.vue');//我的任务
 const PersonalData = () => import('../pages/personalData.vue');//个人资料
 const ManageDiary = () => import('../pages/manageDiary.vue');//管理日记
 const Structure = () => import('../pages/structure.vue');//组织架构
-const Love = () => import('../pages/love.vue');//组织架构
-const LoveRank = () => import('../pages/loveRank.vue');//组织架构
+const Love = () => import('../pages/love.vue');//爱心点赞
+const LoveRank = () => import('../pages/loveRank.vue');//爱心点赞
 
 Vue.use(Router);
 const router = new Router({
@@ -42,6 +45,22 @@ const router = new Router({
             component: Home,
             meta:{
                 title:'我的首页'
+            }
+        },
+        {
+            path: '/managePraise',
+            name: 'ManagePraise',
+            component: ManagePraise,
+            meta:{
+                title:'管理奖扣'
+            }
+        },
+        {
+            path: '/apply',
+            name: 'Apply',
+            component: Apply,
+            meta:{
+                title:'积分申请'
             }
         },
         {
@@ -102,7 +121,18 @@ const router = new Router({
         {
             path: '/announcement',
             name: 'Announcement',
-            component: Announcement
+            component: Announcement,
+            meta:{
+                title:'发布公告'
+            }
+        },
+        {
+            path: '/announcementList',
+            name: 'AnnouncementList',
+            component: AnnouncementList,
+            meta:{
+                title:'企业公告'
+            }
         },
         {
             path: '/spList',

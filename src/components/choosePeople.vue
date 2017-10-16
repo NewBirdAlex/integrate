@@ -1,9 +1,7 @@
 <template>
     <div class=" wrap bgWhite">
         <div class="inner">
-            <!--<div class="op">-->
-                <!--<slot></slot>-->
-            <!--</div>-->
+
             <slot></slot>
             <img src="../assets/img/head.png" alt="">
             <span>{{name}}</span>
@@ -46,12 +44,7 @@
                 vertical-align: middle;
                 margin-right: 0.2rem;
             }
-            i{
-                font-size: 12px;
-                color: @gray;
-                margin-left: 0.2rem;
-                margin-right: 0.2rem;
-            }
+
         }
         select{
             position: absolute;
@@ -60,6 +53,12 @@
             width: 1px;
             height: 1px;
         }
+    }
+    .icon-xialakuangtishitubiao{
+        font-size: 12px;
+        color: @gray;
+        margin-left: 0.2rem;
+        margin-right: 0.2rem;
     }
 </style>
 <script>

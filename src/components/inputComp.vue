@@ -7,13 +7,12 @@
             </strong>
             <input type="text" :placeholder="note" @input="handleInput" v-if="inpType=='inputSelect'|| inpType=='input'" v-model="inpValue"  ref="input">
             <textarea name="" :placeholder="note" @input="handleInput" v-model="inpValue"  v-if="inpType=='textarea'" id="" cols="30" rows="10"></textarea>
-            <label :for="selId" class="fr" v-if="inpType=='inputSelect'"> <i class="icon iconfont icon-xiala1"></i></label>
+            <label :for="selId" class="fr" v-if="selRange.length"> <i class="icon iconfont icon-xiala1"></i></label>
+            <span class="fr" v-if="inpType=='select'">{{selValue}}</span>
         </div>
-        <select  name="" :id="selId" @change="getSelect" v-model="selValue">
-            <option value="aaaaaa">aaaaa</option>
-            <option value="bbbbbb">bbbbb</option>
-            <option value="ccccc">cccccc</option>
-            <option value="ddddd">ddddddd</option>
+
+        <select  name="" :id="selId" @change="getSelect" v-model="selValue" v-if="selRange.length">
+            <option :value="item" v-for="item in selRange">{{item}}</option>
         </select>
     </div>
 </template>
@@ -107,8 +106,8 @@
             }
         },
         mounted(){
+            if(this.selRange) this.selValue=this.selRange[0]
             this.inpValue = this.content;
-            console.log(this.inpType=='inputSelect')
         },
         props:{
             conttitle:{type:String},
@@ -116,7 +115,8 @@
             note:{type:String},
             content:{type:String},
             num:{type:Number},
-            inpType:{type:String}
+            inpType:{type:String},
+            selRange:{type:Array}
         }
     }
 </script>

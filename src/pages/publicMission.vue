@@ -8,6 +8,7 @@
                    :num='index'
                    :content="item.content"
                    :inpType="item.type"
+                   :selRange="item.selRange"
                    @getData="getData"
         ></InputComp>
         <showRange></showRange>
@@ -32,35 +33,40 @@
                         need: true,
                         ph: "请输入内容",
                         content: "任务类型固定为抢单任务",
-                        type: 'input'
+                        type: 'input',
+                        selRange:[]
                     },
                     {
                         title: "任务描述",
                         need: true,
                         ph: "请输入内容",
                         content: "请描述任务",
-                        type: 'textarea'
+                        type: 'textarea',
+                        selRange:[]
                     },
                     {
                         title: "积分类型",
                         need: true,
                         ph: "请输入内容",
                         content: "",
-                        type: 'inputSelect'
+                        type: 'inputSelect',
+                        selRange:[]
                     },
                     {
                         title: "任务积分",
                         need: true,
                         ph: "请输入内容",
                         content: "每人都会获得，积分为整数，如100",
-                        type: 'input'
+                        type: 'input',
+                        selRange:[]
                     },
                     {
                         title: "限制人数",
                         need: true,
                         ph: "请输入内容",
                         content: "请输入任务限制人数",
-                        type: 'input'
+                        type: 'input',
+                        selRange:[]
                     }
                 ]
             }

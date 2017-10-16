@@ -156,13 +156,13 @@
                         name:"管理奖扣",
                         icon:'icon-guanli',
                         color:'#50bee6',
-                        router:'/praise'
+                        router:'/managePraise'
                     },
                     {
                         name:"发布公告",
                         icon:'icon-gonggao',
                         color:'#fd8f64',
-                        router:'/praise'
+                        router:'/announcement'
                     }
                 ],
                 thirList:[
@@ -185,16 +185,16 @@
                         router:''
                     },
                     {
-                        name:"申报积分",
+                        name:"申请积分",
                         icon:'icon-daiban',
                         color:'#fe6973',
-                        router:''
+                        router:'apply'
                     },
                     {
                         name:"企业公告",
                         icon:'icon-gonggao1',
                         color:'#feaa3b',
-                        router:''
+                        router:'/announcementList'
                     },
                     {
                         name:"爱心点赞",

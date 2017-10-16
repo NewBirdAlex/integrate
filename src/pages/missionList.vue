@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="nav">
+        <div class="nav fs36" >
             <span v-for="item in idList" @click="selId(item)" :class="{'active':item.sel}">{{item.name}}</span>
         </div>
         <mt-tab-container v-model="active" swipeable>
