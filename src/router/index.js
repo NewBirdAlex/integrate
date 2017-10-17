@@ -3,9 +3,6 @@ import Router from 'vue-router'
 import VueRouterTitle from 'vue-router-title'
 
 const Home = () => import('../pages/Home.vue');//首页
-const List = () => import('../pages/list.vue');
-const Upload = () => import('../pages/upload.vue');
-const Count = () => import('../pages/count.vue');
 const Record = () => import('../pages/record.vue');//申请记录
 const OrderDetail = () => import('../pages/orderDetail.vue');//订单详情
 const Praise = () => import('../pages/praise.vue');//领导表扬
@@ -27,6 +24,9 @@ const ManageDiary = () => import('../pages/manageDiary.vue');//管理日记
 const Structure = () => import('../pages/structure.vue');//组织架构
 const Love = () => import('../pages/love.vue');//爱心点赞
 const LoveRank = () => import('../pages/loveRank.vue');//爱心点赞
+const Checkingin = () => import('../pages/checkingin.vue');//考勤
+const ClockIn = () => import('../pages/clockIn.vue');//打卡
+const CheckingRec = () => import('../pages/checkingRec.vue');//打卡记录
 
 Vue.use(Router);
 const router = new Router({
@@ -36,14 +36,41 @@ const router = new Router({
             name: '',
             component: Home,
             meta:{
+                navShow: true,
                 title:'我的首页'
             }
+        },
+        {
+            path: '/checkingin',
+            name: 'Checkingin',
+            component: Checkingin,
+            meta:{
+                navShow: false,
+                title:'考勤'
+            },
+            children:[
+                {
+                    path: '',
+                    redirect:'/checkingin/clockIn'
+                },
+                {
+                    path: '/checkingin/clockIn',
+                    name:'ClockIn',
+                    component: ClockIn
+                },
+                {
+                    path: '/checkingin/checkingRec',
+                    name:'CheckingRec',
+                    component: CheckingRec
+                }
+            ]
         },
         {
             path: '/home',
             name: 'Home',
             component: Home,
             meta:{
+                navShow: true,
                 title:'我的首页'
             }
         },
@@ -52,6 +79,7 @@ const router = new Router({
             name: 'ManagePraise',
             component: ManagePraise,
             meta:{
+                navShow: false,
                 title:'管理奖扣'
             }
         },
@@ -60,69 +88,115 @@ const router = new Router({
             name: 'Apply',
             component: Apply,
             meta:{
+                navShow: false,
                 title:'积分申请'
             }
         },
         {
             path: '/loveRank',
             name: 'LoveRank',
-            component: LoveRank
+            component: LoveRank,
+            meta:{
+                navShow: false,
+                title:'爱心点赞'
+            }
         },
         {
             path: '/love',
             name: 'Love',
-            component: Love
+            component: Love,
+            meta:{
+                navShow: false,
+                title:'爱心点赞'
+            }
         },
         {
             path: '/structure',
             name: 'Structure',
-            component: Structure
+            component: Structure,
+            meta:{
+                navShow: false,
+                title:'公司架构'
+            }
         },
         {
             path: '/manageDiary',
             name: 'ManageDiary',
-            component: ManageDiary
+            component: ManageDiary,
+            meta:{
+                navShow: false,
+                title:'管理日志'
+            }
         },
         {
             path: '/personalData',
             name: 'PersonalData',
-            component: PersonalData
+            component: PersonalData,
+            meta:{
+                navShow: false,
+                title:'个人信息'
+            }
         },
         {
             path: '/missionList',
             name: 'MissionList',
-            component: MissionList
+            component: MissionList,
+            meta:{
+                navShow: false,
+                title:'任务列表'
+            }
         },
         {
             path: '/baseInfor',
             name: 'BaseInfor',
-            component: BaseInfor
+            component: BaseInfor,
+            meta:{
+                navShow: false,
+                title:'个人信息'
+            }
         },
         {
             path: '/infor',
             name: 'Infor',
-            component: Infor
+            component: Infor,
+            meta:{
+                navShow: true,
+                title:'个人中心'
+            }
         },
         {
             path: '/board',
             name: 'Board',
-            component: Board
+            component: Board,
+            meta:{
+                navShow: true,
+                title:'积分榜'
+            }
         },
         {
             path: '/person',
             name: 'Person',
-            component: Person
+            component: Person,
+            meta:{
+                navShow: true,
+                title:'个人中心'
+            }
         },
         {
             path: '/publicMission',
             name: 'PublicMission',
-            component: PublicMission
+            component: PublicMission,
+            meta:{
+                navShow: false,
+                title:'发布任务'
+            }
         },
         {
             path: '/announcement',
             name: 'Announcement',
             component: Announcement,
             meta:{
+                navShow: false,
                 title:'发布公告'
             }
         },
@@ -131,56 +205,63 @@ const router = new Router({
             name: 'AnnouncementList',
             component: AnnouncementList,
             meta:{
+                navShow: false,
                 title:'企业公告'
             }
         },
         {
             path: '/spList',
             name: 'SpList',
-            component: SpList
+            component: SpList,
+            meta:{
+                navShow: false,
+                title:'审批列表'
+            }
         },
         {
             path: '/spDetail',
             name: 'SpDetail',
-            component: SpDetail
+            component: SpDetail,
+            meta:{
+                navShow: false,
+                title:'审批详情'
+            }
         },
         {
             path: '/record',
             name: 'Record',
-            component: Record
+            component: Record,
+            meta:{
+                navShow: false,
+                title:'审批日记'
+            }
         },
         {
             path: '/work',
             name: 'Work',
             component: Work,
             meta:{
+                navShow: true,
                 title:'工作台'
             }
         },
         {
             path: '/praise',
             name: 'Praise',
-            component: Praise
+            component: Praise,
+            meta:{
+                navShow: false,
+                title:'领导奖励'
+            }
         },
         {
             path: '/orderDetail',
             name: 'OrderDetail',
-            component: OrderDetail
-        },
-        {
-            path: "/list",
-            name: "list",
-            component: List
-        },
-        {
-            path: "/upload",
-            name: "upload",
-            component: Upload
-        },
-        {
-            path: "/count",
-            name: "count",
-            component: Count
+            component: OrderDetail,
+            meta:{
+                navShow: false,
+                title:'订单'
+            }
         }
     ]
 })

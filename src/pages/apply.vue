@@ -72,6 +72,42 @@
                        @getData="getData(item)"
                        v-if="index ==3"
             ></InputComp>
+            <!--审批人-->
+            <div class="marginTop">
+                <subTitle :content="'审批人'" :subWord="''" :need="true"></subTitle>
+                <div class="paddingAll overflow bgWhite tac fs28">
+                    <div class="spr overflow fl marginBottom" v-for="i in 4">
+                        <div class="ps fl">
+                            <img src="../assets/img/head.png" class="headPicture" alt="">
+                            <p class="marginTop">欧阳莉</p>
+                        </div>
+                        <div class="pt fl marginTop gray marginLeft marginRight">
+                            .......
+                        </div>
+                    </div>
+                    <div class="add fl" @click="markPerson('shenpi')">
+                        <i class="icon iconfont icon-jia gray"></i>
+                    </div>
+                </div>
+            </div>
+            <!--抄送-->
+            <div class="marginTop">
+                <subTitle :content="'抄送'" :subWord="''" :need="false"></subTitle>
+                <div class="paddingAll overflow bgWhite tac fs28">
+                    <div class="spr overflow fl marginBottom" v-for="i in 1">
+                        <div class="ps fl">
+                            <img src="../assets/img/head.png" class="headPicture" alt="">
+                            <p class="marginTop">欧阳莉</p>
+                        </div>
+                        <div class="pt fl marginTop gray marginLeft marginRight">
+                            .......
+                        </div>
+                    </div>
+                    <div class="add fl" @click="markPerson('chaosong')">
+                        <i class="icon iconfont icon-jia gray"></i>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="confBtn">确定</div>
     </div>
@@ -79,6 +115,14 @@
 <style scoped lang="less">
     @import "../assets/css/common.less";
     @import "../assets/font/font1/iconfont.css";
+    .add{
+        .border;
+        border-radius: 50%;
+        padding: 0.2rem;
+        i{
+            font-size: 0.5rem;
+        }
+    }
     .fs36{font-size: 0.36rem!important;}
     h3 {
         .tac;
@@ -175,6 +219,9 @@
             getData(event) {
                 console.log(event)
                 this.inputData[data.index].content = data.content;
+            },
+            markPerson(msg){
+                console.log(msg )
             },
             accept(data){
                 this.showStaff=!this.showStaff;

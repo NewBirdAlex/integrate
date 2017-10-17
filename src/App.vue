@@ -3,7 +3,7 @@
         <!--<img src="./assets/logo.png">-->
         <!--<h1>{{ msg }}</h1>-->
         <router-view></router-view>
-        <ul class="nav">
+        <ul class="nav" v-show="$route.meta.navShow">
             <li v-for="(item,index) in navList"
                          :key="index"
                          :class="{active:navIndex==index}"

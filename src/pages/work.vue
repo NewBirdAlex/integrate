@@ -170,7 +170,7 @@
                         name:"每天考勤",
                         icon:'icon-dingweikaoqin',
                         color:'#3da5d0',
-                        router:''
+                        router:'/checkingin'
                     },
                     {
                         name:"工作日志",
