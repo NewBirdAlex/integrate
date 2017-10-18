@@ -136,6 +136,8 @@
 </style>
 <script>
     import {MP} from '../lib/mp.js'
+
+    let timer = null;
     export default {
         data() {
             return {
@@ -151,11 +153,23 @@
             },
             openDate(){
                 this.$refs.picker.open();
+            },
+            countTime(){
+                //打卡时间
+                let that = this;
+
+                timer = setInterval(function () {
+                    let now = new Date();
+                    var time = now.getHours()+':'+now.getMinutes()+":"+now.getSeconds();
+                    that.time = time;
+                },1000)
             }
         },
         mounted(){
+
+            this.countTime();
+
             var _this = this;
-            console.log(1111)
             MP(_this.ak).then(BMap => {
                 //在此调用api
                 // 百度地图API功能
@@ -169,31 +183,10 @@
                     map.centerAndZoom(point,16);
                 },{enableHighAccuracy: true})
 
-
-
-                //关于状态码
-                //BMAP_STATUS_SUCCESS	检索成功。对应数值“0”。
-                //BMAP_STATUS_CITY_LIST	城市列表。对应数值“1”。
-                //BMAP_STATUS_UNKNOWN_LOCATION	位置结果未知。对应数值“2”。
-                //BMAP_STATUS_UNKNOWN_ROUTE	导航结果未知。对应数值“3”。
-                //BMAP_STATUS_INVALID_KEY	非法密钥。对应数值“4”。
-                //BMAP_STATUS_INVALID_REQUEST	非法请求。对应数值“5”。
-                //BMAP_STATUS_PERMISSION_DENIED	没有权限。对应数值“6”。(自 1.1 新增)
-                //BMAP_STATUS_SERVICE_UNAVAILABLE	服务不可用。对应数值“7”。(自 1.1 新增)
-                //BMAP_STATUS_TIMEOUT	超时。对应数值“8”。(自 1.1 新增)
             });
-
-
-            //打卡时间
-
-            let that = this;
-            setInterval(function () {
-                let now = new Date();
-                var time = now.getHours()+':'+now.getMinutes()+":"+now.getSeconds();
-                that.time = time;
-            },1000)
-
-
+        },
+        beforeDestroy(){
+            clearInterval(timer);
         }
     }
 </script>

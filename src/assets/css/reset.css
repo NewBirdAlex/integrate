@@ -56,3 +56,15 @@ body{
     padding-bottom: 1rem;
     background: #f8f8f8;
 }
+
+
+
+//漏掉的图标
+@font-face {
+    font-family: 'iconfont';  /* project id 445541 */
+    src: url('//at.alicdn.com/t/font_445541_7v45tukd81dfs9k9.eot');
+    src: url('//at.alicdn.com/t/font_445541_7v45tukd81dfs9k9.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_445541_7v45tukd81dfs9k9.woff') format('woff'),
+    url('//at.alicdn.com/t/font_445541_7v45tukd81dfs9k9.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_445541_7v45tukd81dfs9k9.svg#iconfont') format('svg');
+}

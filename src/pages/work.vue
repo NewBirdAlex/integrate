@@ -182,7 +182,7 @@
                         name:"悬赏任务",
                         icon:'icon-gongzuoribao',
                         color:'#feaa3b',
-                        router:''
+                        router:'/missionList'
                     },
                     {
                         name:"申请积分",
@@ -206,31 +206,31 @@
                         name:"积分申诉",
                         icon:'icon-shensuzhongxin',
                         color:'#cbefd5',
-                        router:''
+                        router:'/complain'
                     },
                     {
                         name:"自由奖扣",
                         icon:'icon-shensuzhongxin',
                         color:'#5bb3d3',
-                        router:''
+                        router:'/freePrize'
                     },
                     {
                         name:"经济哲学",
                         icon:'icon-kaohe',
                         color:'#8ddfb9',
-                        router:''
+                        router:'/philosophy'
                     },
                     {
                         name:"水平考核",
                         icon:'icon-kaohe',
                         color:'#78c7e3',
-                        router:''
+                        router:'/kpi'
                     },
                     {
                         name:"积分商城",
                         icon:'icon-lianmengkeyongjifen',
                         color:'#fa6e77',
-                        router:''
+                        router:'/shop'
                     },
                     {
                         name:"积分抽奖",

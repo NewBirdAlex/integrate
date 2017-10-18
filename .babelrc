@@ -1,5 +1,6 @@
 {
   "presets": [
+    ["es2015", { "modules": false }],
     [
       "env",
       {
@@ -15,6 +16,10 @@
         {
           "libraryName": "mint-ui",
           "style": true
+        },
+        {
+          "libraryName": "element-ui",
+          "styleLibraryName": "theme-default"
         }
       ]
     ]

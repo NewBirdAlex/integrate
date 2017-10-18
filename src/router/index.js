@@ -27,18 +27,20 @@ const LoveRank = () => import('../pages/loveRank.vue');//爱心点赞
 const Checkingin = () => import('../pages/checkingin.vue');//考勤
 const ClockIn = () => import('../pages/clockIn.vue');//打卡
 const CheckingRec = () => import('../pages/checkingRec.vue');//打卡记录
+const Complain = () => import('../pages/complain.vue');//积分申诉
+const FreePrize = () => import('../pages/freePrize.vue');//自由奖扣
+const Philosophy = () => import('../pages/philosophy.vue');//经济哲学
+const PhilosophyDetail = () => import('../pages/philosophyDetail.vue');//经济哲学详情
+const Kpi = () => import('../pages/kpi.vue');//水平考核
+const KpiDetail = () => import('../pages/kpiDetail.vue');//水平考核详情
+const Shop = () => import('../pages/shop.vue');//积分商城
 
 Vue.use(Router);
 const router = new Router({
     routes: [
         {
             path: '/',
-            name: '',
-            component: Home,
-            meta:{
-                navShow: true,
-                title:'我的首页'
-            }
+            redirect:'/home'
         },
         {
             path: '/checkingin',
@@ -72,6 +74,69 @@ const router = new Router({
             meta:{
                 navShow: true,
                 title:'我的首页'
+            }
+        },
+        {
+            path: '/shop',
+            name: 'Shop',
+            component: Shop,
+            meta:{
+                navShow: false,
+                title:'积分商城'
+            }
+        },
+        {
+            path: '/kpi',
+            name: 'Kpi',
+            component: Kpi,
+            meta:{
+                navShow: false,
+                title:'水平考核'
+            }
+        },
+        {
+            path: '/kpiDetail',
+            name: 'KpiDetail',
+            component: KpiDetail,
+            meta:{
+                navShow: false,
+                title:'水平考核'
+            }
+        },
+        {
+            path: '/philosophyDetail',
+            name: 'PhilosophyDetail',
+            component: PhilosophyDetail,
+            meta:{
+                navShow: false,
+                title:'详情'
+            }
+        },
+        {
+            path: '/philosophy',
+            name: 'Philosophy',
+            component: Philosophy,
+            meta:{
+                navShow: false,
+                title:'经济哲学'
+            }
+        },
+        {
+            path: '/freePrize',
+            name: 'FreePrize',
+            component: FreePrize,
+            meta:{
+                navShow: false,
+                title:'自由奖扣'
+            }
+        },
+        {
+            path: '/complain',
+            name: 'Complain',
+            component: Complain,
+            meta:{
+                navShow: false,
+                title:'积分申诉'
             }
         },
         {
