@@ -34,6 +34,7 @@ const PhilosophyDetail = () => import('../pages/philosophyDetail.vue');//经济�
 const Kpi = () => import('../pages/kpi.vue');//水平考核
 const KpiDetail = () => import('../pages/kpiDetail.vue');//水平考核详情
 const Shop = () => import('../pages/shop.vue');//积分商城
+const Product = () => import('../pages/product.vue');//商品
 
 Vue.use(Router);
 const router = new Router({
@@ -83,6 +84,15 @@ const router = new Router({
             meta:{
                 navShow: false,
                 title:'积分商城'
+            }
+        },
+        {
+            path: '/product',
+            name: 'Product',
+            component: Product,
+            meta:{
+                navShow: false,
+                title:'商品详情'
             }
         },
         {
