@@ -176,7 +176,7 @@
                         name:"工作日志",
                         icon:'icon-gongzuoribao',
                         color:'#84d76f',
-                        router:''
+                        router:'/workDiary'
                     },
                     {
                         name:"悬赏任务",

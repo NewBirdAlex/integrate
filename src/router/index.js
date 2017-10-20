@@ -37,6 +37,8 @@ const Shop = () => import('../pages/shop.vue');//积分商城
 const Product = () => import('../pages/product.vue');//商品
 const Exchange = () => import('../pages/exchange.vue');//员工兑换
 const ExchangeRec = () => import('../pages/exchangeRec.vue');//兑换记录
+const WorkDiary = () => import('../pages/workDiary.vue');//兑换记录
+const Menu = () => import('../pages/menu.vue');//兑换记录
 
 Vue.use(Router);
 const router = new Router({
@@ -47,7 +49,7 @@ const router = new Router({
         },
         {
             path: '/checkingin',
-            name: 'Checkingin',
+            // name: 'Checkingin',
             component: Checkingin,
             meta:{
                 navShow: false,
@@ -78,6 +80,26 @@ const router = new Router({
                 navShow: true,
                 title:'我的首页'
             }
+        },
+        {
+            path: '/workDiary',
+            // name: 'WorkDiary',
+            component: WorkDiary,
+            meta:{
+                navShow: false,
+                title:'工作日志'
+            },
+            children:[
+                {
+                    path:'',
+                    redirect:'/workDiary/menu'
+                },
+                {
+                    path:'/workDiary/menu',
+                    name: 'Menu',
+                    component: Menu
+                }
+            ]
         },
         {
             path: '/shop',
