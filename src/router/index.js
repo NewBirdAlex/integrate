@@ -35,6 +35,8 @@ const Kpi = () => import('../pages/kpi.vue');//水平考核
 const KpiDetail = () => import('../pages/kpiDetail.vue');//水平考核详情
 const Shop = () => import('../pages/shop.vue');//积分商城
 const Product = () => import('../pages/product.vue');//商品
+const Exchange = () => import('../pages/exchange.vue');//员工兑换
+const ExchangeRec = () => import('../pages/exchangeRec.vue');//兑换记录
 
 Vue.use(Router);
 const router = new Router({
@@ -84,6 +86,24 @@ const router = new Router({
             meta:{
                 navShow: false,
                 title:'积分商城'
+            }
+        },
+        {
+            path: '/exchange',
+            name: 'Exchange',
+            component: Exchange,
+            meta:{
+                navShow: false,
+                title:'兑换记录'
+            }
+        },
+        {
+            path: '/exchangeRec',
+            name: 'ExchangeRec',
+            component: ExchangeRec,
+            meta:{
+                navShow: false,
+                title:'兑换记录'
             }
         },
         {
