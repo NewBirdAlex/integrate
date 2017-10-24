@@ -121,6 +121,11 @@ const router = new Router({
                     meta:{
                         diaryNav:true
                     }
+                },
+                {
+                    path:'/workDiary/diaryCount',
+                    name: 'DiaryCount',
+                    component: DiaryCount
                 }
             ]
         },
