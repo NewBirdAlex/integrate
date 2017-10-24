@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <div class="showList bgWhite paddingAll" v-for="(item,index) in itemList" :key="index" :class="{'marginTop':index==2}" @click="go(item)">
+        <div class="showList bgWhite paddingAll fs30" v-for="(item,index) in itemList" :key="index" :class="{'marginTop':index==2}" @click="go(item)">
             {{item.name}}
             <span class="fr blue" v-if="item.right">{{item.right}}</span>
             <span class="fr rightArrow" v-if="!item.right">

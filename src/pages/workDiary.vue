@@ -3,28 +3,12 @@
 
         <router-view></router-view>
 
-        <ul class="bnav">
-            <router-link tag="li" to="/workDiary/menu">
+        <ul class="bnav" v-show="!$route.meta.diaryNav">
+            <router-link tag="li" v-for="(item,index) in navList" :key="index" active-class="blue" :to="item.path">
                 <span>
-                    <i class="icon iconfont icon-icon"></i><br>
-                    <span>写日记</span>
+                    <i class="icon iconfont " :class="item.icon"></i><br>
+                    <span>{{item.name}}</span>
                 </span>
-
-            </router-link>
-            <router-link tag="li" to="">
-                <span>
-                    <i class="icon iconfont icon-kan"></i><br>
-                    <span>看日记</span>
-                </span>
-
-            </router-link>
-            <router-link tag="li" to="">
-                <span>
-                    <i class="icon iconfont icon-tongji"></i>
-                    <br>
-                    <span>日记统计</span>
-                </span>
-
             </router-link>
         </ul>
     </div>
@@ -37,6 +21,7 @@
         left:0;
         width: 7.5rem;
         .overflow;
+        background: @grayBg;
         border-top: @border;
         .fs26;
         padding:0.1rem 0;
@@ -63,7 +48,23 @@
     export default {
         data() {
             return {
-
+                navList:[
+                    {
+                        path:'/workDiary/menu',
+                        icon:'icon-icon',
+                        name:"写日记"
+                    },
+                    {
+                        path:'/workDiary/watch',
+                        name:"看日记",
+                        icon:'icon-kan'
+                    },
+                    {
+                        path:'/workDiary/diaryCount',
+                        icon:'icon-tongji',
+                        name:"日记统计"
+                    }
+                ]
             }
         }
     }

@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="top  fs30 tac">
-            <span :class="{'active':chooseNum}" @click="change">今日考勤榜</span>
-            <span :class="{'active':!chooseNum}" @click="change">本月考勤榜</span>
+            <span :class="{'active':chooseNum}" @click="change">本日统计</span>
+            <span :class="{'active':!chooseNum}" @click="change">本月统计</span>
         </div>
 
         <div class="bgWhite paddingAll fs28 borderBottom">
@@ -12,22 +12,21 @@
                 <i class="icon iconfont icon-xiala1 "></i>
             </span>
         </div>
-        <!--今日考勤榜-->
+        <!--本日统计-->
         <div v-if="chooseNum">
-            <div class="list" v-for="i in 2">
+            <div class="list marginTop" v-for="i in 1">
                 <span class="left fl sg tac">{{i}}</span>
                 <div class="right fl">
                     <img src="../assets/img/head.png" class="headPicture fl marginRight"  alt="">
                     <div class="fl md">
                         <p class="fs30">我</p>
-                        <p class="gray fs28">正常上班</p>
+                        <div class="gray fs28">
+                            <span>发布日记：6</span>
+                            <span>累计点赞：800</span>
+                        </div>
                     </div>
-                    <div class="fl blue sg">
+                    <div class="fr blue sg marginRight">
                         588933
-                    </div>
-                    <div class="fr paddingRight tac">
-                        <p>10</p>
-                        <i class="icon iconfont icon-dianzanmw "></i>
                     </div>
                 </div>
             </div>
@@ -38,21 +37,20 @@
                         <img src="../assets/img/head.png" class="headPicture fl marginRight"  alt="">
                         <div class="fl md">
                             <p class="fs30">我</p>
-                            <p class="gray fs28">正常上班</p>
+                            <div class="gray fs28">
+                                <span>发布日记：6</span>
+                                <span>累计点赞：800</span>
+                            </div>
                         </div>
-                        <div class="fl blue sg">
+                        <div class="fr blue sg marginRight">
                             588933
-                        </div>
-                        <div class="fr paddingRight tac">
-                            <p>10</p>
-                            <i class="icon iconfont icon-dianzanmw "></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!--本月考勤榜-->
+        <!--本月统计-->
         <div v-if="!chooseNum">
             <div class="list rb" v-for="i in 7">
                 <span class="left fl sg tac">dd</span>
@@ -67,7 +65,7 @@
                     </div>
                     <div class="fr paddingRight tac">
                         <p>10</p>
-                        <i class="icon iconfont icon-dianzanmw "></i>
+                        <i class="icon iconfont icon-dianzanmw blue"></i>
                     </div>
                 </div>
             </div>

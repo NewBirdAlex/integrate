@@ -38,7 +38,11 @@ const Product = () => import('../pages/product.vue');//商品
 const Exchange = () => import('../pages/exchange.vue');//员工兑换
 const ExchangeRec = () => import('../pages/exchangeRec.vue');//兑换记录
 const WorkDiary = () => import('../pages/workDiary.vue');//兑换记录
-const Menu = () => import('../pages/menu.vue');//兑换记录
+const Menu = () => import('../pages/menu.vue');//写日志菜单
+const DiaryCount = () => import('../pages/diaryCount.vue');//日志统计
+const Watch = () => import('../pages/watch.vue');//看日记
+const Diary = () => import('../pages/diary.vue');//日记详情
+const Write = () => import('../pages/write.vue');//写日记
 
 Vue.use(Router);
 const router = new Router({
@@ -98,6 +102,25 @@ const router = new Router({
                     path:'/workDiary/menu',
                     name: 'Menu',
                     component: Menu
+                },
+
+                {
+                    path:'/workDiary/write',
+                    name: 'Write',
+                    component: Write
+                },
+                {
+                    path:'/workDiary/watch',
+                    name: 'Watch',
+                    component: Watch
+                },
+                {
+                    path:'/workDiary/diary',
+                    name: 'Diary',
+                    component: Diary,
+                    meta:{
+                        diaryNav:true
+                    }
                 }
             ]
         },

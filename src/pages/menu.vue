@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="overflow bgWhite" >
-            <div class="tac item" v-for=" (item,index) in list" :key="index">
+            <div class="tac item" v-for=" (item,index) in list" :key="index" @click="go">
                 <div class="crl" :style="{background:item.color}">
                     <i class="icon iconfont " :class="item.icon"></i>
                 </div>
@@ -73,6 +73,11 @@
                         color:'#f96f76'
                     },
                 ]
+            }
+        },
+        methods:{
+            go(){
+                this.$router.push('/workDiary/write')
             }
         }
     }
