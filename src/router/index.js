@@ -107,7 +107,10 @@ const router = new Router({
                 {
                     path:'/workDiary/write',
                     name: 'Write',
-                    component: Write
+                    component: Write,
+                    meta:{
+                        diaryNav:true
+                    }
                 },
                 {
                     path:'/workDiary/watch',

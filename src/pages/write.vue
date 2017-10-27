@@ -44,17 +44,22 @@
                     },
                     {
                         ph:'请填写文字',
-                        label:"今日完成工作",
+                        label:"未完成任务",
                         type:'input'
                     },
                     {
                         ph:'请填写文字',
-                        label:"今日完成工作",
+                        label:"工作情况总结",
                         type:'input'
                     },
                     {
                         ph:'请填写文字',
-                        label:"今日完成工作",
+                        label:"开发目标客户数量",
+                        type:'input'
+                    },
+                    {
+                        ph:'请填写文字',
+                        label:"审批备注*",
                         type:'textarea'
                     }
                 ]
