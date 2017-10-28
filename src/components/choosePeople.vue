@@ -18,7 +18,6 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-    @import "../assets/font/font1/iconfont.css";
     .wrap{
         position: relative;
         padding:0 0.2rem;

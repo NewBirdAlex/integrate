@@ -59,7 +59,7 @@ module.exports = {
     devServer: {
         historyApiFallback: true,
         noInfo: true,
-        host:'192.168.0.114',
+        // host:'192.168.0.114',
         port: 8085
     },
     performance: {
