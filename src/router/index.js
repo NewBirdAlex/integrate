@@ -43,7 +43,7 @@ const DiaryCount = () => import('../pages/diaryCount.vue');//日志统计
 const Watch = () => import('../pages/watch.vue');//看日记
 const Diary = () => import('../pages/diary.vue');//日记详情
 const Write = () => import('../pages/write.vue');//写日记
-const Lottery = () => import('../pages/lottery.vue');//写日记
+const Lottery = () => import('../pages/lottery.vue');//积分抽奖
 
 Vue.use(Router);
 const router = new Router({

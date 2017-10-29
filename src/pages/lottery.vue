@@ -33,9 +33,10 @@
                         <span class="rightArrow fr"><i class="icon iconfont icon-xiala1 fs30"></i></span>
                     </div>
                     <div class="roll">
-                        <div class="item fl tac fs28 bgWhite" v-for="i in 9" :class="{'midSpace': i==2||i==5||i==8}">
+                        <div class="item  tac fs28 bgWhite" v-for="(item,index) in priceList" :key="index" :class="{'midSpace':index==1||index==4||index==7}">
                             <img src="../assets/img/1.jpg" alt="">
-                            <p class="paddingAll">乐扣保温杯</p>
+                            <p class="paddingAll" @click="roll">乐扣保温杯</p>
+                            <div class="" :class="{'cover':item.light}"></div>
                         </div>
                     </div>
                 </div>
@@ -113,16 +114,29 @@
     }
 
     .roll{
-        padding: 0.3rem 0.1rem;
+        /*padding: 0.3rem 0.1rem;*/
+        padding:0.3rem 0;
+        .tac;
         .overflow;
         .item{
             margin-top: 0.2rem;
+            display: inline-block;
+            position: relative;
             img{
                 width: 2.1rem;
                 height: 2.1rem;
             }
             /*&:nth-child(2n+3){*/
             /*}*/
+            .cover{
+                position: absolute;
+                left:0;
+                top:0;
+                width: 100%;
+                height: 100%;
+                background: @yellow;
+                opacity: 0.6;
+            }
         }
         .midSpace{
             margin: 0.2rem 0.18rem;
@@ -131,10 +145,58 @@
     }
 </style>
 <script>
+    let timer = null;
     export default {
         data() {
             return {
+                rollArr:[0,1,2,5,8,7,6,3],
+                priceList:[
+                    {
+                        light:true
+                    },
+                    {
+                        light:false
+                    },
+                    {
+                        light:false
+                    },
+                    {
+                        light:false
+                    },
+                    {
+                        light:false
+                    },
+                    {
+                        light:false
+                    },
+                    {
+                        light:false
+                    },
+                    {
+                        light:false
+                    },
+                    {
+                        light:false
+                    }
+                ]
+            }
+        },
+        methods:{
+            roll(){
 
+                let num = 0;
+                let that = this;
+//                let rollArr = this.rollArr;
+
+                clearInterval(timer)
+                timer = setInterval(function(){
+
+                    that.priceList[that.rollArr[num]].light=false;
+                    num+=1;
+                    num>=that.rollArr.length?num=0:'';
+                    that.priceList[that.rollArr[num]].light=true;
+
+                },50)
             }
         }
     }

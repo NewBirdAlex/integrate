@@ -236,7 +236,7 @@
                         name:"积分抽奖",
                         icon:'icon-choujiang',
                         color:'#feaa3b',
-                        router:''
+                        router:'/lottery'
                     }
                 ]
             }
