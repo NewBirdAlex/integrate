@@ -44,6 +44,7 @@ const Watch = () => import('../pages/watch.vue');//看日记
 const Diary = () => import('../pages/diary.vue');//日记详情
 const Write = () => import('../pages/write.vue');//写日记
 const Lottery = () => import('../pages/lottery.vue');//积分抽奖
+const LotteryRec = () => import('../pages/lotteryRec.vue');//抽奖记录
 
 Vue.use(Router);
 const router = new Router({
@@ -84,6 +85,15 @@ const router = new Router({
             meta:{
                 navShow: false,
                 title:'积分抽奖'
+            }
+        },
+        {
+            path: '/lotteryRec',
+            name: 'LotteryRec',
+            component: LotteryRec,
+            meta:{
+                navShow: false,
+                title:'抽奖记录'
             }
         },
         {
