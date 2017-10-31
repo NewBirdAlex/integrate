@@ -39,7 +39,7 @@
                 <th>总分</th>
             </tr>
 
-            <tr >
+            <tr>
                 <td>6</td>
                 <td><img src="../assets/img/head.png" alt=""></td>
                 <td>欧阳诗</td>
@@ -47,11 +47,12 @@
                 <td>2000</td>
                 <td class="blue">2000</td>
             </tr>
-            <div style="height: 0.2rem">    </div>
+            <div style="height: 0.2rem"></div>
             <tr v-for="(i,index) in 12" @click="go">
                 <td>
                     <i v-if="index>=3">{{index}}</i>
-                    <i class="icon iconfont " :class="{'icon-jin':index==0,'icon-tong':index==1,'icon-yin':index==2}" v-if="index<3"></i>
+                    <i class="icon iconfont " :class="{'icon-jin':index==0,'icon-tong':index==1,'icon-yin':index==2}"
+                       v-if="index<3"></i>
                 </td>
                 <td><img src="../assets/img/head.png" alt=""></td>
                 <td>欧阳诗</td>
@@ -60,62 +61,97 @@
                 <td class="blue">2000</td>
             </tr>
         </table>
+
+        <!--loadmore-->
+        <div style="height: 10rem;overflow: scroll;">
+            <mt-loadmore
+                    :bottom-all-loaded="allLoaded "
+                         :bottom-method="loadBottom"
+                         ref="loadmore"
+            >
+                <ul>
+                    <li v-for="item in list">{{ item }}</li>
+                </ul>
+                <div slot="top" class="mint-loadmore-top">
+                    <span v-show="topStatus !== 'loading'" :class="{ 'rotate': topStatus === 'drop' }">↓</span>
+                    <span v-show="topStatus === 'loading'">Loading...</span>
+                </div>
+            </mt-loadmore>
+        </div>
+
+        <!--loadmore-->
+
     </div>
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-    .cbtn{
-        span{
+    /*loadmore*/
+    ul {
+        li {
+            .tac;
+            font-size: 0.4rem;
+            line-height: 0.4rem;
+            .paddingAll;
+            .borderBottom;
+        }
+    }
+
+    /*loadmore*/
+
+    .cbtn {
+        span {
             display: inline-block;
             width: 40%;
             line-height: 0.5rem;
             .border;
             .borderRadius;
-            margin:0.3rem;
+            margin: 0.3rem;
         }
     }
-    .option{
+
+    .option {
         position: absolute;
-        left:0;
-        top:0.8rem;
+        left: 0;
+        top: 0.8rem;
         width: 7.1rem;
         z-index: 10;
         .bgWhite;
         .paddingAll;
         overflow: hidden;
-        .subt{
+        .subt {
             line-height: 0.5rem;
             font-size: @fs30;
         }
-        .btn{
+        .btn {
             .fl;
-            padding:0.2rem 0.4rem;
+            padding: 0.2rem 0.4rem;
             .border;
-            margin:0.1rem 0.2rem;
-            &.active{
+            margin: 0.1rem 0.2rem;
+            &.active {
                 background: @blue;
-                color:white;
+                color: white;
             }
         }
     }
-    .search{
+
+    .search {
         .borderBottom;
 
         position: relative;
-        .left{
+        .left {
             width: 2rem;
             .fl;
             .tac;
             font-size: @fs30;
             padding-top: 0.1rem;
         }
-        .right{
+        .right {
             .fl;
             width: 5rem;
             text-indent: 1em;
-            padding:0.1rem 0;
+            padding: 0.1rem 0;
             .borderRadius;
-            input{
+            input {
                 margin-left: 0.2rem;
                 border: none;
                 outline: none;
@@ -123,28 +159,37 @@
         }
     }
 
-    .icon-jin{color:#ffe157}
-    .icon-tong{color:#d5e3eb}
-    .icon-yin{color:#f0c789}
-    table{
+    .icon-jin {
+        color: #ffe157
+    }
+
+    .icon-tong {
+        color: #d5e3eb
+    }
+
+    .icon-yin {
+        color: #f0c789
+    }
+
+    table {
         width: 100%;
         font-size: @fs30;
         .tac;
-        tr{
-            &:nth-child(2){
+        tr {
+            &:nth-child(2) {
                 margin-bottom: 0.2rem;
             }
-            .icon{
+            .icon {
                 font-size: 0.6rem;
             }
-            td,th{
-                padding:0.2rem 0;
+            td, th {
+                padding: 0.2rem 0;
 
             }
-            td{
+            td {
                 background: white;
                 border-bottom: @border;
-                img{
+                img {
                     width: 0.9rem;
                     height: 0.9rem;
                     border-radius: 50%;
@@ -158,11 +203,20 @@
     export default {
         data() {
             return {
-                showOption:false
+                showOption: false,
+                topStatus: '',
+                allLoaded:false,
+                list: [1, 2, 4, 5, 3, 3, 3, 33, 3, 3, 2, 3, 3, 2, 3, 23,3,21,23,2,3,23]
             }
         },
-        methods:{
-            go(){
+        methods: {
+            loadBottom(){
+                 // 加载更多数据
+                this.allLoaded = true;// 若数据已全部获取完毕
+                //                this.$refs.loadmore.onBottomLoaded();
+                console.log(3)
+            },
+            go() {
                 //路由跳转
                 this.$router.push('/infor')
             }

@@ -68,15 +68,42 @@
                 this.$router.push({path: item.router})
             }
         },
-        beforeRouteUpdate(to, from, next) {
-            let isBack = this.$router.isBack
-            if (isBack) {
-                this.transitionName = 'slide-right'
-            } else {
-                this.transitionName = 'slide-left'
+        watch:{
+            $route(to){
+                const noncePath = to.fullPath,
+                    format = JSON.stringify([noncePath])
+
+                const KEY = 'history'
+
+                let historyInd = -1, exist;
+
+                if(this.isInitial) {
+                    window.sessionStorage.setItem(KEY, '')
+                }
+                this.isInitial = false
+
+                exist = window.sessionStorage.getItem(KEY) ?
+                    JSON.parse(window.sessionStorage.getItem(KEY)) :
+                    window.sessionStorage.getItem(KEY);
+                console.log(exist)
+                if(!exist) {
+                    this.transitionName = 'slide-left'
+                    window.sessionStorage.setItem(KEY, format)
+                } else {
+                    if((historyInd = exist.indexOf(noncePath)) == -1) {
+                        exist.push(noncePath)
+                        this.transitionName = 'slide-left'
+                    } else {
+                        exist.splice(historyInd)
+                        this.transitionName = 'slide-right'
+                    }
+                    window.sessionStorage.setItem(KEY, JSON.stringify(exist))
+                }
+
             }
-            this.$router.isBack = false
-            next()
+        },
+        beforeRouteUpdate  (to, from, next) {
+
         }
     }
 </script>
