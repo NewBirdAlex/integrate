@@ -4,7 +4,7 @@
             <div class="subt">
                 <i class="icon iconfont icon-jifen1 blue"></i>
                 <span class="gray">积分动态</span>
-                <span class="fr"> 9 yue</span>
+                <span class="fr" @click="openPicker"> 9月</span>
             </div>
             <div class="paddingAll">
                 <div class="showdt" v-for="i in 3">
@@ -39,6 +39,15 @@
                 </div>
             </div>
         </div>
+
+        <mt-datetime-picker
+                v-model="pickerVisible"
+                type="date"
+                ref="picker"
+                year-format="{value} 年"
+                month-format="{value} 月"
+                date-format="{value} 日">
+        </mt-datetime-picker>
     </div>
 </template>
 <style scoped lang="less">
@@ -92,7 +101,14 @@
 <script>
     export default {
         data() {
-            return {}
+            return {
+                pickerVisible:''
+            }
+        },
+        methods:{
+            openPicker() {
+                this.$refs.picker.open();
+            }
         }
     }
 </script>

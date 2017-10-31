@@ -9,6 +9,7 @@ import "./assets/font/font2/iconfont.css"
 
 //reset css inport
 import './assets/css/reset.css'
+import './assets/css/animate.css'
 
 import './lib/adaptive'
 //element-ui -------------------------------------------------

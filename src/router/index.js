@@ -46,6 +46,11 @@ const Write = () => import('../pages/write.vue');//写日记
 const Lottery = () => import('../pages/lottery.vue');//积分抽奖
 const LotteryRec = () => import('../pages/lotteryRec.vue');//抽奖记录
 
+Router.prototype.goBack = function () {
+    this.isBack = true
+    window.history.go(-1)
+}
+
 Vue.use(Router);
 const router = new Router({
     routes: [
