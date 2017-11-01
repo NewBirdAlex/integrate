@@ -82,12 +82,12 @@
                     </p>
                 </div>
             </div>
-            <div class="subt">
+            <router-link tag="div" to="/lottery" class="subt">
                 <span class="blue">你有3个积分抽奖活动正在进行</span>
                 <span class="fr gray rightArrow">
                     <i class="icon iconfont icon-xiala1"></i>
                 </span>
-            </div>
+            </router-link>
         </div>
         <!--积分动态-->
 

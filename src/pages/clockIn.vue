@@ -6,15 +6,13 @@
         </div>
         <div class="bgWhite paddingAll overflow borderBottom">
             <img src="../assets/img/head.png" class="headPicture fl marginRight" alt="">
-            <div class="fl lh">
+            <div class="fl lh" style="padding-top: 0.1rem">
                 <p class="fs30"><strong>李晓露</strong></p>
                 <p class="fs28 gray">设计部</p>
             </div>
             <div class="fr tm" @click="openDate">
                 2012 10 38
-                <span class=" fr">
-                    <i class="icon iconfont icon-xiala1 "></i>
-                </span>
+                <i class="icon iconfont icon-xiala fs26"></i>
             </div>
         </div>
         <!--date-->
@@ -166,11 +164,11 @@
             }
         },
         mounted(){
-
             this.countTime();
 
             var _this = this;
-            MP(_this.ak).then(BMap => {
+            (MP(_this.ak).then(BMap => {
+                alert(1)
                 //在此调用api
                 // 百度地图API功能
                 var map = new BMap.Map("allmap");
@@ -183,7 +181,8 @@
                     map.centerAndZoom(point,16);
                 },{enableHighAccuracy: true})
 
-            });
+
+            }))();
         },
         beforeDestroy(){
             clearInterval(timer);

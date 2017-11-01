@@ -29,13 +29,13 @@
                 <span class=" ">总积分</span>
                 <span class="fr gray">20000</span>
             </div>
-            <div class="borderBottom paddingAll overflow  fs30">
+            <router-link tag="div" to='/baseInfor' class="borderBottom paddingAll overflow  fs30">
                 <span class=" ">基础积分</span>
                 <span class="rightArrow fr">
                    <i class="icon iconfont icon-xiala1"></i>
                 </span>
                 <span class="fr gray">80</span>
-            </div>
+            </router-link>
         </div>
     </div>
 </template>

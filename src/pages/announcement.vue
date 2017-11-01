@@ -11,7 +11,9 @@
                    :selRange="item.selRange"
                    @getData="getData"
         ></InputComp>
-        <showRange></showRange>
+
+        <showRange @getData="collectData"></showRange>
+
         <div class="confBtn">发布公告</div>
 
     </div>
@@ -53,6 +55,9 @@
         computed:{
         },
         methods: {
+            collectData(msg){
+                console.log(msg)
+            },
             getData(data) {
                 console.log(data);
                 this.inputData[data.index].content = data.content;

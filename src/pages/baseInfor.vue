@@ -5,16 +5,16 @@
             <p>我的基础信息</p>
             <p><span class="blue">基础积分：1000</span></p>
         </div>
-        <div class="paddingAll bgWhite fs30 borderBottom">
-            <i class="icon iconfont icon-zhiwei fs36"></i>
-            <strong>职位：总裁</strong>
+        <div class="paddingAll bgWhite fs30 borderBottom lh40">
+            <i class="icon iconfont icon-job fs36"></i>
+            <span>职位：总裁</span>
             <span class="fr">
                 +200
             </span>
         </div>
         <div class="paddingAll bgWhite fs30 borderBottom">
             <i class="icon iconfont icon-wujiaoxing fs36"></i>
-            <strong>职位星级</strong>
+            <span>职位星级</span>
             <span class="fs36">
                 <i class="icon iconfont icon-mg-star fs36" style="font-size: 0.5rem"></i>
                 <i class="icon iconfont icon-wujiaoxing fs36"></i>
@@ -29,7 +29,7 @@
         </div>
         <div class="paddingAll bgWhite marginTop fs30 borderBottom">
             <i class="icon iconfont icon-yuangongnianling fs36"></i>
-            <strong>工龄奖励</strong>
+            <span>工龄奖励</span>
             <span class="gray fs26">（入职时间：2014-06-08至今3年零3个月）</span>
         </div>
         <ul class="praise">
@@ -40,8 +40,8 @@
             <li><i></i>满5年奖励100分</li>
         </ul>
         <div class="paddingAll bgWhite fs30 borderBottom marginTop">
-            <i class="icon iconfont icon-xueli fs36"></i>
-            <strong>学历：本科</strong>
+            <i class="icon iconfont icon-education fs36"></i>
+            <span>学历：本科</span>
             <span class="fr">
                 +200
             </span>
@@ -49,14 +49,14 @@
         <div class="paddingLeft  borderBottom bgWhite overflow mulItem fs30">
             <div class="left paddingTop paddingBottom">
                 <i class="icon iconfont icon-zhicheng fs36"></i>
-                <strong>职称：</strong>
+                <span>职称：</span>
             </div>
             <div class="right">
                 <div class=" borderBottom paddingAll">
                     中级美导dddsdf
                     <span class="fr">+200分</span>
                 </div>
-                <div class=" borderBottom paddingAll">
+                <div class="  paddingAll">
                     中级美导dd
                     <span class="fr">+200分</span>
                 </div>
@@ -65,14 +65,14 @@
         <div class="paddingLeft  borderBottom bgWhite overflow mulItem fs30">
             <div class="left paddingTop paddingBottom">
                 <i class="icon iconfont icon-renwu1 fs36"></i>
-                <strong>荣誉：</strong>
+                <span>荣誉：</span>
             </div>
             <div class="right">
                 <div class=" borderBottom paddingAll">
                     优秀员工
                     <span class="fr">+200分</span>
                 </div>
-                <div class=" borderBottom paddingAll">
+                <div class="  paddingAll">
                     出色党员
                     <span class="fr">+200分</span>
                 </div>
@@ -81,14 +81,14 @@
         <div class="paddingLeft  borderBottom bgWhite overflow mulItem fs30">
             <div class="left paddingTop paddingBottom">
                 <i class="icon iconfont icon-techang fs36"></i>
-                <strong>特长：</strong>
+                <span>特长：</span>
             </div>
             <div class="right">
                 <div class=" borderBottom paddingAll">
                     唱歌d
                     <span class="fr">+200分</span>
                 </div>
-                <div class=" borderBottom paddingAll">
+                <div class="  paddingAll">
                     中级美导dd
                     <span class="fr">+200分</span>
                 </div>
