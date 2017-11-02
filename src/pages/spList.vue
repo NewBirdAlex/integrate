@@ -172,7 +172,6 @@
         line-height: 0.9rem;
         background: @grayBg;
         .tac;
-        font-size: @fs30;
         .borderBottom;
         position: relative;
         .filter{
@@ -181,7 +180,7 @@
             left:0;
             width: 100%;
             z-index: 100;
-            /*display: none;*/
+            .fs30;
             background: white;
             .sel_type{
                 .paddingAll;

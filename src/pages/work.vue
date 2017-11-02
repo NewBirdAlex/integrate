@@ -122,7 +122,7 @@
                 msg:"2sdfsdf",
                 aboutMe:[
                     {
-                        name:"积分日志",
+                        name:"审批日志",
                         num:"7",
                         router:'/record'
                     },{

@@ -51,7 +51,7 @@
                 <div class="ckbtn">
                     <p>下班打卡
                     </p>
-                    <p>{{time.h|addZero}}.{{time.m|addZero}}.{{time.s|addZero}}</p>
+                    <p>{{time.h|addZero}}:{{time.m|addZero}}:{{time.s|addZero}}</p>
                 </div>
             </div>
         </div>

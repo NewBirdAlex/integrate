@@ -53,13 +53,10 @@
                 <span class="fr marginRight"><i class="icon iconfont icon-gouxuan blue"></i></span>
             </subTitle>
 
-            <div class="marginTop paddingAll bgWhite fs30 borderBottom" @click="showStaff=!showStaff">
-                <strong>选择其他员工</strong>
-                <span class="fr rightArrow"><i class="icon iconfont icon-xiala1 gray"></i></span>
-            </div>
+
 
             <!--选择员工-->
-            <chooseStaff :showStaff="showStaff" @accept="accept"></chooseStaff>
+            <chooseStaff  @getData="accept"></chooseStaff>
 
             <InputComp v-for="(item,index) in inputData" :key="index"
                        :conttitle="item.title"
@@ -104,7 +101,6 @@
     export default {
         data() {
             return {
-                showStaff:false,
                 dialogImageUrl: '',
                 dialogVisible: false,
                 inputData: [

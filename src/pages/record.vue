@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3>审批日记</h3>
+        <!--<h3>审批日记</h3>-->
         <ul>
             <li v-for="item in list" class="bgWhite">
                 <div class="left"><img src="../assets/img/head.png" alt=""></div>
@@ -16,9 +16,6 @@
 <style scoped lang="less">
     @import "../assets/css/common.less";
 
-    body{
-        background: #fff;
-    }
     h3{
         .tac;
         padding:0.26rem;
