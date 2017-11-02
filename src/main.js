@@ -42,6 +42,16 @@ Vue.use(MintUI);
 // Vue.$toast = Vue.prototype.$toast = Toast;
 //mint-ui --------------------------------------------
 
+//overall  config
+import {config} from './lib/config'
+Vue.use(config)
+
+//过滤器
+import filters from './lib/filters'
+Object.keys(filters).forEach(key => Vue.filter(key, filters[key]));
+
+//过滤器
+
 new Vue({
     el: '#app',
     router,

@@ -35,12 +35,23 @@
             </div>
         </div>
         <div class="marginTop mpwrap">
-            <div id="allmap"></div>
+            <!--baidu map-->
+            <!--<div id="allmap"></div>-->
+            <baidu-map class="map" :ak="ak" :center="center" :zoom="zoom" @ready="handler">
+                <bm-geolocation
+                        anchor="BMAP_ANCHOR_BOTTOM_RIGHT"
+                        :showAddressBar="true"
+                        :autoLocation="true"
+                        @locationSuccess="getLocation"
+                >
+
+                </bm-geolocation>
+            </baidu-map>
             <div class="bwp">
                 <div class="ckbtn">
                     <p>下班打卡
                     </p>
-                    <p>{{time}}</p>
+                    <p>{{time.h|addZero}}.{{time.m|addZero}}.{{time.s|addZero}}</p>
                 </div>
             </div>
         </div>
@@ -48,6 +59,10 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
+    .map{
+        width: 100%;
+        height: 4rem;
+    }
     .tm{
         padding: 0.2rem;
         background-color: rgba(221, 241, 255, 1);
@@ -133,19 +148,37 @@
     }
 </style>
 <script>
-    import {MP} from '../lib/mp.js'
-
+//    import {MP} from '../lib/mp.js'
+    import {BaiduMap,BmGeolocation} from 'vue-baidu-map'
     let timer = null;
     export default {
         data() {
             return {
                 chooseNum:0,
                 ak:'jzbCq3Pg2pZ0wb2A5c6weIO62n2fdlh3',
+                center: {lng: 0, lat: 0},
+                zoom: 15,
                 pickerVisible:'',
-                time:''
+                time:{
+                    h:'',
+                    m:'',
+                    s:''
+                }
             }
         },
         methods:{
+            getLocation(point, AddressComponent){
+                console.log(point)
+                console.log(AddressComponent)
+            },
+            handler ({BMap, map}) {
+                let that = this;
+                console.log(BMap, map)
+                this.center.lng = 116.404
+                this.center.lat = 39.915
+                this.zoom = 15
+
+            },
             handleConfirm(msg){
                 console.log(msg)
             },
@@ -158,31 +191,33 @@
 
                 timer = setInterval(function () {
                     let now = new Date();
-                    var time = now.getHours()+':'+now.getMinutes()+":"+now.getSeconds();
-                    that.time = time;
+                    that.time.h=now.getHours();
+                    that.time.m=now.getMinutes();
+                    that.time.s=now.getSeconds();
                 },1000)
             }
+        },
+        components: {
+            BaiduMap,
+            BmGeolocation
         },
         mounted(){
             this.countTime();
 
-            var _this = this;
-            (MP(_this.ak).then(BMap => {
-                alert(1)
-                //在此调用api
-                // 百度地图API功能
-                var map = new BMap.Map("allmap");
-
-                var point = null;
-                //定位
-                var geolocation = new BMap.Geolocation();
-                geolocation.getCurrentPosition(function(r){
-                    point = new BMap.Point(r.point.lng,r.point.lat);
-                    map.centerAndZoom(point,16);
-                },{enableHighAccuracy: true})
-
-
-            }))();
+            //            var _this = this;
+            //            MP(_this.ak).then(BMap => {
+            //                //在此调用api
+            //                // 百度地图API功能
+            //                var map = new BMap.Map("allmap");
+            //
+            //                var point = null;
+            //                //定位
+//                            var geolocation = new BMap.Geolocation();
+//                            geolocation.getCurrentPosition(function(r){
+//                                point = new BMap.Point(r.point.lng,r.point.lat);
+//                                map.centerAndZoom(point,16);
+//                            },{enableHighAccuracy: true})
+            //            });
         },
         beforeDestroy(){
             clearInterval(timer);
