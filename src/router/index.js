@@ -45,6 +45,7 @@ const Diary = () => import('../pages/diary.vue');//日记详情
 const Write = () => import('../pages/write.vue');//写日记
 const Lottery = () => import('../pages/lottery.vue');//积分抽奖
 const LotteryRec = () => import('../pages/lotteryRec.vue');//抽奖记录
+const JfSelect = () => import('../pages/jfSelect.vue');//申請積分
 
 
 
@@ -96,6 +97,15 @@ const router = new Router({
             meta:{
                 navShow: false,
                 title:'抽奖记录'
+            }
+        },
+        {
+            path: '/jfSelect',
+            name: 'JfSelect',
+            component: JfSelect,
+            meta:{
+                navShow: false,
+                title:'申請積分'
             }
         },
         {

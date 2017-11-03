@@ -6,8 +6,8 @@
         <div class="paddingAll borderBottom">
             <span>您本月可用的爱心分：600分</span>
             <span class="fr">
-                <span class="marginRight"><i class="icon iconfont icon-liang-huangjin yellow fs36"></i> 10分</span>
-                <span><i class="icon iconfont icon-love red fs36"></i> 10分</span>
+                <span class="marginRight"><i class="icon iconfont icon-sun3 yellow fs36"></i> 10分</span>
+                <span><i class="icon iconfont icon-hongxin red fs36"></i> 1分</span>
             </span>
         </div>
 
@@ -22,19 +22,44 @@
                     </div>
                     <div class="fr  tac marginRight">
                         <p>6</p>
-                        <p><i class="icon iconfont icon-love gray"></i></p>
+                        <p><i class="icon iconfont icon-hongxin gray" @click="kissU"></i></p>
                     </div>
                     <div class="fr marginRight tac">
                         <p>6</p>
-                        <p><i class="icon iconfont icon-liang-huangjin yellow"></i></p>
+                        <p><i class="icon iconfont icon-sun3 yellow"></i></p>
                     </div>
                 </div>
             </div>
         </div>
+        <!--<transition-->
+                <!--name="custom-classes-transition"-->
+                <!--enter-active-class="animated zoomIn"-->
+                <!--leave-active-class="animated fadeOut"-->
+        <!--&gt;-->
+             <i class="icon iconfont icon-kiss red specilIcon" :class="{'activeIcon':clickHeart}" v-if="clickHeart"></i>
+        <!--</transition>-->
     </div>
 </template>
-<style scoped lang="less">
+<style  lang="less">
     @import "../assets/css/common.less";
+    .specilIcon{
+        position: absolute;
+        left:50%;
+        top:50%;
+        transform: translate(-50%,-50%);
+        font-size: 4rem;
+        /*animation-duration: 1s;*/
+        transition: all 1s;
+        /*animation: kiss 0s linear 1s infinite ;*/
+    }
+    .activeIcon{
+        /*transform: translate(-50%,-50%) scale(3)!important;*/
+        animation: kiss 1s linear 500ms 1 ;
+    }
+    @keyframes kiss {
+        0%{ transform: translate(-50%,-50%) scale(1);}
+        100%{transform: translate(-50%,-50%) scale(6);opacity: 0;}
+    }
     .yellow{color:#f5b739;}
     .red{color:#f55839;}
     i{vertical-align: middle}
@@ -66,10 +91,18 @@
     export default {
         data() {
             return {
-                showOption:false
+                showOption:false,
+                clickHeart:false
             }
         },
         methods:{
+            kissU(){
+                let that = this;
+                this.clickHeart=true;
+                let timer = null;
+                clearTimeout(timer);
+                setTimeout(()=>this.clickHeart=false,1000)
+            },
             getData(msg){
                 console.log(msg)
             }

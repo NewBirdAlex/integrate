@@ -174,13 +174,13 @@
                     },
                     {
                         name:"工作日志",
-                        icon:'icon-gongzuoribao',
+                        icon:'icon-rizhi',
                         color:'#84d76f',
                         router:'/workDiary'
                     },
                     {
                         name:"悬赏任务",
-                        icon:'icon-gongzuoribao',
+                        icon:'icon-renwuxuanshang',
                         color:'#feaa3b',
                         router:'/missionList'
                     },
@@ -188,7 +188,7 @@
                         name:"申请积分",
                         icon:'icon-daiban',
                         color:'#fe6973',
-                        router:'apply'
+                        router:'jfSelect'
                     },
                     {
                         name:"企业公告",
@@ -198,19 +198,19 @@
                     },
                     {
                         name:"爱心点赞",
-                        icon:'icon-aixin-copy',
+                        icon:'icon-hongxin',
                         color:'#fb3333',
                         router:'love'
                     },
                     {
                         name:"积分申诉",
-                        icon:'icon-shensuzhongxin',
+                        icon:'icon-tanhao1',
                         color:'#cbefd5',
                         router:'/complain'
                     },
                     {
                         name:"自由奖扣",
-                        icon:'icon-shensuzhongxin',
+                        icon:'icon-moneychange',
                         color:'#5bb3d3',
                         router:'/freePrize'
                     },

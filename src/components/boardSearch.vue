@@ -79,9 +79,10 @@
         }
     }
     .option {
-        position: absolute;
+        position: fixed;
         left: 0;
-        top: 1.2rem;
+        top: 0;
+        padding-top: 1.2rem;
         width: 7.1rem;
         z-index: 10;
         .bgWhite;

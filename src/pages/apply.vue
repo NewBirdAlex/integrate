@@ -49,17 +49,14 @@
                           @changePoint="changePoint">
                 <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
             </choosePeople>
-            <subTitle :content="'全选积分'" :subWord="'(选择可批量修改申请的积分)'" :need="false">
-                <span class="fr marginRight"><i class="icon iconfont icon-gouxuan blue"></i></span>
-            </subTitle>
-
-            <div class="marginTop paddingAll bgWhite fs30 borderBottom" @click="showStaff=!showStaff">
-                <strong>选择其他申请人</strong>
-                <span class="fr rightArrow"><i class="icon iconfont icon-xiala1 gray"></i></span>
+            <div class="bgWhite paddingAll lh40 fs28">
+                <strong>全选积分</strong>
+                <span class="gray">(选择可批量修改申请的积分)</span>
+                <span class="fr marginRight cl" :class="{'border':!selAll}" @click="selAll=!selAll"><i class="icon iconfont icon-gouxuan blue fs36" v-if="selAll"></i></span>
             </div>
 
             <!--选择员工-->
-            <chooseStaff :showStaff="showStaff" @accept="accept"></chooseStaff>
+            <chooseStaff  @getData="accept"></chooseStaff>
 
             <InputComp v-for="(item,index) in inputData" :key="index"
                        :conttitle="item.title"
@@ -137,6 +134,14 @@
     .icon{
         /*<!--font-size: @fs30!important;-->*/
     }
+    .cl{
+        .fr;
+        width: 0.4rem;
+        height: 0.4rem;
+        .tac;
+        line-height: 0.4rem;
+        border-radius: 50%;
+    }
 </style>
 <script>
     import InputComp from '../components/inputComp.vue'
@@ -151,6 +156,7 @@
                 showStaff:false,
                 dialogImageUrl: '',
                 dialogVisible: false,
+                selAll:false,
                 inputData: [
                     {
                         title: "审批标题",

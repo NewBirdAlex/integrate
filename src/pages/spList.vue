@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="spTop">
+        <div class="spTop" ref="myFilter">
             <span :class="{active:spType}" @click="spType=!spType">待我审批</span>
             <span :class="{active:!spType}" @click="spType=!spType">我已审批</span>
         </div>
@@ -13,7 +13,7 @@
                 <i class="icon iconfont icon-shaixuan"></i>
                 筛选
             </span>
-            <div class="filter" ref="myFilter" :style="{height:filterHeight+'px'}"  v-show="showWrap">
+            <div class="filter"  :style="{height:filterHeight+'px'}"  v-show="showWrap">
                 <div class="sel_type" v-if="!showSearch">
                     <p class="gray">积分类型</p>
                     <span>行为分</span>
@@ -247,7 +247,7 @@
                 console.log(document.documentElement.clientHeight  )
                 console.log(this.$refs.myFilter.getBoundingClientRect())
                 console.log(this.$refs.myFilter.getBoundingClientRect().top)
-                this.filterHeight = document.documentElement.clientHeight - this.$refs.myFilter.getBoundingClientRect().top;
+                this.filterHeight = document.documentElement.clientHeight - this.$refs.myFilter.getBoundingClientRect().height;
             },
             handlehide(msg){
                 if(msg=='search'){

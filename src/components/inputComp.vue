@@ -35,7 +35,7 @@
             background: white;
             position: relative;
             z-index: 2;
-            padding:0.2rem 0;
+            padding:0.3rem 0;
         }
         strong{
             width: 1.6rem;

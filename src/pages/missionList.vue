@@ -1,72 +1,35 @@
 <template>
     <div>
-        <div class="nav fs36" >
+        <div class="nav fs30" >
             <span v-for="item in idList" @click="selId(item)" :class="{'active':item.sel}">{{item.name}}</span>
         </div>
-        <mt-tab-container v-model="active" swipeable>
-            <mt-tab-container-item id="a">
-                <div class=" bgWhite ml" v-for="i in 3">
-                    <div class="paddingAll borderBottom">
-                        <p class="fs30">设计公司logo <span class="fr blue">+600分</span></p>
-                        <p class=" fs28">本周设计好公司logo,要求logo简单大气</p>
-                        <p class=" fs26 gray">剩余：1 <span class="fr qd">抢单</span></p>
-
-                    </div>
-                    <div class="paddingAll gray overflow">
-                        他们已抢单：
-                        <span class="rightArrow fr">
+        <div class=" bgWhite ml" v-for="i in 3">
+            <div class="paddingAll borderBottom">
+                <p class="fs30">3设计公司logo <span class="fr blue">+600分</span></p>
+                <p class=" fs28">本周设计好公司logo,要求logo简单大气</p>
+                <p class=" gray">2017-9-26  13:30 前完成</p>
+                <p class=" fs26 gray">剩余：1 <span class="fr qd">抢单</span></p>
+                <i class="icon iconfont icon-icon"></i>
+            </div>
+            <div class="paddingAll gray overflow">
+                他们已抢单：
+                <span class="rightArrow fr">
                            <i class="icon iconfont icon-xiala1"></i>
                        </span>
-                        <div class="fr" style="width: 5rem">
-                            <img src="../assets/img/head.png" class="littleHead" v-for="i in 8" alt="">
-                        </div>
-                    </div>
+                <div class="fr countPeople">
+                    <img src="../assets/img/head.png" class="littleHead" v-for="i in 8" alt="">
                 </div>
-            </mt-tab-container-item>
-            <mt-tab-container-item id="b">
-                <div class=" bgWhite ml" v-for="i in 3">
-                    <div class="paddingAll borderBottom">
-                        <p class="fs30">设计公司logo <span class="fr blue">+600分</span></p>
-                        <p class=" fs28">本周设计好公司logo,要求logo简单大气</p>
-                        <p class=" fs26 gray">剩余：1 <span class="fr qd">抢单</span></p>
-                    </div>
-                    <div class="paddingAll gray overflow">
-                        他们已抢单：
-                        <span class="rightArrow fr">
-                           <i class="icon iconfont icon-xiala1"></i>
-                       </span>
-                        <div class="fr" style="width: 5rem">
-                            <img src="../assets/img/head.png" class="littleHead" v-for="i in 8" alt="">
-                        </div>
-                    </div>
-                </div>
-            </mt-tab-container-item>
-            <mt-tab-container-item id="c">
-                <div class=" bgWhite ml" v-for="i in 3">
-                    <div class="paddingAll borderBottom">
-                        <p class="fs30">设计公司logo <span class="fr blue">+600分</span></p>
-                        <p class=" fs28">本周设计好公司logo,要求logo简单大气</p>
-                        <p class=" gray">2017-9-26  13:30 前完成</p>
-                        <p class=" fs26 gray">剩余：1 <span class="fr qd">抢单</span></p>
-                        <i class="icon iconfont icon-icon"></i>
-                    </div>
-                    <div class="paddingAll gray overflow">
-                        他们已抢单：
-                        <span class="rightArrow fr">
-                           <i class="icon iconfont icon-xiala1"></i>
-                       </span>
-                        <div class="fr" style="width: 5rem">
-                            <img src="../assets/img/head.png" class="littleHead" v-for="i in 8" alt="">
-                        </div>
-                    </div>
-                </div>
-            </mt-tab-container-item>
-        </mt-tab-container>
+            </div>
+        </div>
     </div>
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-
+    .countPeople{
+        width: 5rem;
+        height: 0.7rem;
+        .overflow;
+    }
     .ml {
         line-height: 0.5rem;
         position: relative;
