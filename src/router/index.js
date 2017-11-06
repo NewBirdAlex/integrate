@@ -46,6 +46,7 @@ const Write = () => import('../pages/write.vue');//写日记
 const Lottery = () => import('../pages/lottery.vue');//积分抽奖
 const LotteryRec = () => import('../pages/lotteryRec.vue');//抽奖记录
 const JfSelect = () => import('../pages/jfSelect.vue');//申請積分
+const Login = () => import('../pages/login.vue');//登录
 
 
 
@@ -80,6 +81,15 @@ const router = new Router({
                     component: CheckingRec
                 }
             ]
+        },
+        {
+            path: '/login',
+            name: 'Login',
+            component: Login,
+            meta:{
+                navShow: false,
+                title:'登录'
+            }
         },
         {
             path: '/lottery',

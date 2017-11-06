@@ -14,6 +14,7 @@
             <router-view class="child-view"></router-view>
         </transition>
 
+        <loading v-if="showLoading"></loading>
 
         <ul class="nav" v-show="$route.meta.navShow">
             <router-link
@@ -31,6 +32,8 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+    import loading from './components/loading.vue'
     export default {
         name: 'app',
         data() {
@@ -61,6 +64,14 @@
                     }
                 ]
             }
+        },
+        components:{
+            loading
+        },
+        computed: {
+            ...mapGetters([
+                'showLoading',
+            ]),
         },
         methods: {
             handleClick(item, index) {
@@ -113,7 +124,7 @@
     /*animation    */
     .child-view {
         /*position: absolute;*/
-        /*width: 100%;*/
+        width: 100%;
         transition: all .8s cubic-bezier(.55, 0, .1, 1) ;
     }
 

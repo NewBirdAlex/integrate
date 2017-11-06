@@ -2,11 +2,9 @@
     <div>
         <div class="slide">
             <mt-swipe :auto="4000">
-                <mt-swipe-item>
-                    <img src="../assets/img/1.jpg" alt="">
+                <mt-swipe-item v-for="(item,index) in swipeList" :key='index'>
+                    <img :src="item.cover" alt="">
                 </mt-swipe-item>
-                <mt-swipe-item><img src="../assets/img/2.jpg" alt=""></mt-swipe-item>
-                <mt-swipe-item><img src="../assets/img/3.jpg" alt=""></mt-swipe-item>
             </mt-swipe>
         </div>
         <div class="marginAll marginTop border borderRadius bgWhite">
@@ -154,14 +152,38 @@
     export default {
         data(){
             return{
-
+                swipeList:[]
             }
         },
         components:{
             jfdt
         },
         mounted(){
+            let that = this;
 
+            //获取是否登录
+            if(localStorage.getItem('HXuserMessage')){
+                this.$store.commit('getLocalUserMessage');
+            }else{
+                this.$router.push('/login');
+            }
+
+           this.$http.post('/advert/listByCom',{
+               companyId:301,
+               locationType:1,
+               sortOrder:"desc",
+               sortType:'id',
+               token:'9159455603544ceabbbc1e7b0cde0999',
+               userId:1020
+
+           })
+               .then(function (response) {
+                   console.log(response);
+                   that.swipeList = response.data.data.content;
+               })
+               .catch(function (error) {
+                   console.log(error);
+               });
         }
     }
 
