@@ -8,7 +8,7 @@
         <div class="middle bgWhite">
             <div>
                 <i class="icon iconfont icon-phone blue"></i>
-                <input type="text" class="myInput" placeholder="请输入您的手机号" v-model="phone">
+                <input type="tel" class="myInput" placeholder="请输入您的手机号" v-model="phone">
             </div>
             <div>
                 <i class="icon iconfont icon-lock blue"></i>

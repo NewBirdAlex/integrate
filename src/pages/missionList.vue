@@ -3,28 +3,65 @@
         <div class="nav fs30" >
             <span v-for="item in idList" @click="selId(item)" :class="{'active':item.sel}">{{item.name}}</span>
         </div>
-        <div class=" bgWhite ml" v-for="i in 3">
-            <div class="paddingAll borderBottom">
-                <p class="fs30">3设计公司logo <span class="fr blue">+600分</span></p>
-                <p class=" fs28">本周设计好公司logo,要求logo简单大气</p>
-                <p class=" gray">2017-9-26  13:30 前完成</p>
-                <p class=" fs26 gray">剩余：1 <span class="fr qd">抢单</span></p>
-                <i class="icon iconfont icon-icon"></i>
-            </div>
-            <div class="paddingAll gray overflow">
-                他们已抢单：
-                <span class="rightArrow fr">
+        <!--<div class=" bgWhite ml">-->
+            <!--<div class="paddingAll borderBottom">-->
+                <!--<p class="fs30">3设计公司logo <span class="fr blue">+600分</span></p>-->
+                <!--<p class=" fs28">本周设计好公司logo,要求logo简单大气</p>-->
+                <!--<p class=" gray">2017-9-26  13:30 前完成</p>-->
+                <!--<p class=" fs26 gray">剩余：1 <span class="fr qd">抢单</span></p>-->
+                <!--<i class="icon iconfont icon-icon"></i>-->
+            <!--</div>-->
+            <!--<div class="paddingAll gray overflow">-->
+                <!--他们已抢单：-->
+                <!--<span class="rightArrow fr">-->
+                           <!--<i class="icon iconfont icon-xiala1"></i>-->
+                       <!--</span>-->
+                <!--<div class="fr countPeople">-->
+                    <!--<img src="../assets/img/head.png" class="littleHead" v-for="i in 8" alt="">-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <ul  class="  ml"
+                v-infinite-scroll="loadMore"
+                infinite-scroll-disabled="loading"
+                infinite-scroll-immediate-check="true"
+                infinite-scroll-distance="10">
+            <li v-for="(item,index) in list" :key="index" class="marginBottom bgWhite">
+                <div class="paddingAll borderBottom">
+                    <p class="fs30">{{item.missionTitle}} <span class="fr blue">+{{item.missionAddScore}}分</span></p>
+                    <p class=" fs28">{{item.missionContext}}</p>
+                    <p class=" gray">2017-9-26  13:30 前完成</p>
+                    <p class=" fs26 gray">剩余：1 <span class="fr qd borderRadius">抢单</span></p>
+                    <i class="icon iconfont icon-icon"></i>
+                </div>
+                <div class="paddingAll gray overflow">
+                    他们已抢单：
+                    <span class="rightArrow fr">
                            <i class="icon iconfont icon-xiala1"></i>
                        </span>
-                <div class="fr countPeople">
-                    <img src="../assets/img/head.png" class="littleHead" v-for="i in 8" alt="">
+                    <div class="fr countPeople">
+                        <img src="../assets/img/head.png" class="littleHead" v-for="i in 8" alt="">
+                    </div>
                 </div>
-            </div>
-        </div>
+            </li>
+
+            <li class="tac" v-if="loading">
+                <div class="loadmore">
+                    <mt-spinner color="#26a2ff"></mt-spinner>
+                </div>
+            </li>
+        </ul>
     </div>
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
+
+    .loadmore{
+        width: 10%;
+        margin: 0 auto;
+        .paddingAll;
+    }
     .countPeople{
         width: 5rem;
         height: 0.7rem;
@@ -32,8 +69,11 @@
     }
     .ml {
         line-height: 0.5rem;
-        position: relative;
+
         margin-bottom: 0.2rem;
+        li{
+            position: relative;
+        }
         .icon-icon{
             position: absolute;
             right: 1.3rem;
@@ -73,30 +113,81 @@
     }
 </style>
 <script>
+    import { mapGetters } from 'vuex';
+
     export default {
         data() {
             return {
-                active: 'a',
+                active: 1,
                 idList: [
                     {
-                        id: 'a',
+                        id: 1,
                         name: '日常任务',
                         sel: true
                     },
                     {
-                        id: 'b',
+                        id: 2,
                         name: '抢单任务',
                         sel: false
                     },
                     {
-                        id: 'c',
+                        id: 3,
                         name: '挑战任务',
                         sel: false
                     }
-                ]
+                ],
+                list:[],
+                num:3,
+                pageNumber:1,
+                lastPage:false,
+                loading:false
             }
         },
+        computed: {
+            ...mapGetters([
+                'userMessage',
+            ])
+        },
+        mounted(){
+            this.getList();
+        },
         methods: {
+            loadMore() {
+                this.getList();
+                this.loading = true;
+            },
+            getList(){
+                let that = this;
+                console.log(that.pageNumber)
+                if(!that.lastPage){
+                    this.$http.post('/missionRecord/userGetMissionList',{
+                        missionType:this.active,
+                        pageNumber: this.pageNumber,
+                        pageSize: 5,
+                        sortOrder: "desc",
+                        token:this.userMessage.token,
+                        userId:this.userMessage.userId
+                    })
+                        .then(function (response) {
+                            that.pageNumber+=1;
+                            if(response.data.data.lastPage){
+                                that.lastPage=true;
+                            }
+                            console.log(response)
+                            that.list=that.list.concat(response.data.data.list) ;
+                            that.loading = false;
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }else{
+                    this.$toast({
+                        message: '没有更多数据了',
+                        duration: 2000
+                    });
+                }
+
+            },
             selId(item) {
                 this.idList.forEach(function (a) {
                     a.sel = false;

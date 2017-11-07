@@ -7,7 +7,7 @@
                 </mt-swipe-item>
             </mt-swipe>
         </div>
-        <div class="marginAll marginTop border borderRadius bgWhite">
+        <div class="marginAll marginTop border borderRadius bgWhite" v-if="todayMission">
             <div class="subt">
                 <i class="icon iconfont icon-daiban blue"></i>
                 <span class="gray">今日待办</span>
@@ -15,17 +15,9 @@
                     <i class="icon iconfont icon-xiala1"></i>
                 </span>
             </div>
-            <div class="subt">
-                设计公司LOGOs
-                <span class="blue fr">+600分</span>
-            </div>
-            <div class="subt">
-                接待客户参观公司
-                <span class="blue fr">+600分</span>
-            </div>
-            <div class="subt">
-                设计公司LOGO
-                <span class="blue fr">+600分</span>
+            <div class="subt" v-for="(item,index) in todayMission" :key="index">
+                {{item.missionTitle}}
+                <span class="blue fr">+{{item.missionAddScore}}</span>
             </div>
         </div>
         <!--今日积分排名-->
@@ -36,17 +28,17 @@
             </div>
             <div class="subt overflow ">
                 <div class="fl half">
-                    <p class="blue">200</p>
+                    <p class="blue">{{scoreRank.myOrderNum}}</p>
                     <p class="gray">排名</p>
                 </div>
                 <div class="fl half">
-                    <p class="blue">600</p>
+                    <p class="blue">{{scoreRank.myScore}}</p>
                     <p class="gray">今日积分</p>
                 </div>
             </div>
-            <div class="subt addHead">
-                <img src="../assets/img/head.png" alt="">
-                <span class="blue">欧阳诗曼获得今日的积分冠军</span>
+            <div class="subt addHead" v-if="scoreRank.noOneName">
+                <img :src="scoreRank.noOneAvatar" alt="">
+                <span class="blue">{{scoreRank.noOneName}}获得今日的积分冠军</span>
                 <span class="fr gray rightArrow">
                     <i class="icon iconfont icon-xiala1"></i>
                 </span>
@@ -104,6 +96,9 @@
             margin: 0;
             padding:0.3rem 0.2rem;
         }
+        .icon{
+            .fs34;
+        }
     }
     .addHead{
         img{
@@ -148,12 +143,22 @@
 <script>
     import '../assets/css/animate.css'
     import jfdt from '../components/jifendongtai.vue'
-
+    import { mapGetters } from 'vuex';
     export default {
         data(){
             return{
-                swipeList:[]
+                swipeList:[],
+                todayMission:[],
+                scoreRank:{
+                    myOrderNum:0,
+                    myScore:0
+                }
             }
+        },
+        computed: {
+            ...mapGetters([
+                'userMessage',
+            ])
         },
         components:{
             jfdt
@@ -167,23 +172,45 @@
             }else{
                 this.$router.push('/login');
             }
-
+            //今日积分排名接口
+            this.$http.post('/approveRecord/todayScoreOrder',{
+                token:this.userMessage.token,
+                userId:this.userMessage.userId
+            })
+            .then(function (response) {
+                that.scoreRank = response.data.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+            //今日任务
+            this.$http.post('/missionRecord/todayMission',{
+                pageNumber: 1,
+                pageSize: 10,
+                userId:this.userMessage.userId
+            })
+            .then(function (response) {
+                that.todayMission = response.data.data.list;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+            //swiper
            this.$http.post('/advert/listByCom',{
-               companyId:301,
+               companyId:this.userMessage.companyId,
                locationType:1,
                sortOrder:"desc",
                sortType:'id',
-               token:'9159455603544ceabbbc1e7b0cde0999',
-               userId:1020
+               token:this.userMessage.token,
+               userId:this.userMessage.userId
 
            })
-               .then(function (response) {
-                   console.log(response);
-                   that.swipeList = response.data.data.content;
-               })
-               .catch(function (error) {
-                   console.log(error);
-               });
+           .then(function (response) {
+               that.swipeList = response.data.data.content;
+           })
+           .catch(function (error) {
+               console.log(error);
+           });
         }
     }
 

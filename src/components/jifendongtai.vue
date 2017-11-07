@@ -3,55 +3,78 @@
         <div class="marginAll marginTop border borderRadius bgWhite">
             <div class="subt">
                 <i class="icon iconfont icon-jifen1 blue"></i>
-                <span class="gray">积分动态</span>
-                <span class="fr" @click="openPicker"> 9月</span>
+                <span class="gray">积分动态  {{userMessage.userId}}</span>
+                <!--<span class="fr" @click="openPicker"> 9月</span>-->
+                <span class="rightArrow fr gray">
+                    <i class="icon iconfont icon-xiala"></i>
+                </span>
             </div>
-            <div class="paddingAll">
-                <div class="showdt" v-for="i in 3">
-                    <div class="left">
-                        <img src="../assets/img/head.png" alt="">
-                    </div>
-                    <div class="right">
-                        <h4>
-                            <strong>李梦洁</strong>
-                            <span class="fr blue">
-                                <span class="marginAll">+300</span>
-                                <span>A分</span>
+            <ul
+                    v-infinite-scroll="loadMore"
+                    infinite-scroll-disabled="loading"
+                    infinite-scroll-immediate-check="true"
+                    infinite-scroll-distance="10">
+                <li v-for="(item,index) in list" :key="index">
+                    <div class="paddingAll borderBottom">
+                        <div class="showdt">
+                            <div class="left">
+                                <img :src="item.userAvatar" alt="">
+                            </div>
+                            <div class="right">
+                                <h4>
+                                    <strong>{{item.userName}}</strong>
+                                    <span class="fr blue">
+                                <span class="marginAll">+{{item.addScore}}</span>
+                                <span>{{item.scoreType}}分</span>
                             </span>
-                        </h4>
-                        <p class="gray">设计师</p>
-                        <p> <strong>本月业绩目标8000达标，奖励200分</strong></p>
-                        <p>本月业绩已经超额完成，谢谢领导的栽培，我会继
-                            续努力实现更大的目标
-                        </p>
-                        <div class="cp">
-                            <img src="../assets/img/1.jpg" v-for="i in 5" alt="">
-                        </div>
-                        <p class="gray">
-                            <i class="icon iconfont icon-shijian"></i>
-                            18:16
-                            <span class=" fr ">
+                                </h4>
+                                <p class="gray">{{item.jobTitle}}</p>
+                                <p> <strong>{{item.approveTitle}}</strong></p>
+                                <p>
+                                    {{item.approveContext}}
+                                </p>
+                                <div class="cp">
+                                    <img src="../assets/img/1.jpg" v-for="i in 5" alt="">
+                                </div>
+                                <p class="gray">
+                                    <i class="icon iconfont icon-shijian"></i>
+                                    {{item.createDate}}
+                                    <span class=" fr ">
                                  <i class="icon iconfont icon-aixin-copy"></i>
                                 100
                             </span>
-                        </p>
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </li>
+
+                <li class="tac" v-if="loading">
+                    <div class="loadmore">
+                        <mt-spinner color="#26a2ff"></mt-spinner>
+                    </div>
+                </li>
+            </ul>
+
         </div>
 
-        <mt-datetime-picker
-                v-model="pickerVisible"
-                type="date"
-                ref="picker"
-                year-format="{value} 年"
-                month-format="{value} 月"
-                date-format="{value} 日">
-        </mt-datetime-picker>
+        <!--<mt-datetime-picker-->
+                <!--v-model="pickerVisible"-->
+                <!--type="date"-->
+                <!--ref="picker"-->
+                <!--year-format="{value} 年"-->
+                <!--month-format="{value} 月"-->
+                <!--date-format="{value} 日">-->
+        <!--</mt-datetime-picker>-->
     </div>
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
+    .loadmore{
+        width: 10%;
+        margin: 0 auto;
+        .paddingAll;
+    }
     .subt{
         font-size: @fs28;
         padding:0.3rem 0;
@@ -99,13 +122,60 @@
     }
 </style>
 <script>
+    import { mapGetters } from 'vuex';
     export default {
         data() {
             return {
-                pickerVisible:''
+                pickerVisible:'',
+                list:[],
+                num:3,
+                pageNumber:1,
+                lastPage:false,
+                loading:false
             }
         },
+        computed: {
+            ...mapGetters([
+                'userMessage',
+            ])
+        },
+        mounted(){
+
+        },
         methods:{
+            loadMore() {
+                this.getList();
+                this.loading = true;
+            },
+            getList(){
+                let that = this;
+                console.log(that.pageNumber)
+                if(!that.lastPage){
+                    this.$http.post('/approveRecord/scoreChange',{
+                        pageNumber: this.pageNumber,
+                        pageSize: 5,
+                        sortOrder: "desc",
+                        userId:this.userMessage.userId
+                    })
+                        .then(function (response) {
+                            that.pageNumber+=1;
+                            if(response.data.data.last){
+                                that.lastPage=true;
+                            }
+                            that.list=that.list.concat(response.data.data.content) ;
+                            that.loading = false;
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }else{
+                    this.$toast({
+                        message: '没有更多数据了',
+                        duration: 2000
+                    });
+                }
+
+            },
             openPicker() {
                 this.$refs.picker.open();
             }

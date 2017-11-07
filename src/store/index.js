@@ -52,7 +52,8 @@ const actions = {
 
 const getters = {
     evenOrOdd:state => state.count % 2 === 0 ? 'even' : 'odd',
-    showLoading:state => state.showLoading
+    showLoading:state => state.showLoading,
+    userMessage:state => state.userMessage
 }
 
 

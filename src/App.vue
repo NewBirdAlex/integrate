@@ -73,6 +73,9 @@
                 'showLoading',
             ]),
         },
+        mounted(){
+            this.$store.commit('getLocalUserMessage')
+        },
         methods: {
             handleClick(item, index) {
                 this.navIndex = index;

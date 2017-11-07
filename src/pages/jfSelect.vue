@@ -55,15 +55,15 @@
             return {
                 idList: [
                     {
-                        name: '日常任务',
+                        name: '品德积分',
                         sel: true
                     },
                     {
-                        name: '抢单任务',
+                        name: '行为积分',
                         sel: false
                     },
                     {
-                        name: '挑战任务',
+                        name: '业绩积分',
                         sel: false
                     }
                 ]

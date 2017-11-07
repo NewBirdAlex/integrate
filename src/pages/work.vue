@@ -30,10 +30,11 @@
         </ul>
         <div class="normalTille">日常积分</div>
         <ul class="itemList ">
-            <router-link :to="item.router" tag="li" v-for="(item,index) in thirList" :key="index" class="vpadding">
+            <!--<router-link :to="item.router" tag="li" v-for="(item,index) in thirList" :key="index" class="vpadding" v-if="item.show">-->
+            <router-link :to="item.router" tag="li" v-for="(item,index) in thirList" :key="index" class="vpadding" >
                 <span class="new" v-if="index%3==0">New</span>
                 <span class="hline"></span>
-                <span class="vline" v-if="(index+1)%4!=0"></span>
+                <span class="vline" ></span>
                 <p > <i class="icon iconfont " :class="item.icon" :style="{color:item.color}"></i></p>
                 <p>{{item.name}}</p>
             </router-link>
@@ -52,7 +53,7 @@
         }
     }
     .vpadding{
-        padding:0.35rem 0
+        /*padding:0.35rem 0*/
     }
     .itemList{
         overflow: hidden;
@@ -64,6 +65,8 @@
             font-size: @fs28;
             position: relative;
             overflow: hidden;
+            width: 1.875rem;
+            height: 1.875rem;
             .vline{
                 position: absolute;
                 right: 0;
@@ -84,9 +87,7 @@
 
             }
             p{
-                &:last-child{
-                    margin-top: 0.3rem;
-                }
+                padding-top: 0.3rem;
             }
             .icon{
                 font-size: 0.6rem;
@@ -115,7 +116,7 @@
     }
 </style>
 <script>
-
+    import { mapGetters } from 'vuex';
     export default {
         data() {
             return {
@@ -167,7 +168,7 @@
                 ],
                 thirList:[
                     {
-                        name:"每天考勤",
+                        name:"考勤",
                         icon:'icon-dingweikaoqin',
                         color:'#3da5d0',
                         router:'/checkingin'
@@ -240,6 +241,40 @@
                     }
                 ]
             }
+        },
+        computed: {
+            ...mapGetters([
+                'userMessage',
+            ])
+        },
+        methods:{
+            getModule(){
+                console.log(this.userMessage.token)
+                let that = this;
+                this.$http.post('/module/listModuleByUser',{
+                    token:this.userMessage.token,
+                    userId:this.userMessage.userId
+                })
+                    .then(function (response) {
+                        console.log(response)
+                        that.thirList.forEach(item=>{
+                            for(let i = 0 ; i<response.data.data.length;i++){
+                                if(response.data.data[i].moduleTitle==item.name){
+                                    item.show=response.data.data[i].status==1?true:false;
+                                    break;
+                                }
+                            }
+
+                        })
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+        },
+        mounted(){
+            //work stage
+            setTimeout(this.getModule,500)
         }
     }
 </script>
