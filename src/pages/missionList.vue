@@ -31,9 +31,9 @@
                 <div class="paddingAll borderBottom">
                     <p class="fs30">{{item.missionTitle}} <span class="fr blue">+{{item.missionAddScore}}分</span></p>
                     <p class=" fs28">{{item.missionContext}}</p>
-                    <p class=" gray">2017-9-26  13:30 前完成</p>
-                    <p class=" fs26 gray">剩余：1 <span class="fr qd borderRadius">抢单</span></p>
-                    <i class="icon iconfont icon-icon"></i>
+                    <p class=" gray">{{item.missionEndTime}}2017-9-26  13:30 前完成</p>
+                    <p class=" fs26 gray">剩余：1 {{item.remainCount}} <span class="fr qd borderRadius">抢单</span></p>
+                    <i class="icon iconfont icon-icon" v-if="item.isComplete"></i>
                 </div>
                 <div class="paddingAll gray overflow">
                     他们已抢单：
@@ -91,7 +91,7 @@
                 color: white;
                 .fs30;
                 background: @blue;
-                margin-top: -0.3rem;
+                margin-top: -0.2rem;
             }
         }
     }
@@ -139,6 +139,7 @@
                 list:[],
                 num:3,
                 pageNumber:1,
+                pageSize:5,
                 lastPage:false,
                 loading:false
             }
@@ -153,8 +154,16 @@
         },
         methods: {
             loadMore() {
-                this.getList();
-                this.loading = true;
+                if(!this.lastPage&&!this.loading){
+                    this.getList();
+                    this.loading = true;
+                }else{
+                    this.loading = false;
+                    this.$toast({
+                        message: '没有更多数据了',
+                        duration: 2000
+                    });
+                }
             },
             getList(){
                 let that = this;
@@ -163,17 +172,16 @@
                     this.$http.post('/missionRecord/userGetMissionList',{
                         missionType:this.active,
                         pageNumber: this.pageNumber,
-                        pageSize: 5,
-                        sortOrder: "desc",
+                        pageSize: this.pageSize,
+                        sortOrder: "asc",
                         token:this.userMessage.token,
                         userId:this.userMessage.userId
                     })
                         .then(function (response) {
                             that.pageNumber+=1;
-                            if(response.data.data.lastPage){
+                            if(response.data.data.isLastPage){
                                 that.lastPage=true;
                             }
-                            console.log(response)
                             that.list=that.list.concat(response.data.data.list) ;
                             that.loading = false;
                         })
@@ -181,6 +189,7 @@
                             console.log(error);
                         });
                 }else{
+                    that.loading = false;
                     this.$toast({
                         message: '没有更多数据了',
                         duration: 2000
@@ -194,6 +203,12 @@
                 })
                 item.sel = true;
                 this.active = item.id;
+
+                //change type
+                this.pageNumber=1;
+                this.lastPage=false;
+                this.list=[];
+                this.getList();
             }
         }
     }

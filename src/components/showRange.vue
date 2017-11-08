@@ -17,12 +17,17 @@
                 <ul class="bgWhite ">
                     <li v-for="(item,index) in list" :key="index">
                         {{item.name}}
-                        <span class="fr" @click="item.ticket=!item.ticket"><i class="icon iconfont icon-gouxuan blue"
-                                                                              v-if="item.ticket"></i></span>
+                        <span class="fr" @click="selApartment(item,index)" v-if="!item.ticket"></span>
+
+                        <i @click="selApartment(item,index)" class="icon iconfont icon-gouxuan blue fr fs36" v-if="item.ticket"></i>
+
                     </li>
                     <li>
-                        <span class="" @click="chooseAll"><i class="icon iconfont icon-gouxuan blue"
-                                                             v-if="selectAll"></i></span>
+                        <span class="" @click="chooseAll" v-if="!selectAll">
+
+                        </span>
+                        <i @click="chooseAll" class="icon iconfont icon-gouxuan blue fs36"
+                           v-if="selectAll"></i>
                         全选
                         <small class="gray">
                             （不选择默认为单选）
@@ -105,6 +110,8 @@
     }
 </style>
 <script>
+    import { mapGetters } from 'vuex';
+
     export default {
         data() {
             return {
@@ -112,25 +119,18 @@
                 showDepartment: false,
                 msg: '',
                 selContent: '',
-                list: [
-                    {
-                        name: '行政',
-                        ticket: false
-                    },
-                    {
-                        name: 'IT',
-                        ticket: false
-                    },
-                    {
-                        name: '财务',
-                        ticket: false
-                    },
-                    {
-                        name: '行政',
-                        ticket: false
-                    }
-                ]
+                pageNumber:1,
+                pageSize:100,
+                list: []
             }
+        },
+        computed: {
+            ...mapGetters([
+                'userMessage',
+            ])
+        },
+        mounted(){
+            this.getList();
         },
         methods: {
             chooseAll() {
@@ -141,14 +141,39 @@
             confirmSel() {
 
                 let str = '';
+                let arr = [];
                 this.list.forEach(function (item) {
                     if (item.ticket) {
                         str += '<p>' + item.name + '</p>'
+                        arr.push(item)
                     }
                 });
                 this.selContent = str;
                 this.showDepartment = !this.showDepartment;
-                this.$emit('getData','this is data')
+                this.$emit('getData', arr)
+            },
+            selApartment(item,index){
+                this.selectAll = false;
+                item.ticket = !item.ticket;
+                this.$set(this.list,index,item)
+            },
+            getList(){
+                let that = this;
+                this.$http.post('/companyUser/departmentList',{
+                    pageNumber: this.pageNumber,
+                    pageSize: this.pageSize,
+                    sortOrder: "asc",
+                    token:this.userMessage.token,
+                    userId:this.userMessage.userId
+                })
+                    .then(function (response) {
+                        console.log(response)
+                        that.list=response.data.data.content ;
+                        that.list.forEach(item=>item.ticket=false)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
         }
     }

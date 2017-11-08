@@ -1,84 +1,143 @@
 <template>
     <div>
         <div class="normalTille">您本月的可用积分：600分</div>
-        <InputComp v-for="(item,index) in inputData" :key="index"
-                   :conttitle="item.title"
-                   :need="item.need"
-                   :note="item.ph"
-                   :num='index'
-                   :content="item.content"
-                   :inpType="item.type"
-                   :selRange="item.selRange"
-                   @getData="getData"
-        ></InputComp>
-        <showRange></showRange>
+        <myInput v-for="(item,index) in inputData" :key="index"
+                 :conttitle="item.title"
+                 :need="item.need"
+                 :note="item.ph"
+                 v-model="item.content"
+                 :inpType="item.type"
+                 :inputType="item.inputType?item.inputType:'text'"
+        ></myInput>
+        <mySelect :content="selectType" :selProp="'selectType'" @getData="getSelect"></mySelect>
+        <showRange @getData="getRange"></showRange>
+        <div class="confBtn marginTop" @click="subMission">提交</div>
     </div>
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-    .wrap:nth-child(odd){
+
+    .wrap:nth-child(odd) {
         margin-bottom: 0.2rem;
     }
 
+    .confBtn {
+        margin-top: 1rem;
+    }
 </style>
 <script>
-    import InputComp from '../components/inputComp.vue'
+    import myInput from '../components/myInput.vue'
+    import mySelect from '../components/mySelect.vue'
     import showRange from '../components/showRange.vue'
+    import { mapGetters } from 'vuex';
+
     export default {
         data() {
             return {
+                apartMentId: [],
                 inputData: [
                     {
                         title: "任务标题",
                         need: true,
-                        ph: "请输入内容",
-                        content: "任务类型固定为抢单任务",
-                        type: 'input',
-                        selRange:[]
+                        ph: "任务类型固定为抢单任务",
+                        content: "",
+                        type: 'input'
                     },
                     {
                         title: "任务描述",
                         need: true,
-                        ph: "请输入内容",
-                        content: "请描述任务",
-                        type: 'textarea',
-                        selRange:[]
-                    },
-                    {
-                        title: "积分类型",
-                        need: true,
-                        ph: "请输入内容",
+                        ph: "请描述任务",
                         content: "",
-                        type: 'inputSelect',
-                        selRange:[]
+                        type: 'textarea'
                     },
                     {
                         title: "任务积分",
                         need: true,
-                        ph: "请输入内容",
-                        content: "每人都会获得，积分为整数，如100",
-                        type: 'input',
-                        selRange:[]
+                        ph: "每人都会获得，积分为整数，如100",
+                        content: "",
+                        inputType: 'tel',
+                        type: 'input'
                     },
                     {
                         title: "限制人数",
                         need: true,
-                        ph: "请输入内容",
-                        content: "请输入任务限制人数",
-                        type: 'input',
-                        selRange:[]
+                        ph: "请输入任务限制人数",
+                        content: "",
+                        inputType: 'tel',
+                        type: 'input'
                     }
-                ]
+                ],
+                selectType: {
+                    name: '积分类型',
+                    need: true,
+                    selValue: '',
+                    selectRange: [
+                        '品德',
+                        '行为',
+                        '业绩'
+                    ]
+                }
             }
         },
-        methods:{
-            getData(data) {
-                console.log(data);
-                this.inputData[data.index].content = data.content;
+        computed: {
+            ...mapGetters([
+                'userMessage',
+            ])
+        },
+        methods: {
+            getRange(data) {
+                let that = this;
+                data.forEach(item => that.apartMentId.push(item.id))
+            },
+            getSelect(data) {
+                this[data.name].selValue = data.val;
+            },
+            subMission() {
+                let that =this;
+                if (this.selectType == '品德') {
+                    var jfType = 1;
+                }
+                if (this.selectType == '行为') {
+                    var jfType = 2;
+                }
+                if (this.selectType == '业绩') {
+                    var jfType = 3;
+                }
+                this.$http.post('/mission/userCreateMission', {
+                    isRepeat: 7,
+                    missionAddScore: this.inputData[2].content,
+                    missionAuthority: this.apartMentId.join(','),
+                    missionContext: this.inputData[1].content,
+                    missionTitle: this.inputData[0].content,
+                    missionType: 2,
+                    token:this.userMessage.token ,
+                    type: jfType,
+                    userCount: this.inputData[3].content,
+                    userId: this.userMessage.userId
+                })
+                    .then(function (response) {
+                        console.log(response)
+                        if(response.data.code==200000){
+                            that.$toast({
+                                message: '提交任务成功',
+                                duration: 2000
+                            });
+                            that.$router.push('/work');
+                        }else{
+                            that.$toast({
+                                message: response.data.message,
+                                duration: 2000
+                            });
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
         },
         components: {
-            InputComp,
+            myInput,
+            mySelect,
             showRange
         }
     }

@@ -7,7 +7,7 @@
                 </mt-swipe-item>
             </mt-swipe>
         </div>
-        <div class="marginAll marginTop border borderRadius bgWhite" v-if="todayMission">
+        <div class="marginAll marginTop border borderRadius bgWhite" v-if="todayMission.length">
             <div class="subt">
                 <i class="icon iconfont icon-daiban blue"></i>
                 <span class="gray">今日待办</span>

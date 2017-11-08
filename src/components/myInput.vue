@@ -5,15 +5,12 @@
                 {{conttitle}}
                 <span class="red" v-if="need">*</span>
             </strong>
-            <input type="text" :placeholder="note" @input="handleInput" v-if="inpType=='inputSelect'|| inpType=='input'" v-model="inpValue"  ref="input">
-            <textarea name="" :placeholder="note" @input="handleInput" v-model="inpValue"  v-if="inpType=='textarea'" id="" cols="30" rows="10"></textarea>
-            <label :for="selId" class="fr" v-if="selRange.length"> <i class="icon iconfont icon-xiala1"></i></label>
-            <span class="fr" v-if="inpType=='select'">{{selValue}}</span>
-        </div>
+            <!--<input type="text" :placeholder="note" @input="handleInput" v-if="inpType=='inputSelect'|| inpType=='input'" v-model="inpValue"  ref="input">-->
+            <!--<textarea name="" :placeholder="note" @input="handleInput" v-model="inpValue"  v-if="inpType=='textarea'" id="" cols="30" rows="10"></textarea>-->
 
-        <select  name="" :id="selId" @change="getSelect" v-model="selValue" v-if="selRange.length">
-            <option :value="item" v-for="item in selRange">{{item}}</option>
-        </select>
+            <input :type="inputType" :placeholder="note"  @input="$emit('input', $event.target.value)" :value="value"  v-if="inpType=='input'" >
+            <textarea name="" :placeholder="note"  @input="$emit('input', $event.target.value)" :value="value"  v-if="inpType=='textarea'" id="" cols="30" rows="10"></textarea>
+        </div>
     </div>
 </template>
 <style scoped lang="less">
@@ -44,7 +41,7 @@
         label{
             color: @gray;
             font-size: 12px;
-           /*margin-top: 0.1rem;*/
+            /*margin-top: 0.1rem;*/
             i{
                 font-size: @fs36;
             }
@@ -82,20 +79,13 @@
     export default {
         data() {
             return {
-                selValue:"",
                 inpValue:""
             }
         },
         computed:{
-            selId(){
-                return Math.random().toString(36).substr(3)
-            }
+
         },
         methods:{
-            getSelect(ev){
-                this.inpValue = this.selValue;
-                this.handleInput();
-            },
             handleInput(){
                 //输入数据变化后提交
                 let data = {index:this.num,content:this.inpValue};
@@ -113,10 +103,9 @@
             conttitle:{type:String},
             need:{type:Boolean},
             note:{type:String},
-            content:{type:String},
-            num:{type:Number},
+            value:{type:String},
             inpType:{type:String},
-            selRange:{type:Array}
+            inputType:{type:String},
         }
     }
 </script>

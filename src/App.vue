@@ -127,7 +127,7 @@
     /*animation    */
     .child-view {
         /*position: absolute;*/
-        width: 100%;
+        /*width: 100%;*/
         transition: all .8s cubic-bezier(.55, 0, .1, 1) ;
     }
 
