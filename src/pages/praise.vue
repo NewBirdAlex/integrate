@@ -2,17 +2,15 @@
     <div>
 
         <div class=" wrap">
-            <InputComp v-for="(item,index) in inputData" :key="index"
-                       :conttitle="item.title"
-                       :need="item.need"
-                       :note="item.ph"
-                       :num='index'
-                       :content="item.content"
-                       :inpType="item.type"
-                       :selRange="item.selRange"
-                       @getData="getData(item)"
-                       v-if="index <3"
-            ></InputComp>
+            <myInput v-for="(item,index) in inputData" :key="index"
+                     :conttitle="item.title"
+                     :need="item.need"
+                     :note="item.ph"
+                     v-model="item.content"
+                     :inpType="item.type"
+                     :inputType="item.inputType?item.inputType:'text'"
+            ></myInput>
+            <mySelect :content="selectType" :selProp="'selectType'" @getData="getSelect"></mySelect>
             <div class="marginTop"></div>
 
             <subTitle :content="'附加图片'" :subWord="'（6/9）'"></subTitle>
@@ -52,23 +50,9 @@
             <subTitle :content="'全选积分'" :subWord="'(选择可批量修改申请的积分)'" :need="false">
                 <span class="fr marginRight"><i class="icon iconfont icon-gouxuan blue"></i></span>
             </subTitle>
-
-
-
             <!--选择员工-->
             <chooseStaff  @getData="accept"></chooseStaff>
 
-            <InputComp v-for="(item,index) in inputData" :key="index"
-                       :conttitle="item.title"
-                       :need="item.need"
-                       :note="item.ph"
-                       :num='index'
-                       :content="item.content"
-                       :inpType="item.type"
-                       :selRange="item.selRange"
-                       @getData="getData(item)"
-                       v-if="index ==3"
-            ></InputComp>
         </div>
         <div class="confBtn">确定</div>
     </div>
@@ -92,7 +76,8 @@
     }
 </style>
 <script>
-    import InputComp from '../components/inputComp.vue'
+    import myInput from '../components/myInput.vue'
+    import mySelect from '../components/mySelect.vue'
     import subTitle from '../components/subTitle.vue'
     import VueCoreImageUpload from 'vue-core-image-upload'
     import choosePeople from '../components/choosePeople.vue'
@@ -103,38 +88,31 @@
             return {
                 dialogImageUrl: '',
                 dialogVisible: false,
+                selectType:{
+                    name: '积分类型',
+                    need: true,
+                    selValue: '',
+                    selectRange: [
+                        '品德',
+                        '行为',
+                        '业绩'
+                    ]
+                },
                 inputData: [
                     {
                         title: "表扬标题",
                         need: true,
                         ph: "请输入内容",
                         content: "",
-                        type: 'inputSelect',
-                        selRange:[80,90,100]
+                        type: 'input'
                     },
                     {
-                        title: "表扬标题",
+                        title: "表扬内容",
                         need: true,
                         ph: "请输入内容",
                         content: "",
                         type: 'input',
                         selRange:[]
-                    },
-                    {
-                        title: "表扬内容",
-                        need: false,
-                        ph: "请输入内容",
-                        content: "",
-                        type: 'textarea',
-                        selRange:[]
-                    },
-                    {
-                        title: "积分类型",
-                        need: true,
-                        ph: "请输入内容",
-                        content: "",
-                        type: 'select',
-                        selRange:[80,90,100]
                     }
                 ],
                 peopleList:[
@@ -168,9 +146,8 @@
             }
         },
         methods: {
-            getData(event) {
-                console.log(event)
-                this.inputData[data.index].content = data.content;
+            getSelect(data) {
+                this[data.name].selValue = data.val;
             },
             accept(data){
                 this.showStaff=!this.showStaff;
@@ -200,10 +177,11 @@
             }
         },
         components: {
-            InputComp,
             subTitle,
             VueCoreImageUpload,
             choosePeople,
+            mySelect,
+            myInput,
             chooseStaff
         }
     }

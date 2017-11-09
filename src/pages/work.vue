@@ -11,11 +11,11 @@
         </div>
         <div class="normalTille">审批日记</div>
         <ul class="itemList vpadding">
-            <router-link :to="item.router"  tag="li" v-for="(item,index) in aboutMe" :key="index">
+            <router-link :to="item.router"  tag="li" v-for="(item,index) in aboutMe" :key="index" >
                 <!--<span class="hline"></span>-->
                 <span class="vline"></span>
                 <span class="redpoint" v-if="index%3==0"></span>
-                <p > <span class="num">{{item.num}}</span></p>
+                <p style="padding-top: 0.5rem"> <span class="num">{{item.num}}</span></p>
                 <p>{{item.name}}</p>
             </router-link>
         </ul>
@@ -99,7 +99,7 @@
                 background: red;
                 border-radius: 50%;
                 right: 0.4rem;
-                top:0rem;
+                top:0.3rem;
             }
             .new{
                 position: absolute;

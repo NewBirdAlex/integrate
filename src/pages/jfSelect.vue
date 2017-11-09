@@ -8,7 +8,7 @@
         </div>
         <div class="marginAll bgWhite search">
             <i class="icon iconfont icon-sousuo"></i>
-            <input type="text" class="myInput fs26 marginLeft" placeholder="请输入你要找的积分类型">
+            <input type="text" class="myInput fs26 marginLeft" placeholder="请输入你要找的关键字">
         </div>
 
 
@@ -20,7 +20,7 @@
              v-if="list.length"
         >
             <li v-for="(item,index) in list" :key="index" class="marginBottom ">
-                <div @click="go" class=" paddingAll bgWhite lh50" >
+                <div @click="go(item)" class=" paddingAll bgWhite lh50" >
                     <h4 class="fs30 ">{{item.title}}</h4>
                     <p class="fs26 lh30 littleSpace">积极帮助公司宣传公司的产品可以获得积分,获得额外的积分申
                         请积分获得积分资格</p>
@@ -127,8 +127,8 @@
                 this.list=[];
                 this.getList();
             },
-            go(){
-                this.$router.push('/apply');
+            go(item){
+                this.$router.push('/apply/'+item.id);
             },
             loadMore() {
                 if(!this.lastPage && !this.loading){

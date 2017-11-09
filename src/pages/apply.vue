@@ -2,19 +2,33 @@
     <div>
 
         <div class=" wrap">
-            <InputComp v-for="(item,index) in inputData" :key="index"
-                       :conttitle="item.title"
-                       :need="item.need"
-                       :note="item.ph"
-                       :num='index'
-                       :content="item.content"
-                       :inpType="item.type"
-                       :selRange="item.selRange"
-                       @getData="getData(item)"
-                       v-if="index <3"
-            ></InputComp>
-            <div class="marginTop"></div>
+            <div class="bgWhite">
+                <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom firstItem">
+                    <strong class="fs30 lh40">审批标题 <span class="red">*</span></strong>
+                    <span class="rightPart fs30 lh40 ">{{detail.title}}</span>
+                    <label for="">
+                        <i class="icon iconfont icon-xiala gray fs30"></i>
+                    </label>
+                </div>
+                <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom">
+                    <strong class="fs30 lh40">审批内容 <span class="red">*</span></strong>
+                    <span class="rightPart fs30 lh40 ">{{detail.context}}</span>
+                </div>
+                <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom">
+                    <strong class="fs30">积分类型 <span class="red">*</span></strong>
+                    <span class="rightPart fs30 lh40 ">A</span>
+                </div>
+            </div>
 
+            <myInput v-for="(item,index) in inputData" :key="index"
+                     :conttitle="item.title"
+                     :need="item.need"
+                     :note="item.ph"
+                     v-model="item.content"
+                     :inpType="item.type"
+                     :inputType="item.inputType?item.inputType:'text'"
+            ></myInput>
+            <div class="marginTop"></div>
             <subTitle :content="'附加图片'" :subWord="'（6/9）'"></subTitle>
             <div class="paddingAll bgWhite">
                 <!--<vue-core-image-upload-->
@@ -57,26 +71,14 @@
 
             <!--选择员工-->
             <chooseStaff  @getData="accept"></chooseStaff>
-
-            <InputComp v-for="(item,index) in inputData" :key="index"
-                       :conttitle="item.title"
-                       :need="item.need"
-                       :note="item.ph"
-                       :num='index'
-                       :content="item.content"
-                       :inpType="item.type"
-                       :selRange="item.selRange"
-                       @getData="getData(item)"
-                       v-if="index ==3"
-            ></InputComp>
             <!--审批人-->
             <div class="marginTop">
                 <subTitle :content="'审批人'" :subWord="''" :need="true"></subTitle>
                 <div class="paddingAll overflow bgWhite tac fs28">
-                    <div class="spr overflow fl marginBottom" v-for="i in 4">
+                    <div class="spr overflow fl marginBottom" v-for="(item,index) in approveUser">
                         <div class="ps fl">
-                            <img src="../assets/img/head.png" class="headPicture" alt="">
-                            <p class="marginTop">欧阳莉</p>
+                            <img :src="item.userAvatar" class="headPicture" alt="">
+                            <p class="marginTop" v-html="item.userName"></p>
                         </div>
                         <div class="pt fl marginTop gray marginLeft marginRight">
                             .......
@@ -112,6 +114,30 @@
 <style scoped lang="less">
     @import "../assets/css/common.less";
     /*@import "../assets/font/font1/iconfont.css";*/
+    .ps{
+        width: 1.1rem;
+    }
+    .firstItem{
+        position: relative;
+        label{
+            position: absolute;
+            right: 0.2rem;
+            top:0.4rem;
+        }
+    }
+    .inner{
+        strong{
+            width: 1.6rem;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .rightPart{
+            display: inline-block;
+            width: 5.2rem;
+            vertical-align: top;
+        }
+    }
+
     .add{
         .border;
         border-radius: 50%;
@@ -144,7 +170,7 @@
     }
 </style>
 <script>
-    import InputComp from '../components/inputComp.vue'
+    import myInput from '../components/myInput.vue'
     import subTitle from '../components/subTitle.vue'
     import VueCoreImageUpload from 'vue-core-image-upload'
     import choosePeople from '../components/choosePeople.vue'
@@ -157,40 +183,27 @@
                 dialogImageUrl: '',
                 dialogVisible: false,
                 selAll:false,
+                detail:{},
+                approveUser:[],
                 inputData: [
-                    {
-                        title: "审批标题",
-                        need: true,
-                        ph: "请输入内容",
-                        content: "",
-                        type: 'inputSelect',
-                        selRange:[80,90,100]
-                    },
-                    {
-                        title: "审批内容",
-                        need: true,
-                        ph: "请输入内容",
-                        content: "",
-                        type: 'input',
-                        selRange:[]
-                    },
                     {
                         title: "审批备注",
                         need: true,
                         ph: "请输入内容",
                         content: "",
-                        type: 'textarea',
-                        selRange:[]
-                    },
-                    {
-                        title: "积分类型",
-                        need: true,
-                        ph: "请输入内容",
-                        content: "",
-                        type: 'select',
-                        selRange:[80,90,100]
+                        type: 'textarea'
                     }
                 ],
+                selectType:{
+                    name: '积分类型',
+                    need: true,
+                    selValue: '',
+                    selectRange: [
+                        '品德',
+                        '行为',
+                        '业绩'
+                    ]
+                },
                 peopleList:[
                     {
                         name:"alex2",
@@ -222,10 +235,6 @@
             }
         },
         methods: {
-            getData(event) {
-                console.log(event)
-                this.inputData[data.index].content = data.content;
-            },
             markPerson(msg){
                 console.log(msg )
             },
@@ -254,10 +263,26 @@
             handlePictureCardPreview(file) {
                 this.dialogImageUrl = file.url;
                 this.dialogVisible = true;
+            },
+            getDetail(){
+                let that = this;
+                this.$http.post('/actionList/getActionDetail', {
+                    id:this.$route.params.id
+                })
+                    .then(function (response) {
+                        that.detail = response.data.data.detail;
+                        that.approveUser = response.data.data.approveUser;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
         },
+        mounted(){
+            this.getDetail();
+        },
         components: {
-            InputComp,
+            myInput,
             subTitle,
             VueCoreImageUpload,
             choosePeople,

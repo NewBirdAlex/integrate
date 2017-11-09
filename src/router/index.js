@@ -219,7 +219,7 @@ const router = new Router({
             }
         },
         {
-            path: '/kpiDetail',
+            path: '/kpiDetail/:id',
             name: 'KpiDetail',
             component: KpiDetail,
             meta:{
@@ -228,12 +228,12 @@ const router = new Router({
             }
         },
         {
-            path: '/philosophyDetail',
+            path: '/philosophyDetail/:id',
             name: 'PhilosophyDetail',
             component: PhilosophyDetail,
             meta:{
                 navShow: false,
-                title:'详情'
+                title:'经济哲学详情'
             }
         },
         {
@@ -273,7 +273,7 @@ const router = new Router({
             }
         },
         {
-            path: '/apply',
+            path: '/apply/:id',
             name: 'Apply',
             component: Apply,
             meta:{
@@ -440,7 +440,7 @@ const router = new Router({
             component: Praise,
             meta:{
                 navShow: false,
-                title:'领导奖励'
+                title:'领导表扬'
             }
         },
         {

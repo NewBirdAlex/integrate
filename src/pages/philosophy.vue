@@ -29,16 +29,31 @@
             </div>
         </div>
 
-        <div class="marginTop paddingAll bgWhite lh40" v-for="i in 5" @click="go">
-            <p class="fs30">企业经营管理企业经营管理者是如何经营？如何快速
-                提升公司的经营模式？</p>
-            <div class="gray fs26 marginTop">
-                每天可阅读一次
-                <i class="icon iconfont icon-yanjing"></i>
-                1111
-                <span class="fr">已阅读</span>
-            </div>
-        </div>
+        <ul class="marginLeft marginRight"
+            v-infinite-scroll="loadMore"
+            infinite-scroll-disabled="loading"
+            infinite-scroll-immediate-check="true"
+            v-if="list.length!=0"
+            infinite-scroll-distance="10">
+            <li v-for="(item,index) in list" :key="index" class="marginBottom bgWhite">
+                <div class="marginTop paddingAll bgWhite lh40" @click="go(item)">
+                    <div class="fs30" v-html="item.title"></div>
+                    <div class="gray fs26 marginTop">
+                        每天可阅读 {{item.isOnly}}次
+                        <i class="icon iconfont icon-yanjing"></i>
+                        1111
+                        <span class="fr blue" v-if="!item.isRead">未阅读</span>
+                        <span class="fr" v-if="item.isRead">已阅读</span>
+                    </div>
+                </div>
+            </li>
+
+            <li class="tac" v-if="loading">
+                <div class="loadmore">
+                    <mt-spinner color="#26a2ff"></mt-spinner>
+                </div>
+            </li>
+        </ul>
     </div>
 </template>
 <style scoped lang="less">
@@ -104,17 +119,75 @@
     }
 </style>
 <script>
+    import {mapGetters} from 'vuex';
+
     export default {
         data() {
             return {
-                showOption:false
+                showOption:false,
+                list: [],
+                pageNumber: 1,
+                pageSize: 5,
+                lastPage: false,
+                loading: false
             }
         },
-        methods:{
-            go(){
+        computed: {
+            ...mapGetters([
+                'userMessage',
+            ])
+        },
+        methods: {
+            go(item){
                 //路由跳转
-                this.$router.push('/philosophyDetail')
-            }
+                this.$router.push({ name: 'PhilosophyDetail', params: { id: item.id }})
+            },
+            loadMore() {
+                if (!this.lastPage && !this.loading) {
+                    this.getList();
+                    this.loading = true;
+                } else {
+                    this.loading = false;
+                    this.$toast({
+                        message: '没有更多数据了',
+                        duration: 2000
+                    });
+                }
+            },
+            getList() {
+                let that = this;
+                console.log(that.pageNumber)
+                if (!that.lastPage) {
+                    this.$http.post('/culture/cultureListByUser', {
+                        pageNumber: this.pageNumber,
+                        pageSize: this.pageSize,
+                        sortOrder: "asc",
+                        token: this.userMessage.token,
+                        userId: this.userMessage.userId
+                    })
+                        .then(function (response) {
+                            that.pageNumber += 1;
+                            if (response.data.data.last) {
+                                that.lastPage = true;
+                            }
+                            that.list = that.list.concat(response.data.data.content);
+                            that.loading = false;
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                } else {
+                    that.loading = false;
+                    this.$toast({
+                        message: '没有更多数据了',
+                        duration: 2000
+                    });
+                }
+
+            },
+        },
+        mounted() {
+            this.getList();
         }
     }
 </script>

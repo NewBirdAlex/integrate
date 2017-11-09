@@ -73,9 +73,7 @@
                     this.$http.post('/notes/noteList', {
                         pageNumber: this.pageNumber,
                         pageSize: this.pageSize,
-                        sortOrder: "asc",
-                        token: this.userMessage.token,
-                        userId: this.userMessage.userId
+                        sortOrder: "asc"
                     })
                         .then(function (response) {
                             that.pageNumber += 1;

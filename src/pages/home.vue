@@ -15,7 +15,7 @@
                     <i class="icon iconfont icon-xiala1"></i>
                 </span>
             </div>
-            <div class="subt" v-for="(item,index) in todayMission" :key="index">
+            <div class="subt" v-for="(item,index) in todayMission" :key="index" v-if="index<5">
                 {{item.missionTitle}}
                 <span class="blue fr">+{{item.missionAddScore}}</span>
             </div>

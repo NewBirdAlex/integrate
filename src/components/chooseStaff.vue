@@ -38,20 +38,32 @@
                 </div>
 
                 <div class="bgWhite listWrap" :style="{height:listWrap}">
-                    <div class="list overflow paddingAll borderBottom" v-for="(item,index) in staffList" :key="index">
-                        <img src="../assets/img/head.png" class="marginRight headPicture fl" alt="">
-                        <div class="fl">
-                            <p class="fs36 ">{{item.name}}</p>
-                            <p class="gray marginTop">{{item.apartment}}</p>
-                        </div>
-                        <span class="cl" :class="{'border':!item.sel}" @click="item.sel=!item.sel">
-                            <i class="icon iconfont icon-gouxuan blue" v-if="item.sel"></i>
-                        </span>
-                    </div>
-                    <div class="obtn bgWhite">
-                        <div class="">取消</div>
-                        <div class="active" @click="outputData">确认</div>
-                    </div>
+
+
+                    <!--load more-->
+                    <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+                        <ul>
+                            <li v-for="(item,index) in staffList" :key="index">
+                                <div class="list overflow paddingAll borderBottom">
+                                    <img src="../assets/img/head.png" class="marginRight headPicture fl" alt="">
+                                    <div class="fl">
+                                        <p class="fs36 ">{{item.userName}}</p>
+                                        <p class="gray marginTop">{{item.departmentName}}</p>
+                                    </div>
+                                    <span class="cl" :class="{'border':!item.sel}" @click="item.sel=!item.sel">
+                                        <i class="icon iconfont icon-gouxuan blue" v-if="item.sel"></i>
+                                    </span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </mt-loadmore>
+
+                </div>
+
+                <div class="obtn bgWhite">
+                    <div class="">取消</div>
+                    <div class="active" @click="outputData">确认</div>
                 </div>
             </div>
         </transition>
@@ -181,40 +193,17 @@
     export default {
         data() {
             return {
+                allLoaded: false,
                 showOption: false,
                 listWrap: '',
                 showStaff: false,
-                staffList:[
-                    {
-                        name:'二狗蛋',
-                        apartment:"總裁部",
-                        sel:false
-                    },{
-                        name:'二狗蛋',
-                        apartment:"總裁部",
-                        sel:false
-                    },{
-                        name:'二狗蛋',
-                        apartment:"總裁部",
-                        sel:false
-                    },{
-                        name:'二狗蛋',
-                        apartment:"總裁部",
-                        sel:false
-                    },{
-                        name:'二狗蛋',
-                        apartment:"總裁部",
-                        sel:false
-                    },{
-                        name:'二狗蛋',
-                        apartment:"總裁部",
-                        sel:false
-                    },{
-                        name:'二狗蛋',
-                        apartment:"總裁部",
-                        sel:false
-                    },
-                ]
+                pageNumber: 1,
+                pageSize: 5,
+                lastPage: false,
+                keyWord: '',
+                departmentId: '',
+                jobId: '',
+                staffList: []
             }
         },
         computed: {
@@ -236,12 +225,36 @@
         },
         props: {},
         methods: {
+            loadBottom() {
+                // 加载更多数据
+                //this.allLoaded = true;// 若数据已全部获取完毕
+                this.$refs.loadmore.onBottomLoaded();
+            },
             outputData() {
                 this.showStaff = !this.showStaff;
                 this.$emit('getData');
+            },
+            getStaff() {
+                let that = this;
+                this.$http.post('/user/userList', {
+                    departmentId: this.departmentId,
+                    jobId: this.jobId,
+                    pageNumber: this.pageNumber,
+                    pageSize: this.pageSize,
+                    sortOrder: "asc",
+                    sortType: "id",
+                    userName: this.keyWord
+                })
+                    .then(function (response) {
+                        that.staffList = that.staffList.concat(response.data.data.content) ;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
         },
         mounted() {
+            this.getStaff();
 //            console.log(document.querySelector('.search').getClientRects()[0].height)
 //
 //            this.listWrap = (document.documentElement.clientHeight-document.querySelector('.search').getClientRects()[0].height)-80 + "px";
