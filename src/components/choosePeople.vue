@@ -1,12 +1,12 @@
 <template>
-    <div class=" wrap bgWhite">
+    <div class=" wrap2 bgWhite">
         <div class="inner">
 
             <slot></slot>
             <img src="../assets/img/head.png" alt="">
             <span>{{name}}</span>
             <div class="fr">
-                {{showValue}}
+                {{point}}
                 <label :for="selId" ><i class="icon iconfont icon-xialakuangtishitubiao"></i></label>
             </div>
         </div>
@@ -18,7 +18,7 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-    .wrap{
+    .wrap2{
         position: relative;
         padding:0 0.2rem;
         .inner{
@@ -64,8 +64,7 @@
     export default {
         data() {
             return {
-                selValue:"",
-                showValue:'+80'
+                selValue:""
             }
         },
         computed:{
@@ -76,12 +75,12 @@
         methods:{
             handleSelect(){
                 console.log(this.selValue)
-                this.showValue = this.selValue;
-                this.$emit('changePoint',{index:this.ind,value:this.showValue});
+                this.point = this.selValue;
+                this.$emit('changePoint',{index:this.ind,value:this.point});
             }
         },
         mounted(){
-            this.showValue = this.point;
+//            this.showValue = this.point;
         },
         props:[
             "name",

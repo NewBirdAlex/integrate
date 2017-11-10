@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="marginTop paddingAll bgWhite fs30 borderBottom" @click="showStaff=!showStaff">
+        <div class="marginTop paddingAll bgWhite fs30 borderBottom" id="selectPeople" @click="showStaff=!showStaff">
             <strong>选择其他员工</strong>
             <span class="fr rightArrow"><i class="icon iconfont icon-xiala1 gray"></i></span>
         </div>
@@ -50,8 +50,8 @@
                                         <p class="fs36 ">{{item.userName}}</p>
                                         <p class="gray marginTop">{{item.departmentName}}</p>
                                     </div>
-                                    <span class="cl" :class="{'border':!item.sel}" @click="item.sel=!item.sel">
-                                        <i class="icon iconfont icon-gouxuan blue" v-if="item.sel"></i>
+                                    <span class="cl" :class="{'border':!item.pick}" @click="choosePeople(item,index)">
+                                        <i class="icon iconfont icon-gouxuan blue" v-if="item.pick"></i>
                                     </span>
                                 </div>
 
@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="obtn bgWhite">
-                    <div class="">取消</div>
+                    <div class="" @click="cancel">取消</div>
                     <div class="active" @click="outputData">确认</div>
                 </div>
             </div>
@@ -198,7 +198,7 @@
                 listWrap: '',
                 showStaff: false,
                 pageNumber: 1,
-                pageSize: 5,
+                pageSize: 20,
                 lastPage: false,
                 keyWord: '',
                 departmentId: '',
@@ -227,12 +227,36 @@
         methods: {
             loadBottom() {
                 // 加载更多数据
-                //this.allLoaded = true;// 若数据已全部获取完毕
-                this.$refs.loadmore.onBottomLoaded();
+                if(this.lastPage){
+                    this.$toast({
+                        message: '已加载全部员工',
+                        duration: 2000
+                    });
+                    //this.allLoaded = true;// 若数据已全部获取完毕
+                }else{
+                    this.getStaff();
+                    this.$refs.loadmore.onBottomLoaded();
+                }
             },
             outputData() {
+                //返回员工
+                let arr = [];
+                this.staffList.forEach(item=>{
+                    if(item.pick){
+                        arr.push(item)
+                    }
+                })
+                this.$emit('getData',arr);
+                this.staffList.forEach(item=>item.pick=false)
                 this.showStaff = !this.showStaff;
-                this.$emit('getData');
+            },
+            choosePeople(item,index){
+                item.pick = !item.pick;
+                this.$set(this.staffList,index,item)
+            },
+            cancel(){
+                this.staffList.forEach(item=>item.pick=false);
+                this.showStaff = !this.showStaff;
             },
             getStaff() {
                 let that = this;
@@ -246,7 +270,12 @@
                     userName: this.keyWord
                 })
                     .then(function (response) {
+                        that.allLoaded = false;
                         that.staffList = that.staffList.concat(response.data.data.content) ;
+                        that.staffList.forEach(item=>item.pick=false);// click or not
+                        if (response.data.data.last) {  //no more data
+                            that.lastPage = true;
+                        }
                     })
                     .catch(function (error) {
                         console.log(error);
