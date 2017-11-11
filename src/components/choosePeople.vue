@@ -3,7 +3,7 @@
         <div class="inner">
 
             <slot></slot>
-            <img src="../assets/img/head.png" alt="">
+            <img :src="head" class="headPicture" alt="">
             <span>{{name}}</span>
             <div class="fr">
                 {{point}}
@@ -86,7 +86,8 @@
             "name",
             'point',
             'range',
-            'ind'
+            'ind',
+            'head'
         ]
     }
 </script>

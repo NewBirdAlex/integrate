@@ -12,7 +12,7 @@
             <div class="wrap" v-if="showStaff">
                 <div class="search paddingAll">
                     <div class="left" @click="showOption=!showOption">
-                        筛选排名
+                        筛选员工
                         <span class="triangle-down"></span>
                     </div>
                     <div class="right bgWhite">
@@ -22,8 +22,8 @@
                     <div style="clear: both"></div>
                     <transition
                             name="custom-classes-transition"
-                            enter-active-class="animated lightSpeedIn"
-                            leave-active-class="animated lightSpeedOut"
+                            enter-active-class="animated bounceInDown"
+                            leave-active-class="animated bounceOutUp"
                     >
                         <div class="option" v-show="showOption">
                             <div class="ol">
@@ -31,7 +31,14 @@
                                 <div class=""><i class="icon iconfont icon-zhiwei"></i>职位</div>
                             </div>
                             <div class="or tac">
-                                <div v-for="i in 8">行政部门</div>
+                                <mt-loadmore  :bottom-method="apartmenloadBottom" :bottom-all-loaded="apartmentallLoaded" ref="loadapartment">
+                                    <ul class="apartmentList">
+                                        <li v-for="(item,index) in apartMentList" :key="index">
+                                            <div>{{item.name}}</div>
+                                        </li>
+                                    </ul>
+                                </mt-loadmore>
+
                             </div>
                         </div>
                     </transition>
@@ -45,7 +52,7 @@
                         <ul>
                             <li v-for="(item,index) in staffList" :key="index">
                                 <div class="list overflow paddingAll borderBottom">
-                                    <img src="../assets/img/head.png" class="marginRight headPicture fl" alt="">
+                                    <img :src="item.userAvatar" class="marginRight headPicture fl" alt="">
                                     <div class="fl">
                                         <p class="fs36 ">{{item.userName}}</p>
                                         <p class="gray marginTop">{{item.departmentName}}</p>
@@ -71,7 +78,15 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-
+    .apartmentList{
+        height: 7rem;
+        overflow: scroll;
+        li{
+            padding: 0.3rem 0;
+            .borderBottom;
+            .fs30;
+        }
+    }
     .listWrap {
         height: calc(~"100% - 2rem");
         overflow: scroll;
@@ -114,6 +129,8 @@
             i {
                 .fs36;
                 .marginRight;
+                position: relative;
+                top:-2px;
             }
             div {
                 padding: 0.3rem 0;
@@ -123,19 +140,12 @@
             }
         }
         .or {
-            width: 59%;
+            width: 60%;
+            box-sizing: border-box;
             padding-top: 0.08rem;
             .border;
             border-right: none;
             .fl;
-            div {
-                padding: 0.3rem 0;
-                .borderBottom;
-                .fs30;
-                &:last-child {
-                    border: none;
-                }
-            }
         }
     }
 
@@ -193,17 +203,22 @@
     export default {
         data() {
             return {
+                apartmentallLoaded:false,
                 allLoaded: false,
                 showOption: false,
                 listWrap: '',
                 showStaff: false,
                 pageNumber: 1,
                 pageSize: 20,
+                apartmentNum:1,
+                apartmentSize:20,
                 lastPage: false,
                 keyWord: '',
                 departmentId: '',
                 jobId: '',
-                staffList: []
+                staffList: [],
+                apartMentList:[],
+                apartmentLast:false
             }
         },
         computed: {
@@ -225,6 +240,31 @@
         },
         props: {},
         methods: {
+            apartmenloadBottom(){
+                if(!apartmentLast){
+                    this.apartmentNum +=1;
+                    this.getApartment();
+                }else{
+                    this.apartmentallLoaded = true;
+                }
+            },
+            getApartment(){
+                let that = this;
+                this.$http.post('/companyUser/departmentList', {
+                    pageNumber: this.apartmentNum,
+                    pageSize: this.apartmentSize,
+                })
+                    .then(function (response) {
+                        console.log(response)
+                        that.apartMentList = that.apartMentList.concat(response.data.data.content) ;
+                        if(response.data.data.last){
+                            that.apartmentLast = true;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
             loadBottom() {
                 // 加载更多数据
                 if(this.lastPage){
@@ -284,10 +324,7 @@
         },
         mounted() {
             this.getStaff();
-//            console.log(document.querySelector('.search').getClientRects()[0].height)
-//
-//            this.listWrap = (document.documentElement.clientHeight-document.querySelector('.search').getClientRects()[0].height)-80 + "px";
-//            console.log(document.documentElement.clientHeight)
+            this.getApartment();
         }
     }
 </script>

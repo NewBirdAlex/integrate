@@ -29,33 +29,8 @@
                      :inputType="item.inputType?item.inputType:'text'"
             ></myInput>
             <div class="marginTop"></div>
-            <subTitle :content="'附加图片'" :subWord="'（6/9）'"></subTitle>
-            <div class="paddingAll bgWhite">
-                <vue-core-image-upload
-                class="btn btn-primary"
-                :crop="false"
-                @imageuploaded="imageuploaded"
-                @imagechanged="imagechanged"
-                :data="imgData"
-                compress="50"
-                :max-file-size="5242880"
-                url="http://192.168.0.121:8888/imageUpload/imgBase64" >
-                </vue-core-image-upload>
-
-                <!--element ui-->
-                <!--<el-upload-->
-                        <!--action="http://192.168.0.121:8888/imageUpload/imgBase64"-->
-                        <!--list-type="picture-card"-->
-                        <!--limit="5"-->
-                        <!--:before-upload="imgStatuChange"-->
-                        <!--:on-preview="handlePictureCardPreview"-->
-                        <!--:on-remove="handleRemove">-->
-                    <!--<i class="el-icon-plus"></i>-->
-                <!--</el-upload>-->
-                <!--<el-dialog v-model="dialogVisible" size="tiny">-->
-                    <!--<img width="100%" :src="dialogImageUrl" alt="">-->
-                <!--</el-dialog>-->
-            </div>
+            <!--上传图片-->
+            <uploadImg @getData="getImgList"></uploadImg>
             <div class="marginTop"></div>
 
             <subTitle :content="'申请人'" :subWord="'(默认申请自己的，可帮其他同事申请)'" :need="true"></subTitle>
@@ -63,27 +38,11 @@
             <choosePeople v-for="(item,index) in peopleList" :name="item.userName"
                           :key="index" :point="item.selectAddScore" :range="scoreRange"
                           :ind="index"
+                          :head="item.userAvatar"
                           ref="choosePeople"
                           @changePoint="changePoint">
                 <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
             </choosePeople>
-
-            <!--<div class=" wrap2 bgWhite" v-if="peopleList.length">-->
-                <!--<div class="inner" v-for="(item,index) in peopleList" :key="index">-->
-
-                    <!--<span  class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>-->
-                    <!--<img src="../assets/img/head.png" alt="">-->
-                    <!--<span>{{item.userName}}</span>-->
-                    <!--<div class="fr">-->
-                        <!--showValue-->
-                        <!--<label for="selId" ><i class="icon iconfont icon-xiala gray marginRight"></i></label>-->
-                    <!--</div>-->
-                <!--</div>-->
-
-                <!--<select name="" id="selId" >-->
-                    <!--<option value="item" v-for="item in scoreRange">{{item}}</option>-->
-                <!--</select>-->
-            <!--</div>-->
 
 
             <div class="bgWhite paddingAll lh40 fs28">
@@ -134,7 +93,7 @@
                 </div>
             </div>
         </div>
-        <div class="confBtn">确定</div>
+        <div class="confBtn" @click="subData">确定</div>
     </div>
 </template>
 <style scoped lang="less">
@@ -240,10 +199,10 @@
 <script>
     import myInput from '../components/myInput.vue'
     import subTitle from '../components/subTitle.vue'
-    import VueCoreImageUpload from 'vue-core-image-upload'
     import choosePeople from '../components/choosePeople.vue'
     import chooseStaff from '../components/chooseStaff.vue'
-
+    import uploadImg from '../components/uploadImg.vue'
+    import { mapGetters } from 'vuex';
     export default {
         data() {
             return {
@@ -276,9 +235,15 @@
                 peopleList:null,
                 chaosongList:null,
                 shenpiList:null,
-                imgData:{content:''},
+                imgList:'',
+                imgData:{},
                 src: 'http://img1.vued.vanthink.cn/vued0a233185b6027244f9d43e653227439a.png'
             }
+        },
+        computed: {
+            ...mapGetters([
+                'userMessage',
+            ])
         },
         methods: {
             shenpi(){
@@ -301,28 +266,23 @@
                 }else{
                     let that =this
                     this.peopleList = data;
+                    this.peopleList.unshift({
+                        userName:this.userMessage.userName,
+                        selectAddScore:this.scoreRange[0]
+                    })
                     this.peopleList.forEach(item=>item.selectAddScore=that.scoreRange[0])
                 }
 
             },
-            //            上传图片recall
-            imageuploaded(res) {
-                console.log(res)
-                if (res.errcode == 0) {
-                    this.src = res.data.src;
-                }
-            },
-            imagechanged(data){
-                console.log(data.size)
-                console.log(this.imgData)
-                console.log(this.imgData.content)
 
-                this.imgData.content = data.size;
-                console.log(this.imgData)
-                console.log(this.imgData.content)
-
-            },
             delPerson(index){
+                if(this.peopleList[index].userName==this.userMessage.userName){
+                    this.$toast({
+                        message: '不能删除自己哦',
+                        duration: 2000
+                    });
+                    return;
+                }
                 this.peopleList.splice(index, 1)
             },
             changePoint(msg){
@@ -353,10 +313,48 @@
             imgStatuChange(file){
                 console.log(file)
             },
+            getImgList(msg){
+                console.log(msg)
+                this.imgList = msg.join(',')
+            },
             getDetail(){
                 let that = this;
                 this.$http.post('/actionList/getActionDetail', {
                     id:this.$route.params.id
+                })
+                    .then(function (response) {
+                        that.detail = response.data.data.detail;
+                        that.approveUser = response.data.data.approveUser;
+                        // get score select range
+                        let score = that.detail.minuxScore;
+                        for(let i = 0; i<(that.detail.maxScore-that.detail.minuxScore)/that.detail.scoreLevel;i++){
+                            that.scoreRange.push(that.detail.minuxScore+i*that.detail.scoreLevel)
+                        }
+                        that.peopleList = [];
+                        that.peopleList.push({
+                            userName:that.userMessage.userName,
+                            selectAddScore:that.scoreRange[0]
+                        })
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            subData(){
+                this.$http.post('/missionApprove/submitMissionApprove', {
+                    addScore: "string",
+                    aimId: 0,
+                    approveContext: "string",
+                    approveRemark: "string",
+                    approveTitle: "string",
+                    approveUserId: "string",
+                    beApproveUserId: "string",
+                    copyUserId: "string",
+                    missionPics: "string",
+                    missionProof: "string",
+                    rootId: 0,
+                    submitUserId: "string",
+                    type:0,
                 })
                     .then(function (response) {
                         that.detail = response.data.data.detail;
@@ -375,11 +373,12 @@
         },
         mounted(){
             this.getDetail();
+
         },
         components: {
             myInput,
             subTitle,
-            VueCoreImageUpload,
+            uploadImg,
             choosePeople,
             chooseStaff
         }
