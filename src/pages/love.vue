@@ -163,7 +163,7 @@
             }
         },
         mounted(){
-//            this.getList();
+            this.getList();
             this.getBaseInf();
         },
         components:{
