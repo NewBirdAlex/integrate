@@ -1,6 +1,6 @@
 <template>
     <div>
-        <subTitle :content="'附加图片'" :subWord="'（6/9）'"></subTitle>
+        <subTitle :content="'附加图片'" :subWord="'（'+imgNum+'/9）'"></subTitle>
         <div class="imgwrap">
             <img v-for="item in imgList" :src='item' alt="">
         </div>
@@ -13,7 +13,7 @@
                     compress="60"
                     inputOfFile="file"
                     :max-file-size="5242880"
-                    url="http://192.168.0.121:8888/imageUpload/imgUploadFile" >
+                    url="http://192.168.1.108:8888/imageUpload/imgUploadFile" >
                 <i class="icon iconfont icon-upload"></i>
             </vue-core-image-upload>
         </div>
@@ -44,18 +44,23 @@
     export default {
         data() {
             return {
+                imgNum:0,
                 imgList:[]
             }
         },
         methods:{
+
             //            上传图片recall
             imageuploaded(res) {
-                console.log(res)
+                let that  = this;
+
                 if (res.code == "200000") {
-                    this.imgList .push(res.data.url)
-                    this.$emit('getData',this.imgList)
+                    that.imgNum+=1;
+                    console.log(that.imgNum)
+                    that.imgList .push(res.data.url)
+                    that.$emit('getData',this.imgList)
                 }else{
-                    this.$toast({
+                    that.$toast({
                         message: res.data.message,
                         duration: 2000
                     });

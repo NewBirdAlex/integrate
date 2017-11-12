@@ -1,12 +1,24 @@
 <template>
     <div class="wrap">
-        <img class="head" src="../assets/img/head.png" alt="">
+        <img class="head" :src="data.userAvatar" alt="">
         <div class="right">
-            <p>李梦洁的审批 <span class="blue fr">+100分</span></p>
-            <p class="gray">普通员工</p>
-            <p>审批本月月季</p>
-            <p>积分类型：品德A分</p>
-            <p><span class="yellow">待审批</span> <span class="fr gray">08-16 16:08</span></p>
+            <p>
+                {{data.userName}}
+                <span class="blue fr" v-if="data.addScore>0">+{{data.addScore}}分</span>
+                <span class="blue fr" v-else>-{{data.addScore}}分</span>
+            </p>
+            <p class="gray">{{data.jobTitle}}</p>
+            <p>{{data.approveTitle}}</p>
+            <p>积分类型：
+                <span v-if="data.type==1">行为积分</span>
+                <span v-if="data.type==2">品德积分</span>
+                <span v-if="data.type==3">业绩积分</span>
+            </p>
+            <p>
+                <span class="yellow" v-if="data.status==1">待审批</span>
+                <span class="blue" v-if="data.status==2">已经审批</span>
+                <span class="fr gray">{{data.createDate}}</span>
+            </p>
         </div>
     </div>
 </template>
@@ -51,6 +63,9 @@
     export default {
         data() {
             return {}
-        }
+        },
+        props:[
+            'data'
+        ]
     }
 </script>

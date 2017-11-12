@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="spTop" ref="myFilter">
-            <span :class="{active:spType}" @click="spType=!spType">待我审批</span>
-            <span :class="{active:!spType}" @click="spType=!spType">我已审批</span>
+            <span :class="{active:spType==1}" @click="changeStatu(1)">待我审批</span>
+            <span :class="{active:spType==2}" @click="changeStatu(2)">我已审批</span>
         </div>
         <div class="sel">
             <span class="filterType "  @click="handlehide('search')">
@@ -71,10 +71,18 @@
             </div>
         </div>
         <div v-if="!showWrap">
-            <router-link to="/orderDetail">
-                <showList v-for="i in 5" :key="i"></showList>
-            </router-link>
 
+            <ul
+                    v-infinite-scroll="loadMore"
+                    infinite-scroll-disabled="loading"
+                    infinite-scroll-immediate-check="true"
+                    infinite-scroll-distance="10">
+                <router-link tag ='li' :to="'/orderDetail/'+item.id" v-for="(item,index) in orderList" :key="index">
+
+                    <showList :data="item"></showList>
+                </router-link>
+                <myEmpty v-if="!orderList"></myEmpty>
+            </ul>
         </div>
     </div>
 </template>
@@ -227,10 +235,15 @@
     export default {
         data() {
             return {
-                spType:true,
+                spType:1,
                 filterHeight:0,
                 showWrap:true,
                 showSearch:false,
+                pageNumber:1,
+                pageSize:10,
+                lastPage:false,
+                loading:false,
+                orderList:null,
                 searchHistory:[
                     '品德积分',
                     '人气奖',
@@ -249,6 +262,10 @@
                 console.log(this.$refs.myFilter.getBoundingClientRect().top)
                 this.filterHeight = document.documentElement.clientHeight - this.$refs.myFilter.getBoundingClientRect().height;
             },
+            changeStatu(msg){
+                this.spType = msg;
+                this.getList();
+            },
             handlehide(msg){
                 if(msg=='search'){
                     this.showSearch=this.showWrap=true;
@@ -257,9 +274,37 @@
                     this.showWrap=true;
                 }
             },
+            loadMore() {
+                if(!this.lastPage){
+                    this.getList();
+                }
+
+            },
+            getList(){
+                let that = this;
+                this.$http.post('/missionApprove/iApproveList', {
+                    checkedStatus: this.spType,//1:待审批;2:已审批 ,
+                    pageNumber: this.pageNumber,
+                    pageSize: this.pageNumber,
+                    searchContext: ""
+                })
+                    .then(function (response) {
+                        if(response.data.data.code=200000){
+                            that.orderList = response.data.data.content;
+                            //last page
+                            response.data.data.last? that.lastPage=true:'';
+                            that.loading = false;
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
         },
         mounted(){
             this.init();
+            this.getList();
             this.showWrap=false;
         },
         components:{

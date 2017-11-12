@@ -84,12 +84,12 @@
                 idList: [
                     {
                         type:1,
-                        name: '品德积分',
+                        name: '行为积分',
                         sel: true
                     },
                     {
                         type:2,
-                        name: '行为积分',
+                        name: '品德积分',
                         sel: false
                     },
                     {
@@ -128,7 +128,7 @@
                 this.getList();
             },
             go(item){
-                this.$router.push('/apply/'+item.id);
+                this.$router.push('/apply/'+item.id+'/'+this.type);
             },
             loadMore() {
                 if(!this.lastPage && !this.loading){

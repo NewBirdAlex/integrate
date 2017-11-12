@@ -35,13 +35,13 @@
                     <p class=" fs26 gray">剩余：1 {{item.remainCount}} <span class="fr qd borderRadius">抢单</span></p>
                     <i class="icon iconfont icon-icon" v-if="item.isComplete"></i>
                 </div>
-                <div class="paddingAll gray overflow">
+                <div class="paddingAll gray overflow" v-if="item.list.length">
                     他们已抢单：
                     <span class="rightArrow fr">
                            <i class="icon iconfont icon-xiala1"></i>
                        </span>
                     <div class="fr countPeople">
-                        <img src="../assets/img/head.png" class="littleHead" v-for="i in 8" alt="">
+                        <img :src="imgitem.userAvatar" class="littleHead" v-for="(imgitem,ind) in item.list" :key="ind" alt="">
                     </div>
                 </div>
             </li>

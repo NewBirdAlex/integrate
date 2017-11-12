@@ -7,8 +7,11 @@ import router from '../router'
 axios.interceptors.request.use(function (config){
     // 处理请求之前的配置
     store.dispatch('showLoading');
-    config.data.token=store.state.userMessage.token;
-    config.data.userId=store.state.userMessage.userId;
+    if(store.state.userMessage){
+        config.data.token=store.state.userMessage.token;
+        config.data.userId=store.state.userMessage.userId;
+    }
+
     return config;
 }, function (error){
     // 请求失败的处理
@@ -32,6 +35,6 @@ axios.interceptors.response.use(function (response){
     return Promise.reject(error);
 });
 
-axios.defaults.baseURL = 'http://192.168.0.121:8888';
+axios.defaults.baseURL = 'http://192.168.1.108:8888';
 
 export default axios

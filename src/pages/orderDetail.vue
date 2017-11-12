@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h3>积分审批详情</h3>
         <div class="content">
             <div class="head">
                 <img src="../assets/img/head.png" alt="" @click="addActive" :class="active==true?'active':''">
@@ -222,7 +221,25 @@
         methods:{
             addActive(){
                 this.active=true;
+            },
+            getDetail(){
+                let that = this;
+                this.$http.post('/missionApprove/approveDetail', {
+                    id:this.$route.params.id
+                })
+                    .then(function (response) {
+                        if(response.data.data.code=200000){
+
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
+        },
+        mounted(){
+            this.getDetail();
         },
         components:{
             itemList

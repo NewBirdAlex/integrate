@@ -12,24 +12,33 @@
         </div>
 
         <div class="bgWhite">
-            <div class="overflow  fs36 loveList " v-for="(i,index) in 5">
-                <div class="fl left  ">{{index+1}}</div>
-                <div class="fl right">
-                    <router-link to="/loveRank" tag="div" class="fl marginRight"><img src="../assets/img/head.png" class="headPicture" alt=""></router-link>
-                    <div class="fl">
-                        <p><strong>我</strong></p>
-                        <p class="gray fs30">本月 960分</p>
+
+            <ul
+                    v-infinite-scroll="loadMore"
+                    infinite-scroll-disabled="loading"
+                    infinite-scroll-immediate-check="true"
+                    infinite-scroll-distance="10">
+                <li v-for="(item,index) in list" :key="index" class="loveList">
+                    <div class="overflow  fs36  ">
+                        <div class="fl left  ">{{index+1}}</div>
+                        <div class="fl right">
+                            <router-link to="/loveRank" tag="div" class="fl marginRight"><img :src="item.userAvatar" class="headPicture" alt=""></router-link>
+                            <div class="fl">
+                                <p><strong>{{item.userName}}</strong></p>
+                                <p class="gray fs30">本月 {{item.userScore}}分</p>
+                            </div>
+                            <div class="fr  tac marginRight">
+                                <p>{{item.loveAdd}}</p>
+                                <p><i class="icon iconfont icon-hongxin gray" @click="kissU"></i></p>
+                            </div>
+                            <div class="fr marginRight tac">
+                                <p>{{item.loveAddAdmin}}</p>
+                                <p><i class="icon iconfont icon-sun3 yellow"></i></p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="fr  tac marginRight">
-                        <p>6</p>
-                        <p><i class="icon iconfont icon-hongxin gray" @click="kissU"></i></p>
-                    </div>
-                    <div class="fr marginRight tac">
-                        <p>6</p>
-                        <p><i class="icon iconfont icon-sun3 yellow"></i></p>
-                    </div>
-                </div>
-            </div>
+                </li>
+            </ul>
         </div>
         <!--<transition-->
                 <!--name="custom-classes-transition"-->
@@ -92,7 +101,12 @@
         data() {
             return {
                 showOption:false,
-                clickHeart:false
+                clickHeart:false,
+                loading:false,
+                lastPage:false,
+                pageNumber:1,
+                pageSize:10,
+                list:null
             }
         },
         methods:{
@@ -103,9 +117,54 @@
                 clearTimeout(timer);
                 setTimeout(()=>this.clickHeart=false,1000)
             },
+            loadMore() {
+                if(!this.lastPage){
+                    this.loading = true;
+                    this.getList();
+                }
+            },
+            getBaseInf(){
+                let that = this;
+                this.$http.post('/user/canUseLoveScore', {
+                })
+                    .then(function (response) {
+                        if(response.data.data.code=200000){
+
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            getList(){
+                let that = this;
+                this.$http.post('/user/loveOrder', {
+                    departmentId: '',
+                    jobId: '',
+                    month: '',
+                    pageNumber: this.pageNumber,
+                    pageSize:this.pageSize
+                })
+                    .then(function (response) {
+                        if(response.data.data.code=200000){
+                            that.list = response.data.data.content;
+                            if(response.data.data.last) that.lastPage = true;
+                            that.loading = false;
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
             getData(msg){
                 console.log(msg)
             }
+        },
+        mounted(){
+//            this.getList();
+            this.getBaseInf();
         },
         components:{
             boardSearch

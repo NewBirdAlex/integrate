@@ -273,7 +273,7 @@ const router = new Router({
             }
         },
         {
-            path: '/apply/:id',
+            path: '/apply/:id/:type',
             name: 'Apply',
             component: Apply,
             meta:{
@@ -444,12 +444,12 @@ const router = new Router({
             }
         },
         {
-            path: '/orderDetail',
+            path: '/orderDetail/:id',
             name: 'OrderDetail',
             component: OrderDetail,
             meta:{
                 navShow: false,
-                title:'订单'
+                title:'订单详情'
             }
         }
     ]

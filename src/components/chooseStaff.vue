@@ -241,7 +241,7 @@
         props: {},
         methods: {
             apartmenloadBottom(){
-                if(!apartmentLast){
+                if(!this.apartmentLast){
                     this.apartmentNum +=1;
                     this.getApartment();
                 }else{

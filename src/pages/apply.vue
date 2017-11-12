@@ -68,8 +68,17 @@
                             .......
                         </div>
                     </div>
+                    <div class="spr overflow fl marginBottom" v-for="(item,index) in shenpiList">
+                        <div class="ps fl">
+                            <img :src="item.userAvatar" class="headPicture" alt="">
+                            <p class="marginTop" v-html="item.userName"></p>
+                        </div>
+                        <div class="pt fl marginTop gray marginLeft marginRight">
+                            .......
+                        </div>
+                    </div>
                     <!--<div class="add fl" @click="markPerson('shenpi')" v-if="!approveUser.length">-->
-                    <div class="add fl" @click="shenpi">
+                    <div class="add fl" @click="shenpi" v-if="!approveUser.length">
                         <i class="icon iconfont icon-jia gray"></i>
                     </div>
                 </div>
@@ -213,6 +222,8 @@
                 detail:{},
                 approveUser:[],
                 scoreRange:[],
+                selfInf:{
+                },
                 inputData: [
                     {
                         title: "审批备注",
@@ -266,10 +277,7 @@
                 }else{
                     let that =this
                     this.peopleList = data;
-                    this.peopleList.unshift({
-                        userName:this.userMessage.userName,
-                        selectAddScore:this.scoreRange[0]
-                    })
+                    this.peopleList.unshift(this.selfInf);
                     this.peopleList.forEach(item=>item.selectAddScore=that.scoreRange[0])
                 }
 
@@ -331,40 +339,69 @@
                             that.scoreRange.push(that.detail.minuxScore+i*that.detail.scoreLevel)
                         }
                         that.peopleList = [];
-                        that.peopleList.push({
+                        that.selfInf = {
+                            id:that.userMessage.userId,
                             userName:that.userMessage.userName,
                             selectAddScore:that.scoreRange[0]
-                        })
+                        }
+                        that.peopleList.push(that.selfInf)
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
             },
             subData(){
+                let score = [];
+                let that = this;
+                this.peopleList.forEach(item=>{
+                    score.push(item.selectAddScore)
+                })
+                let approveUserId = [];
+                if(this.approveUser.length){
+                    this.approveUser.forEach(item=>{
+                        approveUserId.push(item.id);
+                    })
+                }else if(this.shenpiList){
+                    this.shenpiList.forEach(item=>{
+                        approveUserId.push(item.id);
+                    })
+                }
+                let beApproveUserId = [];
+                this.peopleList.forEach(item=>{
+                    beApproveUserId.push(item.id);
+                })
+                let copyUserId = [];
+                if(this.chaosongList) {
+                    this.chaosongList.forEach(item=> copyUserId.push(item.id));
+                }
+
+
+
                 this.$http.post('/missionApprove/submitMissionApprove', {
-                    addScore: "string",
-                    aimId: 0,
-                    approveContext: "string",
-                    approveRemark: "string",
-                    approveTitle: "string",
-                    approveUserId: "string",
-                    beApproveUserId: "string",
-                    copyUserId: "string",
-                    missionPics: "string",
-                    missionProof: "string",
-                    rootId: 0,
-                    submitUserId: "string",
-                    type:0,
+                    addScore: score.join(','),
+                    aimId: this.$route.params.id,
+                    approveContext: this.detail.context,
+                    approveRemark: this.inputData[0].content,
+                    approveTitle: this.detail.title,
+                    approveUserId: approveUserId.join(','),
+                    beApproveUserId: beApproveUserId.join(','),
+                    copyUserId: copyUserId.join(','),
+                    missionPics: this.imgList,
+                    type:this.$route.params.type,
                 })
                     .then(function (response) {
-                        that.detail = response.data.data.detail;
-                        that.approveUser = response.data.data.approveUser;
-                        // get score select range
-                        let score = that.detail.minuxScore;
-                        for(let i = 0; i<(that.detail.maxScore-that.detail.minuxScore)/that.detail.scoreLevel;i++){
-                            that.scoreRange.push(that.detail.minuxScore+i*that.detail.scoreLevel)
+                        if(response.data.code==200000){
+                            that.$toast({
+                                message:'提交成功',
+                                duration: 2000
+                            });
+                            that.$router.go(-1);
+                        }else{
+                            that.$toast({
+                                message:response.data.message,
+                                duration: 2000
+                            });
                         }
-
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -373,6 +410,7 @@
         },
         mounted(){
             this.getDetail();
+
 
         },
         components: {
