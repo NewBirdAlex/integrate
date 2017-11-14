@@ -27,7 +27,13 @@ axios.interceptors.response.use(function (response){
     //重新登录
     if(response.data.code=="400000"){
         router.push('/login');
+    }else if(response.data.code!="200000"){
+        Vue.$toast({
+            message:response.data.message,
+            duration:2000
+        });
     }
+
     return response;
 }, function (error){
     // 处理响应失败

@@ -19,7 +19,7 @@
                 </div>
             </li>
         </ul>
-        <myEmpty v-if="!list.length"></myEmpty>
+        <myEmpty v-if="!list"></myEmpty>
     </div>
 </template>
 <style scoped lang="less">
@@ -63,7 +63,7 @@
         },
         methods: {
             loadMore() {
-                if (!lastPage) {
+                if (!this.lastPage) {
                     this.pageNumber += 1;
                     this.getList(0);
                 } else {

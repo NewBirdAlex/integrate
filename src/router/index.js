@@ -445,7 +445,7 @@ const router = new Router({
             }
         },
         {
-            path: '/praise',
+            path: '/praise/:type',
             name: 'Praise',
             component: Praise,
             meta:{

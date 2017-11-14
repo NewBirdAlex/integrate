@@ -6,7 +6,7 @@
             <img :src="head" class="headPicture" alt="">
             <span>{{name}}</span>
             <div class="fr">
-                {{point}}
+                {{point}}分
                 <label :for="selId" ><i class="icon iconfont icon-xialakuangtishitubiao"></i></label>
             </div>
         </div>

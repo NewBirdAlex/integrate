@@ -89,6 +89,7 @@
         },
         watch:{
             $route(to){
+                this.$store.commit('hideLoading');
                 const noncePath = to.fullPath,
                     format = JSON.stringify([noncePath])
 

@@ -1,25 +1,57 @@
 <template>
     <div>
         <div class="content">
-            <div class="head">
-                <img src="../assets/img/head.png" alt="" @click="addActive" :class="active==true?'active':''">
-                <span>李萌萌</span>
-                <span class="yellow fr">等待我审批</span>
+            <div class="head fs30">
+                <img :src="orderDetail.userAvatar" alt="">
+                <span>{{orderDetail.userName}}</span>
+                <span class="yellow fr" v-if="orderDetail.checkStatus==1">等待我审批</span>
+                <span class="green fr" v-if="orderDetail.checkStatus==2">审批通过</span>
+                <span class="red fr" v-if="orderDetail.checkStatus==3">审批不通过</span>
             </div>
-            <itemList :itemArray="itemArray"></itemList>
+            <ul class="myUl">
+                <li >
+                    <span class="gray">审批编号</span>
+                    <span class="fr" >{{orderDetail.approveCode}}</span>
+                </li><li >
+                    <span class="gray">所在部门</span>
+                    <span class="fr" >{{orderDetail.departmentName}}</span>
+                </li><li >
+                    <span class="gray">审批标题</span>
+                    <span class="fr" >{{orderDetail.approveTitle}}</span>
+                </li><li >
+                    <span class="gray">审批时间</span>
+                    <span class="fr" >{{orderDetail.approveDate}}</span>
+                </li><li >
+                    <span class="gray">积分类型</span>
+                    <span class="fr" >{{orderDetail.type}}</span>
+                </li><li >
+                    <span class="gray">申请积分</span>
+                    <span class="fr" >{{orderDetail.missionScore}}</span>
+                </li><li >
+                    <span class="gray">备注</span>
+                    <span class="fr" >{{orderDetail.approveRemark}}   </span>
+                </li>
+            </ul>
             
             <div class="showImg">
-                <img src="../assets/img/square.jpg" v-for="i in 5" alt="">
+                <img :src="item" v-for="item in orderDetail.missionPics.split(',')" alt="">
             </div>
         </div>
         <div class="progress">
-            <div class="prog_list" v-for="item in 6">
+            <div class="prog_list" v-for="item in orderDetail.approveUserList">
                 <div class="time"><i class="icon iconfont icon-gouxuan"></i></div>
                 <div class="content">
-                    <div class="left"><img src="../assets/img/head.png" alt=""></div>
+                    <div class="left"><img :src="item.userAvatar" class="headPicture" alt=""></div>
                     <div class="right">
-                        <p>审批我的最佳人气奖 <span class="blue fr">+80分</span></p>
-                        <p class="yellow">审批中 <span class="gray fr">07-02 12:06</span></p>
+                        <p class="overflow">{{item.userName}} <span class="blue fr">+{{item.score}}分</span></p>
+                        <p>
+                            <span class="yellow" v-if="item.checkStatus==0">提交审批</span>
+                            <span class="yellow" v-if="item.checkStatus==1">审批中</span>
+                            <span class="green" v-if="item.checkStatus==2">审批通过</span>
+                            <span class="red" v-if="item.checkStatus==3">审批不通过</span>
+
+                            <span class="gray fr">{{item.approveDate}}</span>
+                        </p>
                         <div class="triangle-left"></div>
                     </div>
                     <div class="recommend" v-if="item%2==0">
@@ -43,7 +75,14 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-    @import "../assets/font/font1/iconfont.css";
+
+    .myUl{
+        padding-top: 0.2rem;
+        li{
+            font-size: @fs28;
+            padding: 0.1rem 0;
+        }
+    }
     h3{
         .tac;
         padding:0.26rem;
@@ -181,41 +220,12 @@
     }
 </style>
 <script>
-
-
     import itemList from '../components/itemList.vue'
     export default {
         data() {
             return {
                 active:false,
-                itemArray:[
-                    {
-                        name:"审批编号",
-                        content:"JFB21225233321224122"
-                    },{
-                        name:"所在部门",
-                        content:"都兰工厂"
-                    },{
-                        name:"审批标题",
-                        content:"每月月底通过客户的好评获得最佳人气奖"
-                    },{
-                        name:"审批标题",
-                        content:"2017-07-16  22:08:06"
-                    },{
-                        name:"积分类型",
-                        content:"人物积分"
-                    },{
-                        name:"申请积分",
-                        content:"+80分",
-                        addClass:true
-                    },{
-                        name:"备注",
-                        content:"科技任务精选"
-                    },{
-                        name:"照片",
-                        content:""
-                    }
-                ]
+                orderDetail:null
             }
         },
         methods:{
@@ -228,10 +238,7 @@
                     id:this.$route.params.id
                 })
                     .then(function (response) {
-                        if(response.data.data.code=200000){
-
-                        }
-
+                        that.orderDetail = response.data.data;
                     })
                     .catch(function (error) {
                         console.log(error);

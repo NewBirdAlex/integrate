@@ -107,7 +107,7 @@
                     console.log(response)
                     if(response.data.code==200000){
                         console.log(JSON.stringify(response.data.data))
-                        console.log(response.data.data)
+
                         localStorage.setItem('HXuserMessage',JSON.stringify(response.data.data));
                         this.$store.commit('getLocalUserMessage');
                         this.$toast({

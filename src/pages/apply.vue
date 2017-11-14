@@ -202,7 +202,7 @@
         background: #fafafa;
     }
     .wrap{
-        background:@grayBg;
+
     }
     .icon{
         /*<!--font-size: @fs30!important;-->*/

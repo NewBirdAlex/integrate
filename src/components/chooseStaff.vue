@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="marginTop paddingAll bgWhite fs30 borderBottom" id="selectPeople" @click="showStaff=!showStaff">
-            <strong>选择其他员工</strong>
+            <strong>选择员工</strong>
             <span class="fr rightArrow"><i class="icon iconfont icon-xiala1 gray"></i></span>
         </div>
         <transition

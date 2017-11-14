@@ -152,13 +152,13 @@
                         name:"领导表扬",
                         icon:'icon-zhicheng',
                         color:'#fec170',
-                        router:'/praise'
+                        router:'/praise/1'
                     },
                     {
                         name:"管理奖扣",
                         icon:'icon-guanli',
                         color:'#50bee6',
-                        router:'/managePraise'
+                        router:'/praise/2'
                     },
                     {
                         name:"发布公告",

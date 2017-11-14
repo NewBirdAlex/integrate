@@ -94,13 +94,13 @@
             },
             subMission() {
                 let that =this;
-                if (this.selectType == '品德') {
+                if (this.selectType.selValue == '品德') {
                     var jfType = 1;
                 }
-                if (this.selectType == '行为') {
+                if (this.selectType.selValue == '行为') {
                     var jfType = 2;
                 }
-                if (this.selectType == '业绩') {
+                if (this.selectType.selValue == '业绩') {
                     var jfType = 3;
                 }
                 this.$http.post('/mission/userCreateMission', {

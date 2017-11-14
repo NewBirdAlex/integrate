@@ -2,6 +2,17 @@
     <div>
 
         <div class=" wrap">
+            <div >
+                <label for="selList">
+                    <i class="icon iconfont icon-xiala gray fs30"></i>
+                </label>
+                <select name="" id="selList" v-model="inputData[0].content">
+                    <option value="租房">租房</option>
+                    <option value="煮饭">煮饭</option>
+                    <option value="游泳">游泳</option>
+                </select>
+            </div>
+
             <myInput v-for="(item,index) in inputData" :key="index"
                      :conttitle="item.title"
                      :need="item.need"
@@ -11,55 +22,67 @@
                      :inputType="item.inputType?item.inputType:'text'"
             ></myInput>
             <mySelect :content="selectType" :selProp="'selectType'" @getData="getSelect"></mySelect>
-            <div class="marginTop"></div>
-
-            <subTitle :content="'附加图片'" :subWord="'（6/9）'"></subTitle>
-            <div class="paddingAll bgWhite">
-                <!--<vue-core-image-upload-->
-                        <!--class="btn btn-primary"-->
-                        <!--:crop="false"-->
-                        <!--@imageuploaded="imageuploaded"-->
-                        <!--@imagechanged="imagechanged"-->
-                        <!--:data="{}"-->
-                        <!--:max-file-size="5242880"-->
-                        <!--url="http://101.198.151.190/api/upload.php" >-->
-                <!--</vue-core-image-upload>-->
-
-                <!--element ui-->
-                <el-upload
-                        action="https://jsonplaceholder.typicode.com/posts/"
-                        list-type="picture-card"
-                        :on-preview="handlePictureCardPreview"
-                        :on-remove="handleRemove">
-                    <i class="el-icon-plus"></i>
-                </el-upload>
-                <el-dialog v-model="dialogVisible" size="tiny">
-                    <img width="100%" :src="dialogImageUrl" alt="">
-                </el-dialog>
+            <div class="paddingAll bgWhite fs30" v-if="$route.params.type==2">
+                <strong>奖扣时间</strong>
+                <span class="fr gray" v-if="!selTime" @click="pickTime">请选择时间</span>
+                <span class="fr" @click="pickTime" v-else>{{selTime}}</span>
             </div>
+            <!--//pick time-->
+            <mt-datetime-picker
+                    v-model="pickerVisible"
+                    type="date"
+                    ref="picker"
+                    @confirm="handleConfirm"
+                    year-format="{value} 年"
+                    month-format="{value} 月"
+                    date-format="{value} 日">
+            </mt-datetime-picker>
             <div class="marginTop"></div>
 
-            <subTitle :content="'表扬员工'" :subWord="'(默认申请自己的，可帮其他同事申请)'" :need="true"></subTitle>
+            <!--上传图片-->
 
-            <choosePeople v-for="(item,index) in peopleList" :name="item.name"
-                          :key="index" :point="item.point" :range="item.range"
+            <uploadImg @getData="getImgList"></uploadImg>
+
+            <div class="marginTop"></div>
+
+            <subTitle :content="'表扬员工'" :subWord="''" :need="true"></subTitle>
+
+            <choosePeople v-for="(item,index) in peopleList" :name="item.userName"
+                          :key="index" :point="item.selectAddScore" :range="scoreRange"
                           :ind="index"
+                          :head="item.userAvatar"
+                          ref="choosePeople"
                           @changePoint="changePoint">
                 <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
             </choosePeople>
-            <subTitle :content="'全选积分'" :subWord="'(选择可批量修改申请的积分)'" :need="false">
-                <span class="fr marginRight"><i class="icon iconfont icon-gouxuan blue"></i></span>
-            </subTitle>
+
+            <div class="bgWhite paddingAll lh40 fs28">
+                <strong>全选积分</strong>
+                <span class="gray">(选择可批量修改申请的积分)</span>
+                <span class="fr marginRight cl" :class="{'border':!selAll}" @click="selAll=!selAll"><i class="icon iconfont icon-gouxuan blue fs36" v-if="selAll"></i></span>
+            </div>
             <!--选择员工-->
             <chooseStaff  @getData="accept"></chooseStaff>
 
         </div>
-        <div class="confBtn">确定</div>
+        <div class="confBtn" @click="subData">确定</div>
     </div>
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-    /*@import "../assets/font/font1/iconfont.css";*/
+
+    label{
+        position: absolute;
+        right: 0.2rem;
+        top:0.4rem;
+        z-index: 10;
+    }
+    #selList{
+        position: absolute;
+        top:-100rem;
+        width: 0;
+        height: 0;
+    }
     .fs36{font-size: 0.36rem!important;}
     h3 {
         .tac;
@@ -74,12 +97,20 @@
     .icon{
         /*<!--font-size: @fs30!important;-->*/
     }
+    .cl{
+        .fr;
+        width: 0.4rem;
+        height: 0.4rem;
+        .tac;
+        line-height: 0.4rem;
+        border-radius: 50%;
+    }
 </style>
 <script>
     import myInput from '../components/myInput.vue'
     import mySelect from '../components/mySelect.vue'
     import subTitle from '../components/subTitle.vue'
-    import VueCoreImageUpload from 'vue-core-image-upload'
+    import uploadImg from '../components/uploadImg.vue'
     import choosePeople from '../components/choosePeople.vue'
     import chooseStaff from '../components/chooseStaff.vue'
 
@@ -91,13 +122,15 @@
                 selectType:{
                     name: '积分类型',
                     need: true,
-                    selValue: '',
+                    selValue: '品德',
                     selectRange: [
                         '品德',
                         '行为',
                         '业绩'
                     ]
                 },
+                selTime:'',
+                pickerVisible:'',
                 inputData: [
                     {
                         title: "表扬标题",
@@ -115,34 +148,10 @@
                         selRange:[]
                     }
                 ],
-                peopleList:[
-                    {
-                        name:"alex2",
-                        point:"+80",
-                        range:['+80','+160','-80','-160']
-                    },
-                    {
-                        name:"ben",
-                        point:"+80",
-                        range:['+80','+160','-80','-160']
-                    },
-                    {
-                        name:"ben",
-                        point:"+80",
-                        range:['+80','+160','-80','-160']
-                    },
-                    {
-                        name:"ben",
-                        point:"+80",
-                        range:['+80','+160','-80','-160']
-                    },
-                    {
-                        name:"ben",
-                        point:"+80",
-                        range:['+80','+160','-80','-160']
-                    }
-                ],
-                src: 'http://img1.vued.vanthink.cn/vued0a233185b6027244f9d43e653227439a.png'
+                peopleList:[],
+                scoreRange:[],
+                imgList:'',
+                selAll:false
             }
         },
         methods: {
@@ -150,35 +159,106 @@
                 this[data.name].selValue = data.val;
             },
             accept(data){
-                this.showStaff=!this.showStaff;
+                // accpet  staff person
+                this.peopleList = data;
+                this.peopleList.forEach(item=>item.selectAddScore=this.scoreRange[0])
+            },
+            getScoreRange(){
+                let that = this;
+                this.$http.post('/module/getModuleDetail', {
+                })
+                    .then(function (response) {
+                        for(let i = 0 ; i<=(response.data.data.moduleDetail.maxScore-response.data.data.moduleDetail.minuxScore)/response.data.data.moduleDetail.level ; i++){
+                            that.scoreRange.push(response.data.data.moduleDetail.minuxScore+i*response.data.data.moduleDetail.level)
+                        }
+                        console.log(that.scoreRange)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
             //            上传图片recall
-            imageuploaded(res) {
-                if (res.errcode == 0) {
-                    this.src = res.data.src;
-                }
-            },
-            imagechanged(data){
-                console.log(data)
+            getImgList(msg){
+                console.log(msg)
+                this.imgList = msg.join(',')
             },
             delPerson(index){
                 this.peopleList.splice(index, 1)
             },
+            pickTime(){
+                this.$refs.picker.open();
+            },
+            handleConfirm(data){
+                console.log(data)
+                this.selTime = data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate();
+
+            },
             changePoint(msg){
                 console.log(msg)
-                this.peopleList[msg.index].point=msg.value;
+//                this.peopleList[msg.index].point=msg.value;
+                //选择分数
+                if(this.selAll){//select all
+                    for(let i = 0 ; i<this.peopleList.length;i++){
+                        console.log(i);
+                        var obj =  this.peopleList[i];
+                        obj.selectAddScore=msg.value;
+                        this.$set(this.peopleList,i,obj);
+                    }
+                    console.log(this.peopleList)
+                }else{
+                    //select one
+                    this.peopleList[msg.index].selectAddScore=msg.value;
+                    console.log(this.peopleList[msg.index].selectAddScore)
+
+                }
             },
-            handleRemove(file, fileList) {
-                console.log(file, fileList);
-            },
-            handlePictureCardPreview(file) {
-                this.dialogImageUrl = file.url;
-                this.dialogVisible = true;
+            subData(){
+                let score = [];
+                let that = this;
+                this.peopleList.forEach(item=>{
+                    score.push(item.selectAddScore)
+                })
+                let approveUserId = [];
+                this.peopleList.forEach(item=>{
+                    approveUserId.push(item.id);
+                })
+                if (this.selectType.selValue == '品德') {
+                    var jfType = 1;
+                }
+                if (this.selectType.selValue == '行为') {
+                    var jfType = 2;
+                }
+                if (this.selectType.selValue == '业绩') {
+                    var jfType = 3;
+                }
+                let params = {
+                    addScore: score.join(','),
+                    beApproveUserId :approveUserId.join(','),
+                    praiseContext:this.inputData[1].content,
+                    praisePics :this.imgList,
+                    praiseTitle :this.inputData[0].content,
+                    type :jfType,
+                }
+                let url = '/missionApprove/praiseUser';
+                if(this.$route.params.type==2){
+                    params.dealDate = this.selTime;
+                    url = '/missionApprove/dealScore'
+                }
+                this.$http.post(url, params)
+                    .then(function (response) {
+                        that.$router.push('/work');
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
+        },
+        mounted(){
+            this.getScoreRange();
         },
         components: {
             subTitle,
-            VueCoreImageUpload,
+            uploadImg,
             choosePeople,
             mySelect,
             myInput,

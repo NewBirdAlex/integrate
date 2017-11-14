@@ -16,32 +16,24 @@
             <div class="filter"  :style="{height:filterHeight+'px'}"  v-show="showWrap">
                 <div class="sel_type" v-if="!showSearch">
                     <p class="gray">积分类型</p>
-                    <span>行为分</span>
-                    <span>品德分</span>
-                    <span class="active">业绩分</span>
-                    <span>积分申诉</span>
-                    <span>申请减分</span>
-                    <span>申请加分</span>
-                    <span>日常任务分</span>
-                    <span>悬赏任务分</span>
-                    <span>挑战任务分</span>
-                    <div class="confBtn" @click="showWrap=!showWrap">确定</div>
+                    <span :class="{'active':item.active}" @click="chooseType(item,index)" v-for="(item,index) in jfType" :key="index">{{item.name}}</span>
+                    <div class="confBtn" @click="confirmSelect">确定</div>
                 </div>
                 <div class="search" v-if="showSearch">
                     <div class="st grayBg">
                         <div class="bgWhite">
                             <i class="icon iconfont icon-sousuo"></i>
-                            <input type="text" placeholder="搜索标题、编号、正文内容">
+                            <input type="text" placeholder="搜索标题、编号、正文内容" v-model="searchContext">
                         </div>
-                        <span class="blue fr" @click="showWrap=!showWrap">取消</span>
+                        <span class="blue fr" @click="confirmInput">确定</span>
                     </div>
-                    <div class="sh gray paddingAll">
+                    <div class="sh gray paddingAll" v-if="history.length">
                         <p>
                             搜索历史
                             <i class="icon iconfont icon-guanbi fr "></i>
                         </p>
                         <div class="overflow">
-                            <span v-for="(item,index) in searchHistory"> {{item}}</span>
+                            <span v-for="(item,index) in history" @click="historySearch(item)"> {{item}}</span>
                         </div>
                     </div>
                     <div class="sn">
@@ -243,6 +235,45 @@
                 lastPage:false,
                 loading:false,
                 orderList:null,
+                history:[],
+                searchContext:'',
+                rootId:'',
+                jfType:[
+                    {
+                        name:'日常任务',
+                        active:true,
+                        id:8
+                    },{
+                        name:'品德积分',
+                        active:false,
+                        id:11
+                    },{
+                        name:'行为积分',
+                        active:false,
+                        id:12
+                    },{
+                        name:'业绩积分',
+                        active:false,
+                        id:131
+                    },{
+                        name:'积分申诉',
+                        active:false,
+                        id:15
+                    },{
+                        name:'自由奖扣',
+                        active:false,
+                        id:16
+                    },{
+                        name:'抢单任务',
+                        active:false,
+                        id:34
+                    },{
+                        name:'挑战任务',
+                        active:false,
+                        id:34
+                    }
+
+                ],
                 searchHistory:[
                     '品德积分',
                     '人气奖',
@@ -260,6 +291,50 @@
                 console.log(this.$refs.myFilter.getBoundingClientRect())
                 console.log(this.$refs.myFilter.getBoundingClientRect().top)
                 this.filterHeight = document.documentElement.clientHeight - this.$refs.myFilter.getBoundingClientRect().height;
+            },
+            historySearch(item){
+                this.searchContext = item;
+                this.showWrap = false;
+                this.getList();
+                this.searchContext = '';
+            },
+            confirmInput(){
+                //确定输入内容
+                this.showWrap = false;
+                if(!this.searchContext) return
+                this.pageNumber=1;
+                this.getList();
+
+                //保存历史记录
+                if(localStorage.getItem('spHistory')){
+                    let arr = localStorage.getItem('spHistory').split(',');
+                    if(arr.length>=10){
+                        arr.pop();
+                        arr.unshift(this.searchContext);
+                    }else{
+                        arr.unshift(this.searchContext);
+                    }
+                    this.history = arr;
+                    localStorage.setItem('spHistory',arr.join(','))
+                }else{
+                    this.history.push(this.searchContext)
+                    localStorage.setItem('spHistory',this.searchContext)
+                }
+                this.searchContext = '';
+            },
+            searchThroughInput(){
+                this.pageNumber=1;
+                this.getList();
+            },
+            confirmSelect(){
+                this.showWrap = false;
+                this.pageNumber=1;
+                this.getList();
+            },
+            chooseType(item,index){
+                this.jfType.forEach(item=>item.active=false);
+                item.active=true;
+                this.rootId = item.id;
             },
             changeStatu(msg){
                 this.spType = msg;
@@ -280,6 +355,7 @@
 
             },
             getList(){
+                //different type
                 let url = '';
                 if(this.$route.params.type==1){
                      url = '/missionApprove/waitMeApproveList'
@@ -293,7 +369,9 @@
                     checkedStatus: this.spType,//1:待审批;2:已审批 ,
                     pageNumber: this.pageNumber,
                     pageSize: this.pageNumber,
-                    searchContext: ""
+                    searchContext: "",
+                    searchContext:this.searchContext,
+                    rootId:this.rootId
                 })
                     .then(function (response) {
                         if(response.data.data.code=200000){
@@ -316,6 +394,9 @@
             this.init();
             this.getList();
             this.showWrap=false;
+
+            //get history
+            this.history = localStorage.getItem('spHistory').split(',');
         },
         components:{
             showList
