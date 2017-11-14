@@ -7,7 +7,7 @@
         <!--enter-active-class="animated fadeInLeftBig"-->
         <!--leave-active-class="animated  fadeOutRightBig"-->
         <!--&gt;-->
-        <!--<router-view></router-view>-->
+            <!--<router-view></router-view>-->
         <!--</transition>-->
 
         <transition :name="transitionName">
@@ -15,7 +15,11 @@
         </transition>
 
         <loading v-if="showLoading"></loading>
-
+        <transition
+                name="custom-classes-transition"
+                enter-active-class="animated slideInUp"
+                leave-active-class="animated  slideOutDown"
+        >
         <ul class="nav" v-show="$route.meta.navShow">
             <router-link
                     tag="li"
@@ -28,6 +32,7 @@
                 {{item.name}}
             </router-link>
         </ul>
+        </transition>
     </div>
 </template>
 
@@ -126,8 +131,9 @@
     @import "assets/css/common.less";
     /*animation    */
     .child-view {
-        /*position: absolute;*/
-        /*width: 100%;*/
+        position: absolute;
+        width: 100%;
+        padding-bottom: 1rem;
         transition: all .8s cubic-bezier(.55, 0, .1, 1) ;
     }
 

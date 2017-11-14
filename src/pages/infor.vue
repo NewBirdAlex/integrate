@@ -2,16 +2,16 @@
     <div>
         <div class="head bgWhite paddingAll overflow">
             <div class="left">
-                <img class="headPicture" src="../assets/img/head.png" alt="">
+                <img class="headPicture" :src="userInf.userAvatar" alt="">
             </div>
             <div class="right">
                 <p>
-                    <strong>欧阳诗曼</strong>
-                    <span>管理员</span>
+                    <strong>{{userInf.userName}}</strong>
+                    <span>{{userInf.jobTitle}}</span>
                 </p>
                 <p class="gray">
-                    总积分：6000
-                    基础积分：3000
+                    总积分：{{userInf.userScore}}
+                    基础积分：{{userInf.baseScore}}
                 </p>
             </div>
         </div>
@@ -76,7 +76,7 @@
                     },
                     {
                         name:'电话号码',
-                        right:'15811867958',
+                        right:'',
                         router:''
                     },
                     {
@@ -99,7 +99,8 @@
                         right:'',
                         router:''
                     }
-                ]
+                ],
+                userInf:{}
             }
         },
         methods:{
@@ -107,7 +108,26 @@
                 if(item.router){
                     this.$router.push(item.router)
                 }
+            },
+            getDetail(){
+                let that = this;
+                this.$http.post('/user/getUserInfo', {
+                    getInfoUserId:this.$route.params.id
+                })
+                    .then(function (response) {
+                        if(response.data.code=200000){
+                            that.userInf = response.data.data;
+                            that.itemList[0].router = '/baseInfor/'+ response.data.data.userId
+                            that.itemList[1].right = response.data.data.userPhone
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
+        },
+        mounted(){
+            this.getDetail();
         }
     }
 </script>

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '../store/index.js'
 import router from '../router'
-
+import Vue from 'vue'
 
 // 请求拦截（配置发送请求的信息）
 axios.interceptors.request.use(function (config){
@@ -32,9 +32,14 @@ axios.interceptors.response.use(function (response){
 }, function (error){
     // 处理响应失败
     store.dispatch('hideLoading');
+    Vue.$toast({
+        message:'网络错误，请稍后再试',
+        duration:2000
+    });
     return Promise.reject(error);
 });
 
-axios.defaults.baseURL = 'http://192.168.1.108:8888';
+// axios.defaults.baseURL = vue.config.path;0
+axios.defaults.baseURL = 'http://192.168.0.121:8888';
 
 export default axios

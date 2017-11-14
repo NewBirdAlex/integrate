@@ -3,12 +3,15 @@
 
         <div class=" wrap">
             <div class="bgWhite">
-                <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom firstItem">
+                <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom firstItem chooseList" >
                     <strong class="fs30 lh40">审批标题 <span class="red">*</span></strong>
                     <span class="rightPart fs30 lh40 ">{{detail.title}}</span>
-                    <!--<label for="">-->
+                    <!--<label for="selList">-->
                         <!--<i class="icon iconfont icon-xiala gray fs30"></i>-->
                     <!--</label>-->
+                    <!--<select name="" id="selList">-->
+                        <!--<option value="1" v-for="i in 5">1</option>-->
+                    <!--</select>-->
                 </div>
                 <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom">
                     <strong class="fs30 lh40">审批内容 <span class="red">*</span></strong>
@@ -59,7 +62,7 @@
             <div class="marginTop">
                 <subTitle :content="'审批人'" :subWord="''" :need="true"></subTitle>
                 <div class="paddingAll overflow bgWhite tac fs28">
-                    <div class="spr overflow fl marginBottom" v-for="(item,index) in approveUser">
+                    <div class="spr overflow fl marginBottom" v-for="(item,index) in approveUserList" :key="index">
                         <div class="ps fl">
                             <img :src="item.userAvatar" class="headPicture" alt="">
                             <p class="marginTop" v-html="item.userName"></p>
@@ -68,7 +71,7 @@
                             .......
                         </div>
                     </div>
-                    <div class="spr overflow fl marginBottom" v-for="(item,index) in shenpiList">
+                    <div class="spr overflow fl marginBottom" v-for="(item,index) in shenpiList" :key="index">
                         <div class="ps fl">
                             <img :src="item.userAvatar" class="headPicture" alt="">
                             <p class="marginTop" v-html="item.userName"></p>
@@ -77,8 +80,7 @@
                             .......
                         </div>
                     </div>
-                    <!--<div class="add fl" @click="markPerson('shenpi')" v-if="!approveUser.length">-->
-                    <div class="add fl" @click="shenpi" v-if="!approveUser.length">
+                    <div class="add fl" @click="shenpi" v-if="!approveUserList">
                         <i class="icon iconfont icon-jia gray"></i>
                     </div>
                 </div>
@@ -108,6 +110,8 @@
 <style scoped lang="less">
     @import "../assets/css/common.less";
     /*@import "../assets/font/font1/iconfont.css";*/
+
+
     .wrap2{
         position: relative;
         padding:0 0.2rem;
@@ -155,10 +159,17 @@
     }
     .firstItem{
         position: relative;
+        overflow: hidden;
         label{
             position: absolute;
             right: 0.2rem;
             top:0.4rem;
+        }
+        select{
+            position: absolute;
+            top:-100rem;
+            width: 0;
+            height: 0;
         }
     }
     .inner{
@@ -220,7 +231,6 @@
                 dialogVisible: false,
                 selAll:false,
                 detail:{},
-                approveUser:[],
                 scoreRange:[],
                 selfInf:{
                 },
@@ -246,6 +256,7 @@
                 peopleList:null,
                 chaosongList:null,
                 shenpiList:null,
+                approveUserList:null,
                 imgList:'',
                 imgData:{},
                 src: 'http://img1.vued.vanthink.cn/vued0a233185b6027244f9d43e653227439a.png'
@@ -332,7 +343,14 @@
                 })
                     .then(function (response) {
                         that.detail = response.data.data.detail;
-                        that.approveUser = response.data.data.approveUser;
+                        if(response.data.data.approveUser.length){
+                            //是否有审批人
+                            alert(1)
+                            that.approveUserList = response.data.data.approveUser;
+
+                        }else{
+//                            that.approveUserList=null;
+                        }
                         // get score select range
                         let score = that.detail.minuxScore;
                         for(let i = 0; i<(that.detail.maxScore-that.detail.minuxScore)/that.detail.scoreLevel;i++){
@@ -374,9 +392,6 @@
                 if(this.chaosongList) {
                     this.chaosongList.forEach(item=> copyUserId.push(item.id));
                 }
-
-
-
                 this.$http.post('/missionApprove/submitMissionApprove', {
                     addScore: score.join(','),
                     aimId: this.$route.params.id,

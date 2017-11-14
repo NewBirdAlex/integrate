@@ -144,36 +144,35 @@
         },
         methods:{
             loadMore() {
-                this.getList();
-                this.loading = true;
-            },
-            getList(){
-                let that = this;
-                console.log(that.pageNumber)
-                if(!that.lastPage){
-                    this.$http.post('/approveRecord/scoreChange',{
-                        pageNumber: this.pageNumber,
-                        pageSize: 5,
-                        sortOrder: "desc",
-                        userId:this.userMessage.userId
-                    })
-                        .then(function (response) {
-                            that.pageNumber+=1;
-                            if(response.data.data.last){
-                                that.lastPage=true;
-                            }
-                            that.list=that.list.concat(response.data.data.content) ;
-                            that.loading = false;
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
+                if(!this.lastPage){
+                    this.loading = true;
+                    this.getList();
                 }else{
                     this.$toast({
                         message: '没有更多数据了',
                         duration: 2000
                     });
                 }
+            },
+            getList(){
+                let that = this;
+                this.$http.post('/approveRecord/scoreChange',{
+                    pageNumber: this.pageNumber,
+                    pageSize: 5,
+                    sortOrder: "desc",
+                    userId:this.userMessage.userId
+                })
+                    .then(function (response) {
+                        that.pageNumber+=1;
+                        if(response.data.data.last){
+                            that.lastPage=true;
+                        }
+                        that.list=that.list.concat(response.data.data.content) ;
+                        that.loading = false;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
 
             },
             openPicker() {

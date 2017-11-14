@@ -71,7 +71,6 @@
             </div>
         </div>
         <div v-if="!showWrap">
-
             <ul
                     v-infinite-scroll="loadMore"
                     infinite-scroll-disabled="loading"
@@ -81,7 +80,7 @@
 
                     <showList :data="item"></showList>
                 </router-link>
-                <myEmpty v-if="!orderList"></myEmpty>
+                <myEmpty v-if="!orderList||!orderList.length"></myEmpty>
             </ul>
         </div>
     </div>
@@ -281,8 +280,16 @@
 
             },
             getList(){
+                let url = '';
+                if(this.$route.params.type==1){
+                     url = '/missionApprove/waitMeApproveList'
+                }else if(this.$route.params.type==2){
+                     url= '/missionApprove/iApproveList'
+                }else{
+                     url = '/missionApprove/copyToMeList'
+                }
                 let that = this;
-                this.$http.post('/missionApprove/iApproveList', {
+                this.$http.post(url, {
                     checkedStatus: this.spType,//1:待审批;2:已审批 ,
                     pageNumber: this.pageNumber,
                     pageSize: this.pageNumber,
@@ -290,6 +297,9 @@
                 })
                     .then(function (response) {
                         if(response.data.data.code=200000){
+                            if(response.data.data.length){
+                                that.orderList = [];
+                            }
                             that.orderList = response.data.data.content;
                             //last page
                             response.data.data.last? that.lastPage=true:'';

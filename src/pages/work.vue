@@ -14,7 +14,8 @@
             <router-link :to="item.router"  tag="li" v-for="(item,index) in aboutMe" :key="index" >
                 <!--<span class="hline"></span>-->
                 <span class="vline"></span>
-                <span class="redpoint" v-if="index%3==0"></span>
+                <!--红点-->
+                <!--<span class="redpoint" v-if="index%3==0"></span>    -->
                 <p style="padding-top: 0.5rem"> <span class="num">{{item.num}}</span></p>
                 <p>{{item.name}}</p>
             </router-link>
@@ -129,15 +130,15 @@
                     },{
                         name:"待我审批",
                         num:"70",
-                        router:'/spList'
+                        router:'/spList/1'
                     },{
                         name:"我发起的",
                         num:"17",
-                        router:'/spList'
+                        router:'/spList/2'
                     },{
                         name:"抄送我的",
                         num:"27",
-                        router:'/spList'
+                        router:'/spList/3'
                     }
                 ],
                 subList:[

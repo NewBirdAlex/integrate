@@ -47,6 +47,7 @@ const Lottery = () => import('../pages/lottery.vue');//积分抽奖
 const LotteryRec = () => import('../pages/lotteryRec.vue');//抽奖记录
 const JfSelect = () => import('../pages/jfSelect.vue');//申請積分
 const Login = () => import('../pages/login.vue');//登录
+const UploadUserPic = () => import('../pages/uploadUserPic.vue');//登录
 
 
 
@@ -89,6 +90,15 @@ const router = new Router({
             meta:{
                 navShow: false,
                 title:'登录'
+            }
+        },
+        {
+            path: '/uploadUserPic',
+            name: 'UploadUserPic',
+            component: UploadUserPic,
+            meta:{
+                navShow: false,
+                title:'上传头像'
             }
         },
         {
@@ -282,7 +292,7 @@ const router = new Router({
             }
         },
         {
-            path: '/loveRank',
+            path: '/loveRank/:id',
             name: 'LoveRank',
             component: LoveRank,
             meta:{
@@ -336,7 +346,7 @@ const router = new Router({
             }
         },
         {
-            path: '/baseInfor',
+            path: '/baseInfor/:id',
             name: 'BaseInfor',
             component: BaseInfor,
             meta:{
@@ -345,11 +355,11 @@ const router = new Router({
             }
         },
         {
-            path: '/infor',
+            path: '/infor/:id',
             name: 'Infor',
             component: Infor,
             meta:{
-                navShow: true,
+                navShow: false,
                 title:'个人中心'
             }
         },
@@ -399,7 +409,7 @@ const router = new Router({
             }
         },
         {
-            path: '/spList',
+            path: '/spList/:type',
             name: 'SpList',
             component: SpList,
             meta:{

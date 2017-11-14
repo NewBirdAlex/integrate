@@ -1,49 +1,42 @@
 <template>
     <div>
         <div class="head  tac bgWhite paddingAll borderBottom">
-            <div><img src="../assets/img/head.png" alt=""></div>
-            <p>我的基础信息</p>
-            <p><span class="blue">基础积分：1000</span></p>
+            <div><img :src="userInf.userAvatar" alt=""></div>
+            <p>{{userInf.userName}}的基础信息</p>
+            <p><span class="blue">基础积分：{{userInf.baseScore}}</span></p>
         </div>
         <div class="paddingAll bgWhite fs30 borderBottom lh40">
             <i class="icon iconfont icon-job fs36"></i>
-            <span>职位：总裁</span>
+            <span>职位：{{userInf.jobMap.jobTitle}}</span>
             <span class="fr">
-                +200
+                +{{userInf.jobMap.jobScore}}
             </span>
         </div>
         <div class="paddingAll bgWhite fs30 borderBottom">
             <i class="icon iconfont icon-wujiaoxing fs36"></i>
             <span>职位星级</span>
             <span class="fs36">
-                <i class="icon iconfont icon-mg-star fs36" style="font-size: 0.5rem"></i>
-                <i class="icon iconfont icon-wujiaoxing fs36"></i>
-                <i class="icon iconfont icon-wujiaoxing fs36"></i>
-                <i class="icon iconfont icon-wujiaoxing fs36"></i>
-                <i class="icon iconfont icon-wujiaoxing fs36"></i>
+                <i class="icon iconfont icon-mg-star fs36" style="font-size: 0.5rem" v-for="i in userInf.jobLevelMap.jobLevel"></i>
+                <i class="icon iconfont icon-wujiaoxing fs36" v-for="i in 5-userInf.jobLevelMap.jobLevel"></i>
 
             </span>
             <span class="fr">
-                +200
+                +{{userInf.jobLevelMap.jobLevelScore}}
             </span>
         </div>
         <div class="paddingAll bgWhite marginTop fs30 borderBottom">
             <i class="icon iconfont icon-yuangongnianling fs36"></i>
             <span>工龄奖励</span>
-            <span class="gray fs26">（入职时间：2014-06-08至今3年零3个月）</span>
+            <span class="gray fs26">（{{userInf.entryTime}}）</span>
         </div>
         <ul class="praise">
-            <li><i></i>满1年奖励100分</li>
-            <li><i></i>满2年奖励100分</li>
-            <li><i></i>满3年奖励100分</li>
-            <li><i></i>满4年奖励100分</li>
-            <li><i></i>满5年奖励100分</li>
+            <li v-for="(item,index) in userInf.jobYearList" :key="index"><i></i>{{item.jobYearTitle}}</li>
         </ul>
         <div class="paddingAll bgWhite fs30 borderBottom marginTop">
             <i class="icon iconfont icon-education fs36"></i>
-            <span>学历：本科</span>
+            <span>学历：{{userInf.eduMap.eduTitle}}</span>
             <span class="fr">
-                +200
+                +{{userInf.eduMap.eduScore}}
             </span>
         </div>
         <div class="paddingLeft  borderBottom bgWhite overflow mulItem fs30">
@@ -52,13 +45,9 @@
                 <span>职称：</span>
             </div>
             <div class="right">
-                <div class=" borderBottom paddingAll">
-                    中级美导dddsdf
-                    <span class="fr">+200分</span>
-                </div>
-                <div class="  paddingAll">
-                    中级美导dd
-                    <span class="fr">+200分</span>
+                <div class=" borderBottom paddingAll" v-for="(item,index) in userInf.techList" :key="index">
+                    {{item.techTitle}}
+                    <span class="fr">+{{item.techScore}}分</span>
                 </div>
             </div>
         </div>
@@ -68,13 +57,9 @@
                 <span>荣誉：</span>
             </div>
             <div class="right">
-                <div class=" borderBottom paddingAll">
-                    优秀员工
-                    <span class="fr">+200分</span>
-                </div>
-                <div class="  paddingAll">
-                    出色党员
-                    <span class="fr">+200分</span>
+                <div class=" borderBottom paddingAll" v-for="(item,index) in userInf.honorList" :key="index">
+                    {{item.honorTitle}}
+                    <span class="fr">+{{item.honorScore}}分</span>
                 </div>
             </div>
         </div>
@@ -84,13 +69,9 @@
                 <span>特长：</span>
             </div>
             <div class="right">
-                <div class=" borderBottom paddingAll">
-                    唱歌d
-                    <span class="fr">+200分</span>
-                </div>
-                <div class="  paddingAll">
-                    中级美导dd
-                    <span class="fr">+200分</span>
+                <div class=" borderBottom paddingAll" v-for="(item,index) in userInf.skillList" :key="index">
+                    {{item.skillTitle}}
+                    <span class="fr">+{{item.skillScore}}分</span>
                 </div>
             </div>
         </div>
@@ -98,7 +79,10 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-
+    .icon{
+        position: relative;
+        top:-2px;
+    }
     .mulItem{
         .left{
             .fl;
@@ -107,6 +91,11 @@
         .right{
             .fr;
             width: 5.7rem;
+            .paddingAll{
+                &:last-child{
+                    border-bottom: none;
+                }
+            }
         }
     }
 
@@ -156,7 +145,28 @@
 <script>
     export default {
         data() {
-            return {}
+            return {
+                userInf:{}
+            }
+        },
+        methods:{
+            getDetail(){
+                let that = this;
+                this.$http.post('/user/getUserBaseInfo', {
+                    getInfoUserId:this.$route.params.id
+                })
+                    .then(function (response) {
+                        if(response.data.data.code=200000){
+                            that.userInf = response.data.data
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+        },
+        mounted(){
+            this.getDetail();
         }
     }
 </script>

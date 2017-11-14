@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <boardSearch @getData="collectData"></boardSearch>
+        <boardSearch  @getData="collectData" v-model="selUserName"></boardSearch>
         <div class="gray listWrap" style="font-weight: bold">
             <span>排名</span>
             <span></span>
@@ -10,18 +10,7 @@
             <span>扣分</span>
             <span class="blue ">总分</span>
         </div>
-        <div class="bgWhite listWrap" v-for="(i,index) in 1">
-            <span>
-                <i v-if="index>=3">{{index}}</i>
-                    <i class="icon iconfont " :class="{'icon-jin':index==0,'icon-tong':index==1,'icon-yin':index==2}"
-                       v-if="index<3"></i>
-            </span>
-            <span><img src="../assets/img/head.png" class="headPicture" alt=""></span>
-            <span>欧阳诗</span>
-            <span>2000</span>
-            <span>2000</span>
-            <span class="blue ">222</span>
-        </div>
+        <myEmpty v-if="!list.length"></myEmpty>
         <!--loadmore-->
         <div style="height: 9rem;overflow: scroll;" class="marginTop">
             <mt-loadmore
@@ -30,26 +19,27 @@
                          ref="loadmore"
             >
                 <ul class="">
-                    <li @click="go" v-for="(item,index) in list">
+                    <router-link tag="li" :to="'/infor/'+item.id" v-for="(item,index) in list" :key="index">
                         <div class="bgWhite listWrap" >
                             <span>
-                                <i v-if="index>=3">{{index}}</i>
-                                    <i class="icon iconfont " :class="{'icon-jin':index==0,'icon-jin icon-tong':index==1,'icon-yin':index==2}"
-                                       v-if="index<3"></i>
+                                <i v-if="index>=4||index==0">{{index+1}}</i>
+                                    <i class="icon iconfont " :class="{'icon-jin':index==1,'icon-jin icon-tong':index==2,'icon-yin':index==3}"
+                                       v-if="index<4"></i>
                             </span>
-                            <span><img src="../assets/img/head.png" class="headPicture" alt=""></span>
-                            <span>欧阳诗</span>
-                            <span>2000</span>
-                            <span>2000</span>
-                            <span class="blue ">222</span>
+                            <span><img :src="item.userAvatar" class="headPicture" alt=""></span>
+                            <span>{{item.userName}}</span>
+                            <span>{{item.addScore}}</span>
+                            <span>{{item.minusScore}}</span>
+                            <span class="blue ">{{item.plusScore}}</span>
                         </div>
-                    </li>
+                    </router-link>
                 </ul>
                 <div slot="top" class="mint-loadmore-top">
                     <span v-show="topStatus !== 'loading'" :class="{ 'rotate': topStatus === 'drop' }">↓</span>
                     <span v-show="topStatus === 'loading'">Loading...</span>
                 </div>
             </mt-loadmore>
+
         </div>
 
         <!--loadmore-->
@@ -78,6 +68,9 @@
         li {
             .tac;
             font-size: 0.4rem;
+            &:first-child{
+                .marginBottom;
+            }
         }
     }
 
@@ -106,23 +99,72 @@
             return {
 
                 topStatus: '',
+                selUserName:'',
+                departmentId:'',
+                jobId:'',
+                type:'',
+                startTime:'',
+                endTime:'',
                 allLoaded:false,
-                list: [1, 2, 4, 5, 3, 3, 3, 33, 3, 3, 2, 3, 3, 2, 3, 23,3]
+                pageNumber:1,
+                pageSize:10,
+                lastPage:false,
+                loading:false,
+                list: [],
+//                list: [1, 2, 4, 5, 3, 3, 3, 33, 3, 3, 2, 3, 3, 2, 3, 23,3]
             }
         },
         components:{
             boardSearch
         },
+        mounted(){
+            this.getList();
+        },
         methods: {
             collectData(msg){
                 //获取搜索栏的数据
                 console.log(msg)
+                msg.apartment?this.departmentId=msg.apartment.id:this.departmentId='';
+                msg.job?this.jobId=msg.job.id:this.jobId='';
+                msg.type?this.type=msg.type.value:this.type='';
+                msg.startTime?this.startTime=msg.startTime:this.startTime='';
+                msg.endTime?this.endTime=msg.endTime:this.endTime='';
+                this.pageNumber=1;
+                this.getList();
             },
             loadBottom(){
                  // 加载更多数据
                 //this.allLoaded = true;// 若数据已全部获取完毕
                 //this.$refs.loadmore.onBottomLoaded();
                 console.log(3)
+                if(!this.lastPage){
+                    this.getList();
+                    this.pageNumber+=1;
+                }else{
+                    this.allLoaded = true;
+                }
+            },
+            getList(){
+                let that = this;
+                this.$http.post('/approveRecord/scoreSortByComId', {
+                    departmentId: this.departmentId,
+                    jobId:this.jobId,
+                    endTime:this.endTime,
+                    type:this.type,
+                    startTime:this.startTime,
+                    userName:this.selUserName,
+                    pageNumber: this.pageNumber,
+                    pageSize:this.pageSize
+                })
+                    .then(function (response) {
+                        if(response.data.data.code=200000){
+                            that.list = response.data.data.content;
+                            if(response.data.data.last) that.lastPage = true;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
             go() {
                 //路由跳转

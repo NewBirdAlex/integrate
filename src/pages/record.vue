@@ -1,16 +1,5 @@
 <template>
     <div>
-        <!--<h3>审批日记</h3>-->
-        <ul>
-            <li v-for="item in list" class="bgWhite">
-                <div class="left"><img src="../assets/img/head.png" alt=""></div>
-                <div class="right">
-                    <p>审批我的最佳人气奖 <span class="blue fr">+80分</span></p>
-                    <p class="yellow">审批中 <span class="gray fr">07-02 12:06</span></p>
-                </div>
-            </li>
-        </ul>
-
         <ul class=" "
             v-infinite-scroll="loadMore"
             infinite-scroll-disabled="loading"
@@ -18,10 +7,15 @@
             v-if="list.length!=0"
             infinite-scroll-distance="10">
             <li v-for="(item,index) in list" :key="index" class="marginBottom bgWhite">
-                <div class="overflow bgWhite paddingAll list marginTop">
-                    <p class="fs30">{{item.context}}</p>
-                    <p class="fs28 gray overflow"><span class="fr">{{item.companyName}}</span></p>
-                    <p class="fs26 gray overflow"><span class="fr">{{item.createDate}}</span></p>
+                <div class="left"><img :src="item.userAvatar" alt=""></div>
+                <div class="right">
+                    <p>{{item.approveTitle}} <span class="blue fr">+{{item.addScore}}分</span></p>
+                    <p >
+                        <span class="yellow" v-if="item.status==1">审批中</span>
+                        <span class="green" v-if="item.status==2">审批通过</span>
+                        <span class="red" v-if="item.status==3">审批不通过</span>
+                        <span class="gray fr">{{item.createDate}}</span>
+                    </p>
                 </div>
             </li>
 
@@ -86,7 +80,7 @@
             return {
                 list: [],
                 pageNumber: 1,
-                pageSize: 5,
+                pageSize: 10,
                 lastPage: false,
                 loading: false
             }
@@ -98,7 +92,7 @@
         },
         methods: {
             loadMore() {
-                if (!this.lastPage && !this.loading) {
+                if (!this.lastPage ) {
                     this.getList();
                     this.loading = true;
                 } else {
@@ -111,33 +105,21 @@
             },
             getList() {
                 let that = this;
-                console.log(that.pageNumber)
-                if (!that.lastPage) {
-                    this.$http.post('/missionApprove/userGetRecordList', {
-                        pageNumber: this.pageNumber,
-                        pageSize: this.pageSize,
-                        sortOrder: "asc",
-                        token: this.userMessage.token,
-                        userId: this.userMessage.userId
+                this.$http.post('/missionApprove/userGetRecordList', {
+                    pageNumber: this.pageNumber,
+                    pageSize: this.pageSize
+                })
+                    .then(function (response) {
+                        that.pageNumber += 1;
+                        if (response.data.data.last) {
+                            that.lastPage = true;
+                        }
+                        that.list = that.list.concat(response.data.data.content);
+                        that.loading = false;
                     })
-                        .then(function (response) {
-                            that.pageNumber += 1;
-                            if (response.data.data.last) {
-                                that.lastPage = true;
-                            }
-                            that.list = that.list.concat(response.data.data.content);
-                            that.loading = false;
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-                } else {
-                    that.loading = false;
-                    this.$toast({
-                        message: '没有更多数据了',
-                        duration: 2000
+                    .catch(function (error) {
+                        console.log(error);
                     });
-                }
 
             },
         },

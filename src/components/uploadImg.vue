@@ -13,7 +13,7 @@
                     compress="60"
                     inputOfFile="file"
                     :max-file-size="5242880"
-                    url="http://192.168.1.108:8888/imageUpload/imgUploadFile" >
+                    :url="url+'/imageUpload/imgUploadFile'" >
                 <i class="icon iconfont icon-upload"></i>
             </vue-core-image-upload>
         </div>
@@ -45,6 +45,7 @@
         data() {
             return {
                 imgNum:0,
+                url:'',
                 imgList:[]
             }
         },
@@ -69,6 +70,9 @@
             imagechanged(data){
 
             },
+        },
+        mounted(){
+            this.url = this.$config.path;
         },
         components: {
             VueCoreImageUpload,

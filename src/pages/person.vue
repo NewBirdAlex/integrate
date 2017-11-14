@@ -3,11 +3,11 @@
         <!--<h3 class="tac paddingAll ">个人中心</h3>-->
         <div class="pt">
             <router-link to="/personalData" tag="div" class="borderBottom overflow paddingBottom">
-                <img class="phead" src="../assets/img/head.png" alt="">
+                <img class="phead" :src="baseInf.userAvatar" alt="">
                 <div class="right">
-                    <p class="fs30"> 欧阳诗曼</p>
-                    <p class="gray fs26">设计部 总监  <span class="fr"><i class="icon iconfont icon-xiala1"></i></span></p>
-                    <p class="fs28">积分：60000   基础积分：20000</p>
+                    <p class="fs30"> {{baseInf.userName}}</p>
+                    <p class="gray fs26">{{baseInf.departmentName}} {{baseInf.jobTitle}}  <span class="fr"><i class="icon iconfont icon-xiala1"></i></span></p>
+                    <p class="fs28">积分：{{baseInf.userScore}}   基础积分：{{baseInf.baseScore}}</p>
                 </div>
             </router-link>
             <div id="main" class="bgWhite"></div>
@@ -130,12 +130,18 @@
 </style>
 <script>
     var echarts = require('echarts');
-
+    import { mapGetters } from 'vuex';
     export default {
         data() {
             return {}
         },
+        computed: {
+            ...mapGetters([
+                'baseInf',
+            ])
+        },
         mounted() {
+            this.$store.commit('getuserBaseInf');
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById('main'));
             // 绘制图表

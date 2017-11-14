@@ -4,7 +4,7 @@
         <div class="imgwrap tac">
             <img v-if="imgUrl" :src='imgUrl' alt="">
         </div>
-        <div class="paddingAll bgWhite">
+        <div class="paddingAll bgWhite" >
             <vue-core-image-upload
                     class="btn btn-primary"
                     :crop="false"
@@ -25,7 +25,7 @@
 <style scoped lang="less">
     @import "../assets/css/common.less";
     .icon{
-        font-size: 1.2rem;
+        font-size: 2rem;
     }
     .imgwrap{
         .overflow;

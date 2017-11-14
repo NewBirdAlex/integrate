@@ -8,7 +8,7 @@
         </div>
         <div class="marginAll bgWhite search">
             <i class="icon iconfont icon-sousuo"></i>
-            <input type="text" class="myInput fs26 marginLeft" placeholder="请输入你要找的关键字">
+            <input type="text" class="myInput fs26 marginLeft" placeholder="请输入你要找的关键字" v-model="searchKeyword" @input="serchList">
         </div>
 
 
@@ -81,6 +81,7 @@
         data() {
             return {
                 type:1,
+                searchKeyword:'',
                 idList: [
                     {
                         type:1,
@@ -115,6 +116,11 @@
             this.getList();
         },
         methods: {
+            serchList(){
+                // key word search
+                this.pageNumber=1;
+                this.getList();
+            },
             selId(item) {
                 this.idList.forEach(function (a) {
                     a.sel = false;
@@ -131,7 +137,7 @@
                 this.$router.push('/apply/'+item.id+'/'+this.type);
             },
             loadMore() {
-                if(!this.lastPage && !this.loading){
+                if(!this.lastPage){
                     this.getList();
                     this.loading = true;
                 }else{
@@ -144,34 +150,26 @@
             },
             getList(){
                 let that = this;
-                console.log(that.pageNumber)
-                if(!that.lastPage){
-                    this.$http.post('/actionModel/modelListByCom',{
-                        type:this.type,
-                        pageNumber: this.pageNumber,
-                        pageSize: this.pageSize,
-                        sortOrder: "asc",
-                        token:this.userMessage.token,
-                        userId:this.userMessage.userId
+                this.$http.post('/actionModel/modelListByCom',{
+                    type:this.type,
+                    pageNumber: this.pageNumber,
+                    pageSize: this.pageSize,
+                    sortOrder: "asc",
+                    title:this.searchKeyword,
+                    token:this.userMessage.token,
+                    userId:this.userMessage.userId
+                })
+                    .then(function (response) {
+                        that.pageNumber+=1;
+                        if(response.data.data.last){
+                            that.lastPage=true;
+                        }
+                        that.list=that.list.concat(response.data.data.content) ;
+                        that.loading = false;
                     })
-                        .then(function (response) {
-                            that.pageNumber+=1;
-                            if(response.data.data.last){
-                                that.lastPage=true;
-                            }
-                            that.list=that.list.concat(response.data.data.content) ;
-                            that.loading = false;
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-                }else{
-                    that.loading = false;
-                    this.$toast({
-                        message: '没有更多数据了',
-                        duration: 2000
+                    .catch(function (error) {
+                        console.log(error);
                     });
-                }
 
             }
         }

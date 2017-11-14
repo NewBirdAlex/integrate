@@ -1,21 +1,17 @@
 import Vue from 'vue'
 import Vuex from "vuex"
+import axios from '../lib/myAxios'
+
 
 Vue.use(Vuex)
 
 const state = {
-    count:0,
     showLoading:false,
-    userMessage:{}
+    userMessage:{},
+    baseInf:{}
 }
 
 const mutations = {
-    increment(state){
-        state.count++
-    },
-    decrement(state){
-        state.count--
-    },
     showLoading(state){
         state.showLoading = true;
     },
@@ -24,36 +20,45 @@ const mutations = {
     },
     hideLoading(state){
         state.showLoading = false;
+    },
+    getuserBaseInf(state){
+
+        axios.post('/user/getUserInfo', {
+            getInfoUserId:state.userMessage.userId
+        })
+            .then(function (response) {
+
+                if(response.data.code=="200000"){
+                    let data =JSON.parse(JSON.stringify(response.data.data)) ;
+                    Vue.nextTick(()=>{
+                        Vue.set(state,'baseInf', data)
+
+                    })
+
+                    console.log(response.data.data)
+                    console.log( state.baseInf)
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 }
 
 
 
 const actions = {
-    increment:({commit})=>commit('increment'),
-    decrement:({commit})=>commit('decrement'),
     showLoading:({commit})=>commit('showLoading'),
     hideLoading:({commit})=>commit('hideLoading'),
-    incrementIfOdd:({commit,state})=>{
-        if((state.count+1)%2==0){
-            commit("increment")
-        }
-    },
-    incrementAsync ({ commit }) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                commit('increment')
-                resolve()
-            }, 1000)
-        })
-    }
+    getuserBaseInf:({commit})=>commit('getuserBaseInf')
 }
 
 
 const getters = {
-    evenOrOdd:state => state.count % 2 === 0 ? 'even' : 'odd',
+
     showLoading:state => state.showLoading,
-    userMessage:state => state.userMessage
+    userMessage:state => state.userMessage,
+    baseInf:state=>state.baseInf
 }
 
 

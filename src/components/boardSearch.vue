@@ -2,12 +2,12 @@
     <div>
         <div class="search paddingAll">
             <div class="left" @click="showOption=!showOption">
-                筛选排名
+                筛选
                 <span class="triangle-down"></span>
             </div>
             <div class="right bgWhite">
                 <i class="icon iconfont icon-sousuo"></i>
-                <input type="text" placeholder="输入搜索内容" v-model="inputVal">
+                <input type="text" placeholder="输入搜索人名字"  @input="$emit('input', $event.target.value)" :value="value">
             </div>
             <div style="clear: both"></div>
             <transition
@@ -19,51 +19,46 @@
                     <div>
                         <p class="subt">时间段</p>
                         <div class="overflow">
-                            <span class="btn">{{startTime}} <i class="icon iconfont icon-xiala fs24"></i></span>
-                            <span class="btn active">{{endTime}}</span>
+                            <span class="btn" @click="pickTime(true)">{{startTime}}</span>
+                            <span class="btn " @click="pickTime(false)">{{endTime}}</span>
                         </div>
                     </div>
-                    <div>
+                    <div >
                         <p class="subt">部门</p>
                         <div class="overflow">
-                            <span class="btn">今日</span>
-                            <span class="btn active">今日</span>
-                            <span class="btn">今日</span>
-                            <span class="btn">今日</span>
-                            <span class="btn">今日</span>
-                            <span class="btn">今日</span>
+                            <span class="btn"  :class="{'active':item.active}" v-for="(item,index) in apartMentList" :key="index" @click="selectApartment(item,index)">{{item.name}}</span>
                         </div>
                     </div>
                     <div>
                         <p class="subt">职位</p>
                         <div class="overflow">
-                            <span class="btn">今日</span>
-                            <span class="btn active">今日</span>
-                            <span class="btn">今日</span>
-                            <span class="btn">今日</span>
-                            <span class="btn">今日</span>
-                            <span class="btn">今日</span>
+
+                            <span class="btn"  :class="{'active':item.active}" v-for="(item,index) in jobList" :key="index" @click="selectJob(item,index)">{{item.jobTitle}}</span>
                         </div>
                     </div>
                     <div>
                         <p class="subt">积分</p>
                         <div class="overflow">
-                            <span class="btn">今日</span>
-                            <span class="btn active">今日</span>
-                            <span class="btn">今日</span>
-                            <span class="btn">今日</span>
-                            <span class="btn">今日</span>
-                            <span class="btn">今日</span>
+                            <span class="btn" :class="{'active':item.active}" v-for="(item,index) in jfType" @click="selectType(item)">{{item.name}}</span>
                         </div>
                     </div>
-                    <div class="tac cbtn overflow" @click="subData">
-                        <span class="fl">重置</span>
-                        <span class="fr" >确认</span>
+                    <div class="tac cbtn overflow"  style="margin-top: 1rem">
+                        <span class="fl" @click="reset">重置</span>
+                        <span class="fr" @click="subData">确认</span>
                     </div>
                 </div>
             </transition>
 
         </div>
+        <mt-datetime-picker
+                v-model="pickerVisible"
+                type="date"
+                ref="picker"
+                @confirm="handleConfirm"
+                year-format="{value} 年"
+                month-format="{value} 月"
+                date-format="{value} 日">
+        </mt-datetime-picker>
     </div>
 </template>
 <style scoped lang="less">
@@ -84,10 +79,11 @@
         top: 0;
         padding-top: 1.2rem;
         width: 7.1rem;
+        height: 100%;
+        overflow: scroll;
         z-index: 10;
         .bgWhite;
         .paddingAll;
-        overflow: hidden;
         .subt {
             line-height: 0.5rem;
             font-size: @fs30;
@@ -135,25 +131,154 @@
             return {
                 inputVal:'',
                 showOption: false,
-                startTime:'开始时间'
+                startTime:'选择开始时间',
+                pickerVisible:'',
+                apartmentNum:1,
+                apartmentSize:1000,
+                apartMentList:[],
+                jobList:[],
+                timePosition:true,
+                endTime:'选择结束时间',
+                jfType:[
+                    {
+                        name:'品德A分',
+                        active:false,
+                        value:1
+                    },{
+                        name:'业绩B分',
+                        active:false,
+                        value:2
+                    },{
+                        name:'行为C分',
+                        active:false,
+                        value:3
+                    },{
+                        name:'A/B分',
+                        active:false,
+                        value:5
+                    },{
+                        name:'A/C分',
+                        active:false,
+                        value:6
+                    },{
+                        name:'B/C分',
+                        active:false,
+                        value:7
+                    },{
+                        name:'A-B-C分',
+                        active:false,
+                        value:8
+                    },{
+                        name:'基础积分',
+                        active:false,
+                        value:4
+                    }
+                ]
             }
         },
         computed:{
-            endTime(){
-                let time = new Date();
-                return time.getFullYear()+'.'+Number(time.getMonth()+1)+'.'+time.getDate()
-            }
+
         },
         methods:{
+            reset(){
+              this.startTime='选择开始时间';
+              this.endTime='选择结束时间';
+              this.apartMentList.forEach(item=>item.active=false)
+              this.jobList.forEach(item=>item.active=false)
+              this.jfType.forEach(item=>item.active=false)
+            },
+            pickTime(data){
+                this.timePosition=data;
+                this.$refs.picker.open();
+            },
+            handleConfirm(data){
+                console.log(data)
+                if(this.timePosition){
+                    this.startTime = data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate();
+                }else{
+                    this.endTime = data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate();
+
+                }
+
+            },
             subData(){
                 //submit the search data
-                console.log(11)
-                this.$emit('getData',1234)
+                let obj = {}
+                if(this.startTime!='选择开始时间') obj.startTime = this.startTime;
+                if(this.endTime!='选择结束时间') obj.startTime = this.endTime;
+                this.apartMentList.forEach(item=>{
+                    if(item.active){
+                        obj.apartment = item;
+                    }
+                })
+                this.jobList.forEach(item=>{
+                    if(item.active){
+                        obj.job = item;
+                    }
+                })
+                this.jfType.forEach(item=>{
+                    if(item.active){
+                        obj.type = item;
+                    }
+                })
+
+
+                this.$emit('getData',obj)
                 this.showOption=false;
+            },
+            getApartment(){
+                let that = this;
+                this.$http.post('/companyUser/departmentList', {
+                    pageNumber: this.apartmentNum,
+                    pageSize: this.apartmentSize,
+                })
+                    .then(function (response) {
+                        console.log(response)
+                        that.apartMentList =response.data.data.content ;
+                        that.apartMentList.forEach(item=>item.active=false)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            getJob(){
+                let that = this;
+                this.$http.post('/job/listJob', {
+                    pageNumber: this.apartmentNum,
+                    pageSize: this.apartmentSize,
+                })
+                    .then(function (response) {
+                        console.log(response)
+                        that.jobList =response.data.data.content ;
+                        that.jobList.forEach(item=>item.active=false)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            selectApartment(item,index){
+
+                this.apartMentList.forEach(item=>item.active=false)
+                item.active=true;
+                this.$set( this.apartMentList,index,item);
+            },
+            selectJob(item,index){
+                this.jobList.forEach(item=>item.active=false)
+                item.active=true;
+                this.$set( this.jobList,index,item);
+            },
+            selectType(item){
+                this.jfType.forEach(item=>item.active=false)
+                item.active=true;
             }
         },
+        props:[
+            'value'
+        ],
         mounted(){
             console.log(document.documentElement.clientHeight)
+            this.getApartment();
+            this.getJob();
         }
     }
 </script>

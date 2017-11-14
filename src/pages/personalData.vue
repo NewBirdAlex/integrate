@@ -2,39 +2,39 @@
     <div>
 
         <div class="bgWhite marginTop ">
-            <div class="borderBottom paddingAll overflow tar fs30">
+            <router-link tag="div" to="/uploadUserPic" class="borderBottom paddingAll overflow tar fs30" style="line-height: 0.5rem">
                  <span class=" fl">头像</span>
-                <img src="../assets/img/head.png" class="littleHead " alt="">
+                <img :src="baseInf.userAvatar" class="littleHead " alt="">
                 <span class="rightArrow fr">
                    <i class="icon iconfont icon-xiala1"></i>
                 </span>
-            </div>
+            </router-link>
             <div class="borderBottom paddingAll overflow  fs30">
-                <span class=" ">头像</span>
-                <span class="fr gray">欧阳诗曼dd</span>
+                <span class=" ">用户名</span>
+                <span class="fr gray">{{baseInf.userName}}</span>
             </div>
             <div class="borderBottom paddingAll overflow  fs30">
                 <span class=" ">所在部门</span>
-                <span class="fr gray">设计部</span>
+                <span class="fr gray">{{baseInf.departmentName}}</span>
             </div>
             <div class="borderBottom paddingAll overflow  fs30">
                 <span class=" ">职位</span>
-                <span class="fr gray">欧阳诗曼</span>
+                <span class="fr gray">{{baseInf.jobTitle}}</span>
             </div>
             <div class="borderBottom paddingAll overflow  fs30">
                 <span class=" ">工号</span>
-                <span class="fr gray">120002</span>
+                <span class="fr gray">{{baseInf.employeeNo}}</span>
             </div>
             <div class="borderBottom paddingAll overflow  fs30">
                 <span class=" ">总积分</span>
-                <span class="fr gray">20000</span>
+                <span class="fr gray">{{baseInf.userScore}}</span>
             </div>
-            <router-link tag="div" to='/baseInfor' class="borderBottom paddingAll overflow  fs30">
+            <router-link tag="div" :to='"/baseInfor/"+baseInf.userId' class="borderBottom paddingAll overflow  fs30">
                 <span class=" ">基础积分</span>
                 <span class="rightArrow fr">
                    <i class="icon iconfont icon-xiala1"></i>
                 </span>
-                <span class="fr gray">80</span>
+                <span class="fr gray">{{baseInf.baseScore}}</span>
             </router-link>
         </div>
     </div>
@@ -44,11 +44,17 @@
 
 </style>
 <script>
+    import { mapGetters } from 'vuex';
     export default {
         data() {
             return {
 
             }
-        }
+        },
+        computed: {
+            ...mapGetters([
+                'baseInf',
+            ])
+        },
     }
 </script>
