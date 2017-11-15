@@ -4,7 +4,7 @@
             <div class="head fs30">
                 <img :src="orderDetail.userAvatar" alt="">
                 <span>{{orderDetail.userName}}</span>
-                <span class="yellow fr" v-if="orderDetail.checkStatus==1">等待我审批</span>
+                <span class="yellow fr" v-if="orderDetail.checkStatus==1">等待审批</span>
                 <span class="green fr" v-if="orderDetail.checkStatus==2">审批通过</span>
                 <span class="red fr" v-if="orderDetail.checkStatus==3">审批不通过</span>
             </div>
@@ -39,37 +39,44 @@
         </div>
         <div class="progress">
             <div class="prog_list" v-for="item in orderDetail.approveUserList">
-                <div class="time"><i class="icon iconfont icon-gouxuan"></i></div>
+                <div class="time">
+                    <i class="icon iconfont icon-gouxuan blue" v-if="item.checkStatus==0||item.checkStatus==2"></i>
+                    <i class="icon iconfont icon-wait gray" v-if="item.checkStatus==1"></i>
+                    <i class="icon iconfont icon-reject red" v-if="item.checkStatus==3"></i>
+                </div>
                 <div class="content">
                     <div class="left"><img :src="item.userAvatar" class="headPicture" alt=""></div>
                     <div class="right">
-                        <p class="overflow">{{item.userName}} <span class="blue fr">+{{item.score}}分</span></p>
-                        <p>
-                            <span class="yellow" v-if="item.checkStatus==0">提交审批</span>
-                            <span class="yellow" v-if="item.checkStatus==1">审批中</span>
-                            <span class="green" v-if="item.checkStatus==2">审批通过</span>
-                            <span class="red" v-if="item.checkStatus==3">审批不通过</span>
+                        <p class="overflow">
+                            {{item.userName}}
+                            <span class="yellow fr" v-if="item.checkStatus==0">提交审批</span>
+                            <span class="yellow fr" v-if="item.checkStatus==1">审批中</span>
+                            <span class="green fr" v-if="item.checkStatus==2">审批通过</span>
+                            <span class="red fr" v-if="item.checkStatus==3">审批不通过</span>
 
+                        </p>
+                        <p class="overflow">
+                            <span class="gray">{{item.departmentName}}</span>
                             <span class="gray fr">{{item.approveDate}}</span>
                         </p>
                         <div class="triangle-left"></div>
                     </div>
-                    <div class="recommend" v-if="item%2==0">
-                        <p>工作积极表象认真，值得表扬赞赏!纠纷解决的聚集地借款
-                            方会计科.
+                    <div class="recommend">
+                        <p class="borderTop" v-if="item.context">
+                            {{item.context}}
                         </p>
-                        <div class="rec_img">
-                            <img src="../assets/img/square.jpg" alt="" v-for="i in 10">
+                        <div class="rec_img" v-if="item.pics">
+                            <img :src="item" alt="" v-for="item in item.pics.split(',')">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="opBtn">
-            <router-link to="/spDetail"><span class="green"> 同意</span></router-link>
-            <span class="yellow">拒绝</span>
-            <span class="blue">撤回</span>
+        <div class="opBtn" v-if="orderDetail.btnStatus==1">
+            <span class="green" @click="go(2)"> 同意</span>
+            <span class="yellow" @click="go(3)"> 拒绝</span>
+            <span class="blue" @click="go(4)"> 撤回</span>
         </div>
     </div>
 </template>
@@ -93,7 +100,7 @@
     .opBtn{
         font-size: @fs30;
         text-align: center;
-        padding:0.2rem 0;
+        padding:0.3rem 0;
         background: white;
         position: fixed;
         bottom: 0;
@@ -163,7 +170,6 @@
                 i{
                     margin-top: 0.6rem;
                     display: inline-block;
-                    color:@blue;
                 }
             }
             .content{
@@ -199,7 +205,6 @@
                     }
                 }
                 .recommend{
-                    border-top: @border;
                     margin-top: 0.2rem;
                     p{
                        font-size: @fs30;
@@ -225,12 +230,19 @@
         data() {
             return {
                 active:false,
-                orderDetail:null
+                orderDetail:{
+                    userAvatar:'',
+                    missionPics:''
+                }
             }
         },
         methods:{
             addActive(){
                 this.active=true;
+            },
+            go(type){
+                this.$store.commit('saveSporder',this.orderDetail)
+                this.$router.push('/spDetail/'+type+'/'+this.$route.params.id+'/'+this.$route.params.spType);
             },
             getDetail(){
                 let that = this;

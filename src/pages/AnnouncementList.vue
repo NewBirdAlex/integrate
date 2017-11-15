@@ -1,7 +1,7 @@
 <template>
 
 
-    <ul class="marginLeft marginRight"
+    <ul class=""
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="loading"
         infinite-scroll-immediate-check="true"
@@ -55,7 +55,7 @@
         },
         methods: {
             loadMore() {
-                if (!this.lastPage && !this.loading) {
+                if (!this.lastPage) {
                     this.getList();
                     this.loading = true;
                 } else {
@@ -68,31 +68,22 @@
             },
             getList() {
                 let that = this;
-                console.log(that.pageNumber)
-                if (!that.lastPage) {
-                    this.$http.post('/notes/noteList', {
-                        pageNumber: this.pageNumber,
-                        pageSize: this.pageSize,
-                        sortOrder: "asc"
+                this.$http.post('/notes/noteList', {
+                    pageNumber: this.pageNumber,
+                    pageSize: this.pageSize,
+                    sortOrder: "asc"
+                })
+                    .then(function (response) {
+                        that.pageNumber += 1;
+                        if (response.data.data.last) {
+                            that.lastPage = true;
+                        }
+                        that.list = that.list.concat(response.data.data.content);
+                        that.loading = false;
                     })
-                        .then(function (response) {
-                            that.pageNumber += 1;
-                            if (response.data.data.last) {
-                                that.lastPage = true;
-                            }
-                            that.list = that.list.concat(response.data.data.content);
-                            that.loading = false;
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-                } else {
-                    that.loading = false;
-                    this.$toast({
-                        message: '没有更多数据了',
-                        duration: 2000
+                    .catch(function (error) {
+                        console.log(error);
                     });
-                }
 
             },
         },

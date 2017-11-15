@@ -8,7 +8,8 @@ Vue.use(Vuex)
 const state = {
     showLoading:false,
     userMessage:{},
-    baseInf:{}
+    baseInf:{},
+    spOrder:{}
 }
 
 const mutations = {
@@ -20,6 +21,10 @@ const mutations = {
     },
     hideLoading(state){
         state.showLoading = false;
+    },
+    saveSporder(state,data){
+        console.log(data)
+        state.spOrder=data
     },
     getuserBaseInf(state){
 
@@ -50,6 +55,7 @@ const mutations = {
 const actions = {
     showLoading:({commit})=>commit('showLoading'),
     hideLoading:({commit})=>commit('hideLoading'),
+    saveSporder:({commit})=>commit('saveSporder'),
     getuserBaseInf:({commit})=>commit('getuserBaseInf')
 }
 
@@ -58,6 +64,7 @@ const getters = {
 
     showLoading:state => state.showLoading,
     userMessage:state => state.userMessage,
+    spOrder:state => state.spOrder,
     baseInf:state=>state.baseInf
 }
 

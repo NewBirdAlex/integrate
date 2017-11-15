@@ -47,7 +47,8 @@ const Lottery = () => import('../pages/lottery.vue');//积分抽奖
 const LotteryRec = () => import('../pages/lotteryRec.vue');//抽奖记录
 const JfSelect = () => import('../pages/jfSelect.vue');//申請積分
 const Login = () => import('../pages/login.vue');//登录
-const UploadUserPic = () => import('../pages/uploadUserPic.vue');//登录
+const UploadUserPic = () => import('../pages/uploadUserPic.vue');//上传用户头像
+const ApplyMissionPerson = () => import('../pages/applyMissionPerson.vue');//抢单任务人物列表
 
 
 
@@ -90,6 +91,15 @@ const router = new Router({
             meta:{
                 navShow: false,
                 title:'登录'
+            }
+        },
+        {
+            path: '/applyMissionPerson/:id/:type',
+            name: 'ApplyMissionPerson',
+            component: ApplyMissionPerson,
+            meta:{
+                navShow: false,
+                title:'抢单列表'
             }
         },
         {
@@ -418,7 +428,8 @@ const router = new Router({
             }
         },
         {
-            path: '/spDetail',
+            //type: 同意 拒绝 撤回    spType  待我审批， 我发起，抄送我得
+            path: '/spDetail/:type/:id/:spType',
             name: 'SpDetail',
             component: SpDetail,
             meta:{
@@ -454,7 +465,7 @@ const router = new Router({
             }
         },
         {
-            path: '/orderDetail/:id',
+            path: '/orderDetail/:id/:spType',
             name: 'OrderDetail',
             component: OrderDetail,
             meta:{

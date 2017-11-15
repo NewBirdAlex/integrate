@@ -308,16 +308,16 @@
                 //选择分数
                 if(this.selAll){//select all
                     for(let i = 0 ; i<this.peopleList.length;i++){
-                        console.log(i);
+
                         var obj =  this.peopleList[i];
                         obj.selectAddScore=msg.value;
                         this.$set(this.peopleList,i,obj);
                     }
-                    console.log(this.peopleList)
+
                 }else{
                     //select one
                     this.peopleList[msg.index].selectAddScore=msg.value;
-                    console.log(this.peopleList[msg.index].selectAddScore)
+
 
                 }
             },
@@ -345,7 +345,6 @@
                         that.detail = response.data.data.detail;
                         if(response.data.data.approveUser.length){
                             //是否有审批人
-                            alert(1)
                             that.approveUserList = response.data.data.approveUser;
 
                         }else{
@@ -375,8 +374,8 @@
                     score.push(item.selectAddScore)
                 })
                 let approveUserId = [];
-                if(this.approveUser.length){
-                    this.approveUser.forEach(item=>{
+                if(this.approveUserList.length){
+                    this.approveUserList.forEach(item=>{
                         approveUserId.push(item.id);
                     })
                 }else if(this.shenpiList){
@@ -402,6 +401,7 @@
                     beApproveUserId: beApproveUserId.join(','),
                     copyUserId: copyUserId.join(','),
                     missionPics: this.imgList,
+                    rootId:this.detail.rootId,
                     type:this.$route.params.type,
                 })
                     .then(function (response) {

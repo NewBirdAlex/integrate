@@ -105,7 +105,6 @@
                 exist = window.sessionStorage.getItem(KEY) ?
                     JSON.parse(window.sessionStorage.getItem(KEY)) :
                     window.sessionStorage.getItem(KEY);
-                console.log(exist)
                 if(!exist) {
                     this.transitionName = 'slide-left'
                     window.sessionStorage.setItem(KEY, format)

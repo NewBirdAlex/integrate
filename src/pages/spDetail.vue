@@ -1,40 +1,33 @@
 <template>
     <div>
-        <h3>审批</h3>
         <div class=" wrap">
-            <choosePeople v-for="(item,index) in mainPerson" :name="item.name"
-                          :key="index" :point="item.point" :range="item.range"
+            <selectSpPeople v-for="(item,index) in peopleList" v-if="index==0" :name="item.userName"
+                          :key="index" :point="item.addScore" :range="scoreRange"
                           :ind="index"
+                            :head="item.userAvatar"
                           @changePoint="changePoint">
-            </choosePeople>
+            </selectSpPeople>
 
-            <subTitle :content="'表扬员工'" :subWord="'(默认申请自己的，可帮其他同事申请)'" :need="true"></subTitle>
-            <choosePeople v-for="(item,index) in peopleList" :name="item.name"
-                          :key="index" :point="item.point" :range="item.range"
-                          :ind="index"
+            <subTitle :content="'他们也申请了'" :subWord="'(勾选后可以一次性审批)'" :need="true"></subTitle>
+
+            <selectSpPeople v-for="(item,index) in peopleList" v-if="index>0" :name="item.userName"
+                          :key="index" :point="item.addScore" :range="scoreRange"
+                          :ind="index" :head="item.userAvatar"
+                            :checkStatus="item.checkStatus"
                           @changePoint="changePoint">
-                <i class="icon iconfont icon-gouxuan " @click="delPerson(index)"></i>
-            </choosePeople>
+                <span class="cl border "  @click="delPerson(index)"><i class="icon iconfont icon-gouxuan fs34"></i></span>
+            </selectSpPeople>
 
             <subTitle :content="'审批备注'"></subTitle>
             <div class="bgWhite paddingAll overflow">
-                <textarea class="spbz" name="" maxlength="100" v-model="noteContent" @input="getLeftWord"  placeholder="添加备注信息" id="" cols="30" rows="10"></textarea>
+                <textarea class="spbz" name="" maxlength="100" v-model="noteContent"  placeholder="添加备注信息" id="" cols="30" rows="10"></textarea>
                 <p>
                     <span class="fr gray"> {{leftWord}}/100</span>
                 </p>
             </div>
 
-            <subTitle :content="'附加图片'" :subWord="'（6/9）'"></subTitle>
-            <div class="paddingAll bgWhite">
-                <vue-core-image-upload
-                        class="btn btn-primary"
-                        :crop="false"
-                        @imageuploaded="imageuploaded"
-                        :data="{}"
-                        :max-file-size="5242880"
-                        url="http://101.198.151.190/api/upload.php" >
-                </vue-core-image-upload>
-            </div>
+            <!--上传图片-->
+            <uploadImg @getData="getImgList"></uploadImg>
         </div>
         <div class="confBtn" @click="confirmHandle">确定</div>
     </div>
@@ -42,13 +35,13 @@
 <style scoped lang="less">
     @import "../assets/css/common.less";
     @import "../assets/font/font1/iconfont.css";
+    .cl{
 
-    h3 {
+        width: 0.4rem;
+        height: 0.4rem;
         .tac;
-        padding: 0.26rem;
-        font-size: 0.34rem;
-        color: #323232;
-        background: #fafafa;
+        line-height: 0.4rem;
+        border-radius: 50%;
     }
     .wrap{
         background:@grayBg;
@@ -56,9 +49,7 @@
             color:@blue!important;
         }
     }
-    .icon{
-        font-size: @fs30!important;
-    }
+
     .spbz{
         width: 100%;
         border: none;
@@ -72,64 +63,118 @@
 <script>
 
     import subTitle from '../components/subTitle.vue'
-    import VueCoreImageUpload from 'vue-core-image-upload'
+    import uploadImg from '../components/uploadImg.vue'
     import choosePeople from '../components/choosePeople.vue'
+    import selectSpPeople from '../components/selectSpPeople.vue'
+    import { mapGetters } from 'vuex';
     export default {
         computed:{
             leftWord(){
                 let num =this.noteContent.length>=100?100:this.noteContent.length;
                 return num;
-            }
+            },
+            ...mapGetters([
+                'spOrder',
+            ])
         },
         data() {
             return {
                 noteContent:"",
-                mainPerson:[{
-                    name:"alex2",
-                    point:"+80",
-                    range:['+80','+160','-80','-160']
-                }],
-                peopleList:[
-                    {
-                        name:"alex2",
-                        point:"+80",
-                        range:['+80','+160','-80','-160']
-                    },
-                    {
-                        name:"ben",
-                        point:"+80",
-                        range:['+80','+160','-80','-160']
-                    },
-                    {
-                        name:"ben",
-                        point:"+80",
-                        range:['+80','+160','-80','-160']
-                    },
-                    {
-                        name:"ben",
-                        point:"+80",
-                        range:['+80','+160','-80','-160']
-                    },
-                    {
-                        name:"ben",
-                        point:"+80",
-                        range:['+80','+160','-80','-160']
-                    }
-                ],
+                mainPerson:[],
+                peopleList:[],
+                orderDetail:{},
+                scoreRange:[],
+                imgList:null,
+                pageNumber:1,
+                pageSize:100,
+                lastPage:false,
                 src: 'http://img1.vued.vanthink.cn/vued0a233185b6027244f9d43e653227439a.png'
             }
         },
-        methods: {
-            getLeftWord(event){
+        mounted(){
 
+            //get self information
+            let selfData = {
+                userName:this.spOrder.userName,
+                addScore:this.spOrder.missionScore,
+                id:this.$route.params.id,
+                userAvatar:this.spOrder.userAvatar
+            }
+            this.peopleList.unshift(selfData)
+
+            this.getList();
+            this.getScoreRange();
+        },
+        methods: {
+            getImgList(msg){
+                this.imgList = msg.join(',')
+            },
+            getScoreRange(){
+                let that = this;
+                this.$http.post('/module/getModuleDetail', {
+                })
+                    .then(function (response) {
+                        for(let i = 0 ; i<=(response.data.data.moduleDetail.maxScore-response.data.data.moduleDetail.minuxScore)/response.data.data.moduleDetail.level ; i++){
+                            that.scoreRange.push(response.data.data.moduleDetail.minuxScore+i*response.data.data.moduleDetail.level)
+                        }
+                        console.log(that.scoreRange)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            getList(){
+                let that = this;
+                this.$http.post('/missionApprove/sameTypeList', {
+                    aimId:this.$route.params.id,
+                    pageNumber: this.pageNumber,
+                    pageSize: this.pageSize
+                })
+                    .then(function (response) {
+                        that.peopleList = that.peopleList.concat(response.data.data.content) ;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
             getData(data) {
                 console.log(data);
                 this.inputData[data.index].content = data.content;
             },
             confirmHandle(){
+                let that = this;
+                let bol = true;
+                let otherIds = [];
+                let otherScores = [];
 
-                this.$router.push({path:'/spList'})
+                this.peopleList.forEach(item=>{
+                    if(item.id == this.$route.params.id){
+
+                        if(bol){
+                            otherIds.push(item.id);
+                            otherScores.push(item.addScore)
+                        }
+                        bol = false;
+                    }else{
+                        otherIds.push(item.id);
+                        otherScores.push(item.addScore)
+                    }
+                })
+                this.$http.post('/missionApprove/approveById', {
+                    approveRemark: this.noteContent,
+                    checkedStatus: this.$route.params.type,
+                    //aimId:this.$route.params.id,
+                    otherIds: otherIds.join(','),
+                    otherScores: otherScores.join(','),
+                    pics: this.imgList
+                })
+                    .then(function (response) {
+                        that.$router.push('/spList/'+that.$route.params.spType);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
             },
 //            上传图片recall
             imageuploaded(res) {
@@ -147,7 +192,8 @@
         },
         components: {
             subTitle,
-            VueCoreImageUpload,
+            uploadImg,
+            selectSpPeople,
             choosePeople
         }
     }

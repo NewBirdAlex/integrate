@@ -68,7 +68,7 @@
                     infinite-scroll-disabled="loading"
                     infinite-scroll-immediate-check="true"
                     infinite-scroll-distance="10">
-                <router-link tag ='li' :to="'/orderDetail/'+item.id" v-for="(item,index) in orderList" :key="index">
+                <router-link tag ='li' :to="'/orderDetail/'+item.id+'/'+$route.params.type" v-for="(item,index) in orderList" :key="index">
 
                     <showList :data="item"></showList>
                 </router-link>
@@ -241,7 +241,7 @@
                 jfType:[
                     {
                         name:'日常任务',
-                        active:true,
+                        active:false,
                         id:8
                     },{
                         name:'品德积分',
@@ -332,9 +332,18 @@
                 this.getList();
             },
             chooseType(item,index){
-                this.jfType.forEach(item=>item.active=false);
-                item.active=true;
-                this.rootId = item.id;
+                console.log(item.active)
+
+                if(item.active){
+                    this.jfType.forEach(item=>item.active=false);
+                    item.active=false;
+                    this.rootId ='';
+                }else{
+                    this.jfType.forEach(item=>item.active=false);
+                    item.active=true;
+                    this.rootId = item.id;
+                }
+
             },
             changeStatu(msg){
                 this.spType = msg;
@@ -368,7 +377,7 @@
                 this.$http.post(url, {
                     checkedStatus: this.spType,//1:待审批;2:已审批 ,
                     pageNumber: this.pageNumber,
-                    pageSize: this.pageNumber,
+                    pageSize: this.pageSize,
                     searchContext: "",
                     searchContext:this.searchContext,
                     rootId:this.rootId

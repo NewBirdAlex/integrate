@@ -3,25 +3,6 @@
         <div class="nav fs30" >
             <span v-for="item in idList" @click="selId(item)" :class="{'active':item.sel}">{{item.name}}</span>
         </div>
-        <!--<div class=" bgWhite ml">-->
-            <!--<div class="paddingAll borderBottom">-->
-                <!--<p class="fs30">3设计公司logo <span class="fr blue">+600分</span></p>-->
-                <!--<p class=" fs28">本周设计好公司logo,要求logo简单大气</p>-->
-                <!--<p class=" gray">2017-9-26  13:30 前完成</p>-->
-                <!--<p class=" fs26 gray">剩余：1 <span class="fr qd">抢单</span></p>-->
-                <!--<i class="icon iconfont icon-icon"></i>-->
-            <!--</div>-->
-            <!--<div class="paddingAll gray overflow">-->
-                <!--他们已抢单：-->
-                <!--<span class="rightArrow fr">-->
-                           <!--<i class="icon iconfont icon-xiala1"></i>-->
-                       <!--</span>-->
-                <!--<div class="fr countPeople">-->
-                    <!--<img src="../assets/img/head.png" class="littleHead" v-for="i in 8" alt="">-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-
         <ul  class="  ml"
                 v-infinite-scroll="loadMore"
                 infinite-scroll-disabled="loading"
@@ -32,10 +13,28 @@
                     <p class="fs30">{{item.missionTitle}} <span class="fr blue">+{{item.missionAddScore}}分</span></p>
                     <p class=" fs28">{{item.missionContext}}</p>
                     <p class=" gray">{{item.missionEndTime}}2017-9-26  13:30 前完成</p>
-                    <p class=" fs26 gray">剩余：1 {{item.remainCount}} <span class="fr qd borderRadius">抢单</span></p>
-                    <i class="icon iconfont icon-icon" v-if="item.isComplete"></i>
+                    <p class=" fs26 gray">
+                        <span v-if="active!=1">剩余： {{item.remainCount}}</span>
+                        <span v-else>
+                            <span v-if="item.isRepeat==1">每天一次</span>
+                            <span v-if="item.isRepeat==2">每周一次</span>
+                            <span v-if="item.isRepeat==3"> 每月一次</span>
+                            <span v-if="item.isRepeat==4">每季一次</span>
+                            <span v-if="item.isRepeat==5">每年一次</span>
+                            <span v-if="item.isRepeat==6"> 无限制 </span>
+                            <span v-if="item.isRepeat==7">仅限一次</span>
+                        </span>
+                        <span class="fr qd borderRadius" v-if="active==2&&item.getStatus==0" @click="getOrder(item)">抢单</span>
+                        <span class="fr qd borderRadius" v-if="active==3&&item.getStatus==0" @click="getOrder(item)">挑战</span>
+                    </p>
+                    <!--<i class="icon iconfont icon-icon" v-if="item.isComplete"></i>-->
+                    <span v-if="item.getStatus==1">
+                         <i class="icon iconfont icon-iconcompleted blue" v-if="item.isComplete"></i>
+                         <i class="icon iconfont icon-uncomplete gray" v-else></i>
+                    </span>
+
                 </div>
-                <div class="paddingAll gray overflow" v-if="item.list.length">
+                <div class="paddingAll gray overflow" v-if="item.list.length" @click="go(item)">
                     他们已抢单：
                     <span class="rightArrow fr">
                            <i class="icon iconfont icon-xiala1"></i>
@@ -74,11 +73,10 @@
         li{
             position: relative;
         }
-        .icon-icon{
+        .icon-icon,.icon-iconcompleted,.icon-uncomplete{
             position: absolute;
             right: 1.3rem;
             top:1rem;
-            color:@blue;
             font-size: 1.2rem;
         }
         .littleHead {
@@ -153,6 +151,33 @@
             this.getList();
         },
         methods: {
+            go(item){
+                this.active==3?this.active=2:'';
+                this.$router.push({ name: 'ApplyMissionPerson', params: { id: item.missionId,type:this.active }})
+            },
+            reset(){
+                this.pageNumber=1;
+                this.lastPage=false;
+                this.list=[];
+                this.getList();
+            },
+            getOrder(item){
+                let that = this;
+                this.$http.post('/missionRecord/getMission',{
+                    missionId:item.missionId
+                })
+                    .then(function (response) {
+
+                        that.$toast({
+                            message: '成功获取任务',
+                            duration: 2000
+                        });
+                        that.reset();
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
             loadMore() {
                 if(!this.lastPage&&!this.loading){
                     this.getList();
@@ -205,10 +230,7 @@
                 this.active = item.id;
 
                 //change type
-                this.pageNumber=1;
-                this.lastPage=false;
-                this.list=[];
-                this.getList();
+                this.reset();
             }
         }
     }
