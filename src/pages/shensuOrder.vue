@@ -44,11 +44,11 @@
             </choosePeople>
 
 
-            <div class="bgWhite paddingAll lh40 fs28" v-if="getRange">
-                <strong>全选积分</strong>
-                <span class="gray">(选择可批量修改申请的积分)</span>
-                <span class="fr marginRight cl" :class="{'border':!selAll}" @click="selAll=!selAll"><i class="icon iconfont icon-gouxuan blue fs36" v-if="selAll"></i></span>
-            </div>
+            <!--<div class="bgWhite paddingAll lh40 fs28" v-if="getRange">-->
+                <!--<strong>全选积分</strong>-->
+                <!--<span class="gray">(选择可批量修改申请的积分)</span>-->
+                <!--<span class="fr marginRight cl" :class="{'border':!selAll}" @click="selAll=!selAll"><i class="icon iconfont icon-gouxuan blue fs36" v-if="selAll"></i></span>-->
+            <!--</div>-->
 
             <!--选择员工-->
             <chooseStaff  @getData="accept" v-if="getRange"></chooseStaff>
@@ -241,7 +241,7 @@
                         '业绩'
                     ]
                 },
-                peopleList:null,
+                peopleList:[],
                 chaosongList:null,
                 shenpiList:null,
                 approveUserList:null,
@@ -319,7 +319,8 @@
                     userAvatar:this.userMessage.userAvatar,
                     selectAddScore:this.detail.missionScore
                 }
-                console.log(this.detail)
+                this.peopleList.push(this.selfInf);
+                console.log(this.peopleList)
             },
             getScoreRange(){
                 let that = this;
@@ -436,7 +437,6 @@
             }else{
 
             }
-            this.getSelfInf();
         },
         components: {
             myInput,
