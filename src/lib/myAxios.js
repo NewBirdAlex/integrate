@@ -6,7 +6,6 @@ import Vue from 'vue'
 // 请求拦截（配置发送请求的信息）
 axios.interceptors.request.use(function (config){
     // 处理请求之前的配置
-    console.log(config.data.token)
     store.dispatch('showLoading');
     if(store.state.userMessage){
         config.data.token=store.state.userMessage.token;

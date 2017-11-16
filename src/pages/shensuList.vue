@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="spTop" ref="myFilter">
-            <span :class="{active:spType==1}" @click="changeStatu(1)">待审批</span>
-            <span :class="{active:spType==2}" @click="changeStatu(2)">已审批</span>
+            <span :class="{active:spType==1}" @click="changeStatu(1)">审批通过</span>
+            <span :class="{active:spType==2}" @click="changeStatu(2)">审批拒绝</span>
         </div>
         <div class="sel">
             <span class="filterType "  @click="handlehide('search')">
@@ -68,9 +68,31 @@
                     infinite-scroll-disabled="loading"
                     infinite-scroll-immediate-check="true"
                     infinite-scroll-distance="10">
-                <router-link tag ='li' :to="'/orderDetail/'+item.id+'/'+$route.params.type" v-for="(item,index) in orderList" :key="index">
+                <router-link tag ='li' :to="'/shensuOrder/'+item.id+'/'+spType+'/'+item.rootId+'/'+item.aimId" v-for="(item,index) in orderList" :key="index">
 
-                    <showList :data="item"></showList>
+                    <!--<showList :data="item"></showList>-->
+                    <div class="wrap2">
+                        <img class="head" :src="item.userAvatar" alt="">
+                        <div class="right">
+                            <p class="lh50">
+                                {{item.approveTitle}}
+                                <span class="blue fr" v-if="item.addScore>0">+{{item.addScore}}分</span>
+                                <span class="blue fr" v-else>-{{item.addScore}}分</span>
+                            </p>
+                            <!--<p class="gray">{{item.jobTitle}}</p>-->
+                            <!--<p>{{item.approveTitle}}</p>-->
+                            <!--<p>积分类型：-->
+                                <!--<span v-if="item.type==1">行为积分</span>-->
+                                <!--<span v-if="item.type==2">品德积分</span>-->
+                                <!--<span v-if="item.type==3">业绩积分</span>-->
+                            <!--</p>-->
+                            <p>
+                                <span class="green" v-if="spType==1">审批通过</span>
+                                <span class="red" v-if="spType==2">审批拒绝</span>
+                                <span class="fr gray">{{item.createDate}}</span>
+                            </p>
+                        </div>
+                    </div>
                 </router-link>
                 <myEmpty v-if="!orderList||!orderList.length"></myEmpty>
             </ul>
@@ -80,7 +102,39 @@
 <style scoped lang="less">
     @import "../assets/css/common.less";
     @import "../assets/font/font1/iconfont.css";
-
+    .wrap2{
+        padding:0.2rem 0;
+        .borderBottom;
+        background: white;
+        overflow: hidden;
+        .head{
+            width: 0.9rem;
+            height: 0.9rem;
+            border-radius: 50%;
+            margin:0.2rem;
+            float:left;
+        }
+        .right{
+            float:left;
+            display: inline-block;
+            width: 6rem;
+            font-size: @fs26;
+            line-height: 0.35rem;
+            padding-right: 0.2rem;
+            padding-top: 0.2rem;
+            p{
+                &:nth-child(1){
+                    font-size: @fs30;
+                }
+                &:nth-child(2){
+                    margin-bottom: 0.1rem;
+                }
+                &:nth-child(4){
+                    margin-bottom: 0.1rem;
+                }
+            }
+        }
+    }
     .search{
         text-align: left;
 
@@ -285,6 +339,12 @@
             }
         },
         methods:{
+            reset(){
+                this.pageNumber=1;
+                this.lastPage=false;
+                this.orderList=[];
+                this.getList();
+            },
             init(){
                 //init height
                 console.log(document.documentElement.clientHeight  )
@@ -347,6 +407,7 @@
             },
             changeStatu(msg){
                 this.spType = msg;
+
                 this.reset();
             },
             handlehide(msg){
@@ -363,25 +424,12 @@
                 }
 
             },
-            reset(){
-                this.pageNumber=1;
-                this.lastPage=false;
-                this.orderList=[];
-                this.getList();
-            },
             getList(){
                 //different type
-                let url = '';
-                if(this.$route.params.type==1){
-                     url = '/missionApprove/waitMeApproveList'
-                }else if(this.$route.params.type==2){
-                     url= '/missionApprove/iApproveList'
-                }else{
-                     url = '/missionApprove/copyToMeList'
-                }
+                let url = '/missionApprove/getSelectList';
                 let that = this;
                 this.$http.post(url, {
-                    checkedStatus: this.spType,//1:待审批;2:已审批 ,
+                    checkedStatus: this.spType,//1:审批通过;2:已审批 reject,
                     pageNumber: this.pageNumber,
                     pageSize: this.pageSize,
                     searchContext: "",
@@ -389,16 +437,14 @@
                     rootId:this.rootId
                 })
                     .then(function (response) {
-                        if(response.data.data.code=200000){
-                            that.pageNumber+=1;
-                            if(response.data.data.length){
-                                that.orderList = [];
-                            }
-                            that.orderList = that.orderList.concat(response.data.data.content);
-                            //last page
-                            response.data.data.last? that.lastPage=true:'';
-                            that.loading = false;
+                        that.pageNumber+=1;
+                        if(response.data.data.length){
+                            that.orderList = [];
                         }
+                        that.orderList =that.orderList.concat(response.data.data.content) ;
+                        //last page
+                        response.data.data.last? that.lastPage=true:'';
+                        that.loading = false;
 
                     })
                     .catch(function (error) {

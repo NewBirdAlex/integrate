@@ -5,39 +5,35 @@
             <div class="bgWhite">
                 <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom firstItem chooseList" >
                     <strong class="fs30 lh40">审批标题 <span class="red">*</span></strong>
-                    <span class="rightPart fs30 lh40 ">{{detail.title}}</span>
+                    <span class="rightPart fs30 lh40 ">{{detail.approveTitle}}</span>
                     <!--<label for="selList">-->
-                        <!--<i class="icon iconfont icon-xiala gray fs30"></i>-->
+                    <!--<i class="icon iconfont icon-xiala gray fs30"></i>-->
                     <!--</label>-->
                     <!--<select name="" id="selList">-->
-                        <!--<option value="1" v-for="i in 5">1</option>-->
+                    <!--<option value="1" v-for="i in 5">1</option>-->
                     <!--</select>-->
                 </div>
                 <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom">
                     <strong class="fs30 lh40">审批内容 <span class="red">*</span></strong>
-                    <span class="rightPart fs30 lh40 ">{{detail.context}}</span>
+                    <span class="rightPart fs30 lh40 ">{{detail.approveContext}}</span>
                 </div>
+                <jifenType v-model="jfType"></jifenType>
                 <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom">
-                    <strong class="fs30">积分类型 <span class="red">*</span></strong>
-                    <span class="rightPart fs30 lh40 ">A</span>
+                    <strong class="fs30 lh40">审批备注 <span class="red">*</span></strong>
+                    <span class="rightPart fs30 lh40 ">{{detail.approveRemark}}</span>
                 </div>
             </div>
-
-            <myInput v-for="(item,index) in inputData" :key="index"
-                     :conttitle="item.title"
-                     :need="item.need"
-                     :note="item.ph"
-                     v-model="item.content"
-                     :inpType="item.type"
-                     :inputType="item.inputType?item.inputType:'text'"
-            ></myInput>
             <div class="marginTop"></div>
             <!--上传图片-->
             <uploadImg v-model="imgList" ></uploadImg>
             <div class="marginTop"></div>
 
-            <subTitle :content="'申请人'" :subWord="'(默认申请自己的，可帮其他同事申请)'" :need="true"></subTitle>
-
+            <subTitle :content="''" :subWord="'(如果对审批项目积分有异议，请修改提交二次审批)'" :need="false"></subTitle>
+            <div class="bgWhite paddingAll" v-if="!getRange">
+                <img :src="detail.userAvatar" class="headPicture marginRight" alt="">
+                <span class="fs36">{{detail.userName}}</span>
+                <input type="text" class="fr fs36 marginTop" placeholder="输入积分" value="80" style="border: none;width:3rem;background: none;text-align: right;outline: none">
+            </div>
             <choosePeople v-for="(item,index) in peopleList" :name="item.userName"
                           :key="index" :point="item.selectAddScore" :range="scoreRange"
                           :ind="index"
@@ -48,14 +44,14 @@
             </choosePeople>
 
 
-            <div class="bgWhite paddingAll lh40 fs28">
+            <div class="bgWhite paddingAll lh40 fs28" v-if="getRange">
                 <strong>全选积分</strong>
                 <span class="gray">(选择可批量修改申请的积分)</span>
                 <span class="fr marginRight cl" :class="{'border':!selAll}" @click="selAll=!selAll"><i class="icon iconfont icon-gouxuan blue fs36" v-if="selAll"></i></span>
             </div>
 
             <!--选择员工-->
-            <chooseStaff  @getData="accept"></chooseStaff>
+            <chooseStaff  @getData="accept" v-if="getRange"></chooseStaff>
 
 
             <!--审批人-->
@@ -222,28 +218,19 @@
     import choosePeople from '../components/choosePeople.vue'
     import chooseStaff from '../components/chooseStaff.vue'
     import uploadImg from '../components/uploadImg.vue'
+    import jifenType from '../components/jifenType.vue'
     import { mapGetters } from 'vuex';
     export default {
         data() {
             return {
-                newImgList:'http://120.25.177.192/imghouse/jfb/upload/image/2017/7/2/g0hb568H52zi3y5iO8uFRByCoX2i1DPh_$xxx$05_05.jpg',
                 showStaff:false,
+                getRange:false,
+                jfType:0,
                 dialogImageUrl: '',
                 dialogVisible: false,
                 selAll:false,
                 detail:{},
                 scoreRange:[],
-                selfInf:{
-                },
-                inputData: [
-                    {
-                        title: "审批备注",
-                        need: true,
-                        ph: "请输入内容",
-                        content: "",
-                        type: 'textarea'
-                    }
-                ],
                 selectType:{
                     name: '积分类型',
                     need: true,
@@ -260,6 +247,8 @@
                 approveUserList:null,
                 imgList:'',
                 imgData:{},
+                scoreRange:[],
+                selfInf:{},
                 src: 'http://img1.vued.vanthink.cn/vued0a233185b6027244f9d43e653227439a.png'
             }
         },
@@ -322,43 +311,61 @@
 
                 }
             },
-            handleRemove(file, fileList) {
-                console.log(file, fileList);
+            getSelfInf(){
+                //获取自己分数
+                this.selfInf = {
+                    id:this.userMessage.userId,
+                    userName:this.userMessage.userName,
+                    userAvatar:this.userMessage.userAvatar,
+                    selectAddScore:this.detail.missionScore
+                }
+                console.log(this.detail)
             },
-            handlePictureCardPreview(file) {
-                console.log(file)
-                this.dialogImageUrl = file.url;
-                this.dialogVisible = true;
-            },
-            imgStatuChange(file){
-                console.log(file)
+            getScoreRange(){
+                let that = this;
+                this.$http.post('/actionList/getActionDetail', {
+                    id:this.$route.params.aimId
+                })
+                    .then(function (response) {
+                        for(let i = 0 ; i<=(response.data.data.detail.maxScore-response.data.data.detail.minuxScore)/response.data.data.detail.scoreLevel ; i++){
+                            that.scoreRange.push(response.data.data.detail.minuxScore+i*response.data.data.detail.scoreLevel)
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
             getDetail(){
                 let that = this;
-                this.$http.post('/actionList/getActionDetail', {
+                this.$http.post('/missionApprove/approveDetail', {
                     id:this.$route.params.id
                 })
                     .then(function (response) {
-                        that.detail = response.data.data.detail;
-                        if(response.data.data.approveUser.length){
-                            //是否有审批人
-                            that.approveUserList = response.data.data.approveUser;
-
-                        }else{
-//                            that.approveUserList=null;
-                        }
-                        // get score select range
-                        let score = that.detail.minuxScore;
-                        for(let i = 0; i<(that.detail.maxScore-that.detail.minuxScore)/that.detail.scoreLevel;i++){
-                            that.scoreRange.push(that.detail.minuxScore+i*that.detail.scoreLevel)
-                        }
-                        that.peopleList = [];
-                        that.selfInf = {
-                            id:that.userMessage.userId,
-                            userName:that.userMessage.userName,
-                            selectAddScore:that.scoreRange[0]
-                        }
-                        that.peopleList.push(that.selfInf)
+                        console.log(response)
+                        that.detail = response.data.data;
+                        that.jfType = that.detail.type;
+                        that.imgList = that.detail.imgList;
+                        that.getSelfInf();//get self score
+//                        if(response.data.data.approveUser.length){
+//                            //是否有审批人
+//                            that.approveUserList = response.data.data.approveUser;
+//
+//                        }else{
+//
+//                        }
+//                        // get score select range
+//                        let score = that.detail.minuxScore;
+//                        for(let i = 0; i<(that.detail.maxScore-that.detail.minuxScore)/that.detail.scoreLevel;i++){
+//                            that.scoreRange.push(that.detail.minuxScore+i*that.detail.scoreLevel)
+//                        }
+//                        that.peopleList = [];
+//                        that.selfInf = {
+//                            id:that.userMessage.userId,
+//                            userName:that.userMessage.userName,
+//                            selectAddScore:that.scoreRange[0]
+//                        }
+//                        that.peopleList.push(that.selfInf)
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -422,14 +429,21 @@
         },
         mounted(){
             this.getDetail();
+            //                11 品德积分12 行为积分13 业绩积分
+            if(this.$route.params.rootId==11||this.$route.params.rootId==12||this.$route.params.rootId==13){
+                this.getRange=true;
+                this.getScoreRange();
+            }else{
 
-
+            }
+            this.getSelfInf();
         },
         components: {
             myInput,
             subTitle,
             uploadImg,
             choosePeople,
+            jifenType,
             chooseStaff
         }
     }

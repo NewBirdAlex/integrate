@@ -1,9 +1,7 @@
 <template>
     <div>
-        <mytest v-model="num" value="num"></mytest>
+
         <div class=" wrap">
-
-
             <myInput v-for="(item,index) in inputData" :key="index"
                      :conttitle="item.title"
                      :need="item.need"
@@ -14,7 +12,7 @@
             ></myInput>
             <div class="marginTop"></div>
             <!--上传图片-->
-            <uploadImg @getData="getImgList"></uploadImg>
+            <uploadImg v-model="imgList"></uploadImg>
             <div class="marginTop"></div>
 
             <subTitle :content="'申请人'" :subWord="'(默认申请自己的，可帮其他同事申请)'" :need="true"></subTitle>
@@ -37,8 +35,7 @@
 
             <!--选择员工-->
             <chooseStaff  @getData="accept"></chooseStaff>
-            <mySelect :content="selectType" :selProp="'selectType'" @getData="getSelect"></mySelect>
-
+            <jifenType v-model="jifenType"></jifenType>
             <!--审批人-->
             <div class="marginTop">
                 <subTitle :content="'审批人'" :subWord="''" :need="true"></subTitle>
@@ -199,9 +196,8 @@
 </style>
 <script>
 
-    import mytest from '../components/mytest.vue'
+    import jifenType from '../components/jifenType.vue'
     import myInput from '../components/myInput.vue'
-    import mySelect from '../components/mySelect.vue'
     import subTitle from '../components/subTitle.vue'
     import choosePeople from '../components/choosePeople.vue'
     import chooseStaff from '../components/chooseStaff.vue'
@@ -211,6 +207,7 @@
         data() {
             return {
                 num:1,
+                jifenType:0,
                 showStaff:false,
                 dialogImageUrl: '',
                 dialogVisible: false,
@@ -234,16 +231,6 @@
                         type: 'textarea'
                     }
                 ],
-                selectType:{
-                    name: '积分类型',
-                    need: true,
-                    selValue: '品德',
-                    selectRange: [
-                        '品德',
-                        '行为',
-                        '业绩'
-                    ]
-                },
                 peopleList:null,
                 chaosongList:null,
                 shenpiList:null,
@@ -260,9 +247,6 @@
             ])
         },
         methods: {
-            getSelect(data) {
-                this[data.name].selValue = data.val;
-            },
             getSelfInf(){
                 //获取自己分数
                 this.selfInf = {
@@ -336,10 +320,6 @@
             imgStatuChange(file){
                 console.log(file)
             },
-            getImgList(msg){
-                console.log(msg)
-                this.imgList = msg.join(',')
-            },
             getScoreRange(){
                 let that = this;
                 this.$http.post('/module/getModuleDetail', {
@@ -399,16 +379,15 @@
                 }
                 this.$http.post('/missionApprove/submitMissionApprove', {
                     addScore: score.join(','),
-                    aimId: this.$route.params.id,
-                    approveContext: this.detail.context,
-                    approveRemark: this.inputData[0].content,
-                    approveTitle: this.detail.title,
+                    aimId: '',
+                    approveContext: this.inputData[1].content,
+                    approveTitle: this.inputData[0].content,
                     approveUserId: approveUserId.join(','),
                     beApproveUserId: beApproveUserId.join(','),
                     copyUserId: copyUserId.join(','),
                     missionPics: this.imgList,
-                    rootId:this.detail.rootId,
-                    type:this.$route.params.type,
+                    rootId:16,
+                    type:this.jifenType,
                 })
                     .then(function (response) {
                         if(response.data.code==200000){
@@ -438,9 +417,8 @@
             myInput,
             subTitle,
             uploadImg,
-            mySelect,
             choosePeople,
-            mytest,
+            jifenType,
             chooseStaff
         }
     }

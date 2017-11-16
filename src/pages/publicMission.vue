@@ -9,7 +9,7 @@
                  :inpType="item.type"
                  :inputType="item.inputType?item.inputType:'text'"
         ></myInput>
-        <mySelect :content="selectType" :selProp="'selectType'" @getData="getSelect"></mySelect>
+        <jifenType v-model="jfType"></jifenType>
         <showRange @getData="getRange"></showRange>
         <div class="confBtn marginTop" @click="subMission">提交</div>
     </div>
@@ -27,7 +27,7 @@
 </style>
 <script>
     import myInput from '../components/myInput.vue'
-    import mySelect from '../components/mySelect.vue'
+    import jifenType from '../components/jifenType.vue'
     import showRange from '../components/showRange.vue'
     import { mapGetters } from 'vuex';
 
@@ -35,6 +35,7 @@
         data() {
             return {
                 apartMentId: [],
+                jfType:0,
                 inputData: [
                     {
                         title: "任务标题",
@@ -67,16 +68,6 @@
                         type: 'input'
                     }
                 ],
-                selectType: {
-                    name: '积分类型',
-                    need: true,
-                    selValue: '',
-                    selectRange: [
-                        '品德',
-                        '行为',
-                        '业绩'
-                    ]
-                }
             }
         },
         computed: {
@@ -89,20 +80,9 @@
                 let that = this;
                 data.forEach(item => that.apartMentId.push(item.id))
             },
-            getSelect(data) {
-                this[data.name].selValue = data.val;
-            },
             subMission() {
                 let that =this;
-                if (this.selectType.selValue == '品德') {
-                    var jfType = 1;
-                }
-                if (this.selectType.selValue == '行为') {
-                    var jfType = 2;
-                }
-                if (this.selectType.selValue == '业绩') {
-                    var jfType = 3;
-                }
+
                 this.$http.post('/mission/userCreateMission', {
                     isRepeat: 7,
                     missionAddScore: this.inputData[2].content,
@@ -111,7 +91,7 @@
                     missionTitle: this.inputData[0].content,
                     missionType: 2,
                     token:this.userMessage.token ,
-                    type: jfType,
+                    type: this.jfType,
                     userCount: this.inputData[3].content,
                     userId: this.userMessage.userId
                 })
@@ -137,7 +117,7 @@
         },
         components: {
             myInput,
-            mySelect,
+            jifenType,
             showRange
         }
     }

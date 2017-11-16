@@ -27,7 +27,7 @@
             </div>
 
             <!--上传图片-->
-            <uploadImg @getData="getImgList"></uploadImg>
+            <uploadImg v-model="imgList"></uploadImg>
         </div>
         <div class="confBtn" @click="confirmHandle">确定</div>
     </div>
@@ -84,7 +84,7 @@
                 peopleList:[],
                 orderDetail:{},
                 scoreRange:[],
-                imgList:null,
+                imgList:'',
                 pageNumber:1,
                 pageSize:100,
                 lastPage:false,
@@ -106,9 +106,6 @@
             this.getScoreRange();
         },
         methods: {
-            getImgList(msg){
-                this.imgList = msg.join(',')
-            },
             getScoreRange(){
                 let that = this;
                 this.$http.post('/module/getModuleDetail', {
@@ -169,7 +166,8 @@
                     pics: this.imgList
                 })
                     .then(function (response) {
-                        that.$router.push('/spList/'+that.$route.params.spType);
+//                        that.$router.push('/spList/'+that.$route.params.spType);
+                        that.$router.push('/work');
                     })
                     .catch(function (error) {
                         console.log(error);

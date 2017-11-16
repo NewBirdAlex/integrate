@@ -7,7 +7,7 @@
             v-if="list.length!=0"
             infinite-scroll-distance="10">
             <li v-for="(item,index) in list" :key="index" class="marginBottom bgWhite">
-                <div class="left"><img :src="item.userAvatar" alt=""></div>
+                <div class="left"><img :src="item.userAvatar"  class="headPicture" alt=""></div>
                 <div class="right">
                     <p>{{item.approveTitle}} <span class="blue fr">+{{item.addScore}}分</span></p>
                     <p >

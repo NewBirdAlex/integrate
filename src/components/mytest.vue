@@ -20,19 +20,10 @@
         },
         watch:{
             value(val) {
-                alert('change'+1)
-                alert(this.visible);
                 this.visible = val;
-                alert(this.visible);
-
             },
             visible(val) {
-                alert("click"+2)
-                alert(this.visible);
-
                 this.$emit('input', val);
-                alert(this.visible);
-
             }
         },
         methods:{

@@ -21,7 +21,8 @@
                      :inpType="item.type"
                      :inputType="item.inputType?item.inputType:'text'"
             ></myInput>
-            <mySelect :content="selectType" :selProp="'selectType'" @getData="getSelect"></mySelect>
+
+            <jifenType v-model="jfType"></jifenType>
             <div class="paddingAll bgWhite fs30" v-if="$route.params.type==2">
                 <strong>奖扣时间</strong>
                 <span class="fr gray" v-if="!selTime" @click="pickTime">请选择时间</span>
@@ -41,7 +42,7 @@
 
             <!--上传图片-->
 
-            <uploadImg @getData="getImgList"></uploadImg>
+            <uploadImg v-model="imgList"></uploadImg>
 
             <div class="marginTop"></div>
 
@@ -108,27 +109,17 @@
 </style>
 <script>
     import myInput from '../components/myInput.vue'
-    import mySelect from '../components/mySelect.vue'
     import subTitle from '../components/subTitle.vue'
     import uploadImg from '../components/uploadImg.vue'
     import choosePeople from '../components/choosePeople.vue'
     import chooseStaff from '../components/chooseStaff.vue'
-
+    import jifenType from '../components/jifenType.vue'
     export default {
         data() {
             return {
                 dialogImageUrl: '',
                 dialogVisible: false,
-                selectType:{
-                    name: '积分类型',
-                    need: true,
-                    selValue: '品德',
-                    selectRange: [
-                        '品德',
-                        '行为',
-                        '业绩'
-                    ]
-                },
+                jfType:1,
                 selTime:'',
                 pickerVisible:'',
                 inputData: [
@@ -155,9 +146,6 @@
             }
         },
         methods: {
-            getSelect(data) {
-                this[data.name].selValue = data.val;
-            },
             accept(data){
                 // accpet  staff person
                 this.peopleList = data;
@@ -178,10 +166,7 @@
                     });
             },
             //            上传图片recall
-            getImgList(msg){
-                console.log(msg)
-                this.imgList = msg.join(',')
-            },
+
             delPerson(index){
                 this.peopleList.splice(index, 1)
             },
@@ -222,22 +207,13 @@
                 this.peopleList.forEach(item=>{
                     approveUserId.push(item.id);
                 })
-                if (this.selectType.selValue == '品德') {
-                    var jfType = 1;
-                }
-                if (this.selectType.selValue == '行为') {
-                    var jfType = 2;
-                }
-                if (this.selectType.selValue == '业绩') {
-                    var jfType = 3;
-                }
                 let params = {
                     addScore: score.join(','),
                     beApproveUserId :approveUserId.join(','),
                     praiseContext:this.inputData[1].content,
                     praisePics :this.imgList,
                     praiseTitle :this.inputData[0].content,
-                    type :jfType,
+                    type :this.jfType,
                 }
                 let url = '/missionApprove/praiseUser';
                 if(this.$route.params.type==2){
@@ -260,8 +236,8 @@
             subTitle,
             uploadImg,
             choosePeople,
-            mySelect,
             myInput,
+            jifenType,
             chooseStaff
         }
     }

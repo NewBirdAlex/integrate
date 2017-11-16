@@ -208,7 +208,7 @@
                         name:"积分申诉",
                         icon:'icon-tanhao1',
                         color:'#cbefd5',
-                        router:'/complain'
+                        router:'/shensuList'
                     },
                     {
                         name:"自由奖扣",

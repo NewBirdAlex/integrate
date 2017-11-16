@@ -49,6 +49,8 @@ const JfSelect = () => import('../pages/jfSelect.vue');//申請積分
 const Login = () => import('../pages/login.vue');//登录
 const UploadUserPic = () => import('../pages/uploadUserPic.vue');//上传用户头像
 const ApplyMissionPerson = () => import('../pages/applyMissionPerson.vue');//抢单任务人物列表
+const ShensuList = () => import('../pages/shensuList.vue');//申诉列表
+const shensuOrder = () => import('../pages/shensuOrder.vue');//申诉列表
 
 
 
@@ -91,6 +93,24 @@ const router = new Router({
             meta:{
                 navShow: false,
                 title:'登录'
+            }
+        },
+        {
+            path: '/shensuOrder/:id/:type/:rootId/:aimId',
+            name: 'shensuOrder',
+            component: shensuOrder,
+            meta:{
+                navShow: false,
+                title:'申诉'
+            }
+        },
+        {
+            path: '/shensuList',
+            name: 'ShensuList',
+            component: ShensuList,
+            meta:{
+                navShow: false,
+                title:'已审批'
             }
         },
         {
