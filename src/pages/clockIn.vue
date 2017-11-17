@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div class="top  fs30 tac">
-            <span :class="{'active':chooseNum==0}" @click="chooseNum=0">内勤</span>
-            <span :class="{'active':chooseNum==1}" @click="chooseNum=1">外勤</span>
-        </div>
+        <!--<div class="top  fs30 tac">-->
+            <!--<span :class="{'active':chooseNum==0}" @click="chooseNum=0">内勤</span>-->
+            <!--<span :class="{'active':chooseNum==1}" @click="chooseNum=1">外勤</span>-->
+        <!--</div>-->
         <div class="bgWhite paddingAll overflow borderBottom">
             <img src="../assets/img/head.png" class="headPicture fl marginRight" alt="">
             <div class="fl lh" style="padding-top: 0.1rem">
@@ -27,11 +27,17 @@
         </mt-datetime-picker>
 
         <div class="paddingAll bgWhite">
-            <div class="inf  bgWhite ">
+            <div class="inf  bgWhite " >
                 <p>上班时间  09:00</p>
                 <p><span class="btn">已打卡</span>  <span class="btn">正常上班</span></p>
                 <p class="gray">打卡时间  08:56</p>
                 <span class="type">上</span>
+            </div>
+            <div class="inf  bgWhite " >
+                <p>下班班时间  09:00</p>
+                <p><span class="btn">已打卡</span>  <span class="btn">正常上班</span></p>
+                <p class="gray">打卡时间  08:56</p>
+                <span class="type active">下</span>
             </div>
         </div>
         <div class="marginTop mpwrap">
@@ -43,11 +49,12 @@
                         :showAddressBar="true"
                         :autoLocation="true"
                         @locationSuccess="getLocation"
+                        @locationError="getLocationFail"
                 >
-
                 </bm-geolocation>
             </baidu-map>
-            <div class="bwp">
+
+            <div class="bwp" @click="checkIn">
                 <div class="ckbtn">
                     <p>下班打卡
                     </p>
@@ -120,7 +127,7 @@
             position: absolute;
             left: 0;
             top:0;
-            transform: translate(-50%,-50%);
+            transform: translate(-50%);
             background: @gray;
             color:white;
             border-radius: 50%;
@@ -129,6 +136,11 @@
             height: 0.3rem;
             .tac;
             line-height: 0.3rem;
+
+        }
+        .active{
+            background: @blue;
+            color:white;
         }
     }
     .lh{
@@ -159,6 +171,16 @@
                 center: {lng: 0, lat: 0},
                 zoom: 15,
                 pickerVisible:'',
+                //submit params
+                checkAddress:'',
+                checkPics:'',
+                checkRemark:'',
+                latitude:'',
+                longitude:'',
+                checkList:[],
+                startTime:'',
+                endTime:'',
+                //submit params
                 time:{
                     h:'',
                     m:'',
@@ -167,12 +189,33 @@
             }
         },
         methods:{
-            getLocation(point, AddressComponent){
-                console.log(point)
-                console.log(AddressComponent)
+            getLocation(location){
+                console.log(location)
+                this.latitude = location.point.lat;
+                this.longitude = location.point.lng;
+                let address = location.addressComponent;
+                this.checkAddress =address.city+address.district+address.province+address.street+address.streetNumber;
             },
-            handler ({BMap, map}) {
+            getLocationFail(status){
+                console.log(status)
+            },
+            checkIn(){
                 let that = this;
+                this.$http.post('/dailyCheck/userCheck', {
+                    checkAddress: this.checkAddress,
+                    checkPics: this.checkPics,
+                    checkRemark: this.checkRemark,
+                    latitude: String(this.latitude),
+                    longitude: String(this.longitude),
+                })
+                    .then(function (response) {
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            handler({BMap, map}){
                 console.log(BMap, map)
                 this.center.lng = 116.404
                 this.center.lat = 39.915
@@ -195,6 +238,20 @@
                     that.time.m=now.getMinutes();
                     that.time.s=now.getSeconds();
                 },1000)
+            },
+            getClockIn(){
+                //check clock in information
+                let that = this;
+                this.$http.post('/dailyCheck/getCheckDetail', {
+                })
+                    .then(function (response) {
+                        that.checkList = response.data.data.checkList;
+                        that.startTime = response.data.data.startTime;
+                        that.endTime = response.data.data.endTime;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
         },
         components: {
@@ -203,21 +260,7 @@
         },
         mounted(){
             this.countTime();
-
-            //            var _this = this;
-            //            MP(_this.ak).then(BMap => {
-            //                //在此调用api
-            //                // 百度地图API功能
-            //                var map = new BMap.Map("allmap");
-            //
-            //                var point = null;
-            //                //定位
-//                            var geolocation = new BMap.Geolocation();
-//                            geolocation.getCurrentPosition(function(r){
-//                                point = new BMap.Point(r.point.lng,r.point.lat);
-//                                map.centerAndZoom(point,16);
-//                            },{enableHighAccuracy: true})
-            //            });
+            this.getClockIn();
         },
         beforeDestroy(){
             clearInterval(timer);
