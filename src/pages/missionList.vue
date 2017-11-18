@@ -34,7 +34,7 @@
                     </span>
 
                 </div>
-                <div class="paddingAll gray overflow" v-if="item.list.length" @click="go(item)">
+                <div class="paddingAll gray overflow" v-if="item.list" @click="go(item)">
                     他们已抢单：
                     <span class="rightArrow fr">
                            <i class="icon iconfont icon-xiala1"></i>
