@@ -44,8 +44,7 @@ Vue.use(MintUI);
 
 //overall  config
 import {config} from './lib/config'
-Vue.use(config)
-
+Vue.use(config);
 //过滤器
 import filters from './lib/filters'
 Object.keys(filters).forEach(key => Vue.filter(key, filters[key]));

@@ -24,7 +24,6 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-    @import "../assets/font/font1/iconfont.css";
     .wrap{
         padding:0.2rem 0;
         .borderBottom;

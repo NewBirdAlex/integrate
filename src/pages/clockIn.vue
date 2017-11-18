@@ -11,7 +11,8 @@
                 <p class="fs28 gray">设计部</p>
             </div>
             <div class="fr tm" @click="openDate">
-                2012 10 38
+                <span v-if="rightTime">{{rightTime}}</span>
+                <span v-else>{{now}}</span>
                 <i class="icon iconfont icon-xiala fs26"></i>
             </div>
         </div>
@@ -27,18 +28,24 @@
         </mt-datetime-picker>
 
         <div class="paddingAll bgWhite">
-            <div class="inf  bgWhite " >
-                <p>上班时间  09:00</p>
-                <p><span class="btn">已打卡</span>  <span class="btn">正常上班</span></p>
-                <p class="gray">打卡时间  08:56</p>
-                <span class="type">上</span>
+            <div class="inf  bgWhite " v-if="checkList[0]">
+                <p>上班时间  {{startTime}}</p>
+                <p><span class="btn">{{checkList[0].checkDesc}}</span>  <span class="btn">{{checkList[0].tip}}</span></p>
+                <p class="gray">打卡时间  {{checkList[0].checkTime}}</p>
+                <span class="type active">上</span>
             </div>
-            <div class="inf  bgWhite " >
-                <p>下班班时间  09:00</p>
-                <p><span class="btn">已打卡</span>  <span class="btn">正常上班</span></p>
-                <p class="gray">打卡时间  08:56</p>
+            <div class="inf  bgWhite " v-if="checkList[1]">
+                <p>下班时间  {{endTime}}</p>
+                <p><span class="btn">{{checkList[1].checkDesc}}</span>  <span class="btn">{{checkList[1].tip}}</span></p>
+                <p class="gray">打卡时间  {{checkList[1].checkTime}}</p>
                 <span class="type active">下</span>
             </div>
+            <!--<div class="inf  bgWhite " >-->
+                <!--<p>下班班时间  {{endTime}}</p>-->
+                <!--<p><span class="btn">已打卡</span>  <span class="btn">正常上班</span></p>-->
+                <!--<p class="gray">打卡时间  08:56</p>-->
+                <!--<span class="type active">下</span>-->
+            <!--</div>-->
         </div>
         <div class="marginTop mpwrap">
             <!--baidu map-->
@@ -53,14 +60,15 @@
                 >
                 </bm-geolocation>
             </baidu-map>
-
-            <div class="bwp" @click="checkIn">
-                <div class="ckbtn">
-                    <p>下班打卡
-                    </p>
-                    <p>{{time.h|addZero}}:{{time.m|addZero}}:{{time.s|addZero}}</p>
+            <div style="padding:1rem 0" v-if="showClockIn">
+                <div class="bwp" @click="checkIn" >
+                    <div class="ckbtn">
+                        <p>下班打卡</p>
+                        <p>{{time.h|addZero}}:{{time.m|addZero}}:{{time.s|addZero}}</p>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -167,6 +175,8 @@
         data() {
             return {
                 chooseNum:0,
+                rightTime:'',
+                showClockIn:true,
                 ak:'jzbCq3Pg2pZ0wb2A5c6weIO62n2fdlh3',
                 center: {lng: 0, lat: 0},
                 zoom: 15,
@@ -186,6 +196,12 @@
                     m:'',
                     s:''
                 }
+            }
+        },
+        computed:{
+            now(){
+                let data = new Date();
+                return data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate();
             }
         },
         methods:{
@@ -209,7 +225,7 @@
                     longitude: String(this.longitude),
                 })
                     .then(function (response) {
-
+                        this.getClockIn();
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -222,8 +238,24 @@
                 this.zoom = 15
 
             },
-            handleConfirm(msg){
-                console.log(msg)
+            handleClockIn(){
+                //if user could clock in
+                if(this.now == this.rightTime){
+                    if(this.checkList.length<2){
+                        this.showClockIn=true;
+                    }else{
+                        this.showClockIn=false;
+                    }
+                }else{
+                    this.showClockIn=false;
+                }
+
+            },
+            handleConfirm(data){
+                this.checkList=[];
+                this.selectTime=true;
+                this.rightTime = data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate();
+                this.getClockIn();
             },
             openDate(){
                 this.$refs.picker.open();
@@ -233,10 +265,10 @@
                 let that = this;
 
                 timer = setInterval(function () {
-                    let now = new Date();
-                    that.time.h=now.getHours();
-                    that.time.m=now.getMinutes();
-                    that.time.s=now.getSeconds();
+                    let nowDate = new Date();
+                    that.time.h=nowDate.getHours();
+                    that.time.m=nowDate.getMinutes();
+                    that.time.s=nowDate.getSeconds();
                 },1000)
             },
             getClockIn(){
@@ -248,6 +280,7 @@
                         that.checkList = response.data.data.checkList;
                         that.startTime = response.data.data.startTime;
                         that.endTime = response.data.data.endTime;
+                        that.handleClockIn();
                     })
                     .catch(function (error) {
                         console.log(error);

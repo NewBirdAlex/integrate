@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="height: 100vh;" class="bgWhite">
         <subTitle :content="'选择您的图片作为头像'" :subWord="''"></subTitle>
         <div class="imgwrap tac">
             <img v-if="imgUrl" :src='imgUrl' alt="">

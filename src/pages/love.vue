@@ -52,7 +52,7 @@
         <!--</transition>-->
     </div>
 </template>
-<style  lang="less">
+<style scoped lang="less">
     @import "../assets/css/common.less";
     .specilIcon{
         position: absolute;

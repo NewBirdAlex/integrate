@@ -1,13 +1,17 @@
 <template>
-    <div>
+    <div class="bgWhite">
         <subTitle :content="'附加图片'" :subWord="'（'+imgNum+'/9）'"></subTitle>
-        <div class="imgwrap overflow" v-if="imgList.length">
-            <div class="imgItem" v-for="(item ,index) in imgList">
-                <img  :src='item' alt="">
-                <i class="icon iconfont icon-shanchu" @click="delImg(index)"></i>
-            </div>
+        <!--<div class="imgwrap overflow" v-if="imgList.length">-->
+            <!--<div class="imgItem" v-for="(item ,index) in imgList">-->
+                <!--<img  :src='item' alt="">-->
+                <!--<i class="icon iconfont icon-shanchu" @click="delImg(index)"></i>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="imgItem" v-for="(item ,index) in imgList">
+            <img  :src='item' alt="">
+            <i class="icon iconfont icon-shanchu" @click="delImg(index)"></i>
         </div>
-        <div class="paddingAll bgWhite">
+        <div class="paddingAll setFrame" >
             <vue-core-image-upload
                     class="btn btn-primary"
                     :crop="false"
@@ -25,37 +29,40 @@
 <style scoped lang="less">
     @import "../assets/css/common.less";
     .icon{
-        font-size: 1.2rem;
+        font-size: 2rem;
     }
-    .imgwrap{
-        .overflow;
-        .bgWhite;
-        .imgItem{
-            position: relative;
-            width: 2rem;
-            height: 2rem;
-            .marginRight;
-            .marginTop;
-            .marginLeft;
-            .fl;
-            .icon{
-                position: absolute;
-                display: block;
-                right: 0;
-                top:0;
-                max-width: 0.4rem;
-                .gray;
-                font-size: 0.5rem;
-                transform: translate(50%,-30%);
-            }
+    form{
+        /*height: 100%!important;*/
+    }
+    .setFrame{
+        width: 2rem;
+        height: 2rem;
+        display: inline-block;
+    }
+    .imgItem{
+        position: relative;
+        width: 2rem;
+        height: 2rem;
+        .marginRight;
+        .marginTop;
+        .marginLeft;
+        display: inline-block;
+        .icon{
+            position: absolute;
+            display: block;
+            right: 0;
+            top:0;
+            max-width: 0.4rem;
+            .gray;
+            font-size: 0.5rem;
+            transform: translate(50%,-30%);
         }
         img{
             width: 2rem;
             height: 2rem;
-            .fl;
-
         }
     }
+
 </style>
 <script>
     import VueCoreImageUpload from 'vue-core-image-upload'

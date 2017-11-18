@@ -1,66 +1,69 @@
 <template>
-    <div class="paddingAll">
+    <div class="">
         <!--<h3 class="tac paddingAll ">个人中心</h3>-->
-        <div class="pt">
-            <router-link to="/personalData" tag="div" class="borderBottom overflow paddingBottom">
-                <img class="phead" :src="baseInf.userAvatar" alt="">
-                <div class="right">
-                    <p class="fs30"> {{baseInf.userName}}</p>
-                    <p class="gray fs26">{{baseInf.departmentName}} {{baseInf.jobTitle}}  <span class="fr"><i class="icon iconfont icon-xiala1"></i></span></p>
-                    <p class="fs28">积分：{{baseInf.userScore}}   基础积分：{{baseInf.baseScore}}</p>
-                </div>
-            </router-link>
-            <div id="main" class="bgWhite"></div>
-        </div>
-        <div class="pt marginTop opItem fs28">
-            <div class="item">
-                <router-link to="/structure">
-                    <i class="leftPart icon iconfont icon-zuzhijiagou"></i>
-                    <div class="rightPart">
-                        企业组织架构
-                        <span class="fr rightArrow">
-                                            <i class=" icon iconfont icon-xiala1"></i>
-                    </span>
+        <div class="paddingAll">
+            <div class="pt">
+                <router-link to="/personalData" tag="div" class="borderBottom overflow paddingBottom">
+                    <img class="phead" :src="baseInf.userAvatar" alt="">
+                    <div class="right">
+                        <p class="fs30"> {{baseInf.userName}}</p>
+                        <p class="gray fs26">{{baseInf.departmentName}} {{baseInf.jobTitle}}  <span class="fr"><i class="icon iconfont icon-xiala1"></i></span></p>
+                        <p class="fs28">积分：{{baseInf.userScore}}   基础积分：{{baseInf.baseScore}}</p>
                     </div>
                 </router-link>
+                <div id="main" class="bgWhite"></div>
+            </div>
+            <div class="pt marginTop opItem fs28">
+                <div class="item">
+                    <router-link to="/structure">
+                        <i class="leftPart icon iconfont icon-zuzhijiagou"></i>
+                        <div class="rightPart">
+                            企业组织架构
+                            <span class="fr rightArrow">
+                                            <i class=" icon iconfont icon-xiala1"></i>
+                    </span>
+                        </div>
+                    </router-link>
 
-            </div>
-            <div class="item">
-                <router-link to="/missionList">
-                    <i class="leftPart icon iconfont icon-renwu1"></i>
+                </div>
+                <div class="item">
+                    <router-link to="/missionList">
+                        <i class="leftPart icon iconfont icon-renwu1"></i>
+                        <div class="rightPart">
+                            我的任务
+                            <span class="fr rightArrow">
+                                            <i class=" icon iconfont icon-xiala1"></i>
+                    </span>
+                        </div>
+                    </router-link>
+
+                </div>
+                <div class="item">
+                    <i class="leftPart icon iconfont icon-caidanlanrijihuise"></i>
                     <div class="rightPart">
-                        我的任务
+                        我的日记
                         <span class="fr rightArrow">
                                             <i class=" icon iconfont icon-xiala1"></i>
                     </span>
                     </div>
-                </router-link>
-
-            </div>
-            <div class="item">
-                <i class="leftPart icon iconfont icon-caidanlanrijihuise"></i>
-                <div class="rightPart">
-                    我的日记
-                    <span class="fr rightArrow">
+                </div>
+                <div class="item">
+                    <router-link to="/manageDiary">
+                        <i class="leftPart icon iconfont icon-guanli1"></i>
+                        <div class="rightPart">
+                            我的管理
+                            <span class="fr rightArrow">
                                             <i class=" icon iconfont icon-xiala1"></i>
                     </span>
+                        </div>
+                    </router-link>
                 </div>
             </div>
-            <div class="item">
-                <router-link to="/manageDiary">
-                    <i class="leftPart icon iconfont icon-guanli1"></i>
-                    <div class="rightPart">
-                        我的管理
-                        <span class="fr rightArrow">
-                                            <i class=" icon iconfont icon-xiala1"></i>
-                    </span>
-                    </div>
-                </router-link>
+            <div class="logout" @click="logOut">
+                退出登录
             </div>
         </div>
-        <div class="logout">
-            退出登录
-        </div>
+
     </div>
 </template>
 <style scoped lang="less">
@@ -139,6 +142,12 @@
             ...mapGetters([
                 'baseInf',
             ])
+        },
+        methods:{
+            logOut(){
+                this.$store.commit('logOut');
+                this.$router.push('/login');
+            }
         },
         mounted() {
             this.$store.commit('getuserBaseInf');

@@ -34,7 +34,6 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-    @import "../assets/font/font1/iconfont.css";
     .cl{
 
         width: 0.4rem;

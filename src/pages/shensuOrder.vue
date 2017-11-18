@@ -42,8 +42,9 @@
                           @changePoint="changePoint">
                 <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
             </choosePeople>
+
             <!--选择员工-->
-            <chooseStaff  @getData="accept" v-if="getRange" :hide=true></chooseStaff>
+            <chooseStaff  @getData="accept" :hide=true></chooseStaff>
 
 
             <!--审批人-->
@@ -331,10 +332,8 @@
                 document.getElementById('selectPeople').click();
             },
             markPerson(msg){
-                console.log(msg )
                 localStorage.setItem('chaosong',true)
                 document.getElementById('selectPeople').click();
-                console.log(document.getElementById('selectPeople'))
             },
             accept(data){
                 // accpet  staff person
@@ -389,7 +388,6 @@
                     selectAddScore:this.detail.missionScore
                 }
                 this.peopleList.push(this.selfInf);
-                console.log(this.peopleList)
             },
             getScoreRange(){
                 let that = this;
@@ -412,30 +410,10 @@
                     id:this.$route.params.id
                 })
                     .then(function (response) {
-                        console.log(response)
                         that.detail = response.data.data;
                         that.jfType = that.detail.type;
                         that.imgList = that.detail.imgList;
                         that.getSelfInf();//get self score
-//                        if(response.data.data.approveUser.length){
-//                            //是否有审批人
-//                            that.approveUserList = response.data.data.approveUser;
-//
-//                        }else{
-//
-//                        }
-//                        // get score select range
-//                        let score = that.detail.minuxScore;
-//                        for(let i = 0; i<(that.detail.maxScore-that.detail.minuxScore)/that.detail.scoreLevel;i++){
-//                            that.scoreRange.push(that.detail.minuxScore+i*that.detail.scoreLevel)
-//                        }
-//                        that.peopleList = [];
-//                        that.selfInf = {
-//                            id:that.userMessage.userId,
-//                            userName:that.userMessage.userName,
-//                            selectAddScore:that.scoreRange[0]
-//                        }
-//                        that.peopleList.push(that.selfInf)
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -446,21 +424,17 @@
                 let that = this;
                 this.peopleList.forEach(item=>{
                     score.push(item.selectAddScore)
-                })
+                });
                 let approveUserId = [];
-                if(this.approveUserList.length){
-                    this.approveUserList.forEach(item=>{
-                        approveUserId.push(item.id);
-                    })
-                }else if(this.shenpiList){
-                    this.shenpiList.forEach(item=>{
-                        approveUserId.push(item.id);
+                if(this.detail.approveUserList.length){
+                    this.detail.approveUserList.forEach(item=>{
+                        approveUserId.push(item.userId);
                     })
                 }
                 let beApproveUserId = [];
                 this.peopleList.forEach(item=>{
                     beApproveUserId.push(item.id);
-                })
+                });
                 let copyUserId = [];
                 if(this.chaosongList) {
                     this.chaosongList.forEach(item=> copyUserId.push(item.id));
@@ -468,15 +442,15 @@
                 this.$http.post('/missionApprove/submitMissionApprove', {
                     addScore: score.join(','),
                     aimId: this.$route.params.id,
-                    approveContext: this.detail.context,
-                    approveRemark: this.inputData[0].content,
-                    approveTitle: this.detail.title,
+                    approveContext: this.detail.approveContext,
+                    approveRemark: this.detail.approveRemark,
+                    approveTitle: this.detail.approveTitle,
                     approveUserId: approveUserId.join(','),
                     beApproveUserId: beApproveUserId.join(','),
                     copyUserId: copyUserId.join(','),
                     missionPics: this.imgList,
                     rootId:this.detail.rootId,
-                    type:this.$route.params.type,
+                    type:this.detail.type,
                 })
                     .then(function (response) {
                         if(response.data.code==200000){
@@ -484,7 +458,7 @@
                                 message:'提交成功',
                                 duration: 2000
                             });
-                            that.$router.go(-1);
+                            that.$router.push('/work');
                         }else{
                             that.$toast({
                                 message:response.data.message,

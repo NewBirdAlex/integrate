@@ -1,83 +1,96 @@
 <template>
-    <div>
-        <div class="marginTop paddingAll bgWhite fs30 borderBottom" id="selectPeople" @click="showStaff=!showStaff">
-            <strong>选择员工</strong>
-            <span class="fr rightArrow"><i class="icon iconfont icon-xiala1 gray"></i></span>
-        </div>
-        <transition
-                name="custom-classes-transition"
-                enter-active-class="animated bounceInLeft"
-                leave-active-class="animated bounceOutLeft"
-        >
-            <div class="wrap" v-if="showStaff">
-                <div class="search paddingAll">
-                    <div class="left" @click="showOption=!showOption">
-                        筛选员工
-                        <span class="triangle-down"></span>
-                    </div>
-                    <div class="right bgWhite">
-                        <i class="icon iconfont icon-sousuo"></i>
-                        <input type="text" placeholder="搜索">
-                    </div>
-                    <div style="clear: both"></div>
-                    <transition
-                            name="custom-classes-transition"
-                            enter-active-class="animated bounceInDown"
-                            leave-active-class="animated bounceOutUp"
-                    >
-                        <div class="option" v-show="showOption">
-                            <div class="ol">
-                                <div class=""><i class="icon iconfont icon-renwu"></i>部门</div>
-                                <div class=""><i class="icon iconfont icon-zhiwei"></i>职位</div>
-                            </div>
-                            <div class="or tac">
-                                <mt-loadmore  :bottom-method="apartmenloadBottom" :bottom-all-loaded="apartmentallLoaded" ref="loadapartment">
-                                    <ul class="apartmentList">
-                                        <li v-for="(item,index) in apartMentList" :key="index">
-                                            <div>{{item.name}}</div>
-                                        </li>
-                                    </ul>
-                                </mt-loadmore>
-
-                            </div>
+    <div :class="{'hidelogo':hide}">
+        <div >
+            <div class="marginTop paddingAll bgWhite fs30 borderBottom" id="selectPeople" @click="showStaff=!showStaff">
+                <strong>选择员工</strong>
+                <span class="fr rightArrow"><i class="icon iconfont icon-xiala1 gray"></i></span>
+            </div>
+            <transition
+                    name="custom-classes-transition"
+                    enter-active-class="animated bounceInLeft"
+                    leave-active-class="animated bounceOutLeft"
+            >
+                <div class="wrap" v-if="showStaff">
+                    <div class="search paddingAll">
+                        <div class="left" @click="showOption=!showOption">
+                            筛选员工
+                            <span class="triangle-down"></span>
                         </div>
-                    </transition>
-                </div>
+                        <div class="right bgWhite">
+                            <i class="icon iconfont icon-sousuo"></i>
+                            <input type="text" placeholder="搜索">
+                        </div>
+                        <div style="clear: both"></div>
+                        <transition
+                                name="custom-classes-transition"
+                                enter-active-class="animated bounceInDown"
+                                leave-active-class="animated bounceOutUp"
+                        >
+                            <div class="option" v-show="showOption">
+                                <div class="ol">
+                                    <div class=""><i class="icon iconfont icon-renwu"></i>部门</div>
+                                    <div class=""><i class="icon iconfont icon-zhiwei"></i>职位</div>
+                                </div>
+                                <div class="or tac">
+                                    <mt-loadmore  :bottom-method="apartmenloadBottom" :bottom-all-loaded="apartmentallLoaded" ref="loadapartment">
+                                        <ul class="apartmentList">
+                                            <li v-for="(item,index) in apartMentList" :key="index">
+                                                <div>{{item.name}}</div>
+                                            </li>
+                                        </ul>
+                                    </mt-loadmore>
 
-                <div class="bgWhite listWrap" :style="{height:listWrap}">
+                                </div>
+                            </div>
+                        </transition>
+                    </div>
+
+                    <div class="bgWhite listWrap" :style="{height:listWrap}">
 
 
-                    <!--load more-->
-                    <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
-                        <ul>
-                            <li v-for="(item,index) in staffList" :key="index">
-                                <div class="list overflow paddingAll borderBottom">
-                                    <img :src="item.userAvatar" class="marginRight headPicture fl" alt="">
-                                    <div class="fl">
-                                        <p class="fs36 ">{{item.userName}}</p>
-                                        <p class="gray marginTop">{{item.departmentName}}</p>
-                                    </div>
-                                    <span class="cl" :class="{'border':!item.pick}" @click="choosePeople(item,index)">
+                        <!--load more-->
+                        <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+                            <ul>
+                                <li v-for="(item,index) in staffList" :key="index">
+                                    <div class="list overflow paddingAll borderBottom">
+                                        <img :src="item.userAvatar" class="marginRight headPicture fl" alt="">
+                                        <div class="fl">
+                                            <p class="fs36 ">{{item.userName}}</p>
+                                            <p class="gray marginTop">{{item.departmentName}}</p>
+                                        </div>
+                                        <span class="cl" :class="{'border':!item.pick}" @click="choosePeople(item,index)">
                                         <i class="icon iconfont icon-gouxuan blue" v-if="item.pick"></i>
                                     </span>
-                                </div>
+                                    </div>
 
-                            </li>
-                        </ul>
-                    </mt-loadmore>
+                                </li>
+                            </ul>
+                        </mt-loadmore>
 
+                    </div>
+
+                    <div class="obtn bgWhite">
+                        <div class="" @click="cancel">取消</div>
+                        <div class="active" @click="outputData">确认</div>
+                    </div>
                 </div>
-
-                <div class="obtn bgWhite">
-                    <div class="" @click="cancel">取消</div>
-                    <div class="active" @click="outputData">确认</div>
-                </div>
-            </div>
-        </transition>
+            </transition>
+        </div>
     </div>
+
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
+    .hidelogo{
+        height: 1px;
+        position: relative;
+        overflow: hidden;
+        #selectPeople{
+            position: absolute;
+            left:200%;
+        }
+    }
+
     .apartmentList{
         height: 7rem;
         overflow: scroll;
@@ -238,7 +251,12 @@
                 }
             }
         },
-        props: {},
+        props: {
+            hide:{
+                type:Boolean,
+                default:false
+            }
+        },
         methods: {
             apartmenloadBottom(){
                 if(!this.apartmentLast){

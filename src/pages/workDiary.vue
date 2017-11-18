@@ -51,13 +51,13 @@
                 navList:[
                     {
                         path:'/workDiary/menu',
-                        icon:'icon-icon',
+                        icon:'icon-bianji',
                         name:"写日记"
                     },
                     {
                         path:'/workDiary/watch',
                         name:"看日记",
-                        icon:'icon-kan'
+                        icon:'icon-yanjing'
                     },
                     {
                         path:'/workDiary/diaryCount',

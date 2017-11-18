@@ -3,7 +3,7 @@
         <div class="marginAll marginTop border borderRadius bgWhite">
             <div class="subt">
                 <i class="icon iconfont icon-jifen1 blue"></i>
-                <span class="gray">积分动态  {{userMessage.userId}}</span>
+                <span class="gray">积分动态</span>
                 <!--<span class="fr" @click="openPicker"> 9月</span>-->
                 <span class="rightArrow fr gray">
                     <i class="icon iconfont icon-xiala"></i>
@@ -21,28 +21,31 @@
                                 <img :src="item.userAvatar" alt="">
                             </div>
                             <div class="right">
-                                <h4>
+                                <h4 class="lh40">
                                     <strong>{{item.userName}}</strong>
                                     <span class="fr blue">
-                                <span class="marginAll">+{{item.addScore}}</span>
-                                <span>{{item.scoreType}}分</span>
-                            </span>
+                                        <span class="marginAll"><span v-if="item.addScore>0">+</span>{{item.addScore}}</span>
+                                        <span v-if="item.scoreType==1">品德分</span>
+                                        <span v-if="item.scoreType==2">业绩分</span>
+                                        <span v-if="item.scoreType==3">行为分</span>
+                                        <span v-if="item.scoreType==4">基础积分分</span>
+                                    </span>
                                 </h4>
-                                <p class="gray">{{item.jobTitle}}</p>
-                                <p> <strong>{{item.approveTitle}}</strong></p>
-                                <p>
+                                <p class="gray lh50">{{item.jobTitle}}</p>
+                                <p class="lh50"> <span class="fs30">{{item.approveTitle}}</span></p>
+                                <p v-if="item.approveContext">
                                     {{item.approveContext}}
                                 </p>
-                                <div class="cp">
-                                    <img src="../assets/img/1.jpg" v-for="i in 5" alt="">
+                                <div class="cp" v-if="item.approvePics">
+                                    <img :src="item.approvePics.split(',')"  alt="">
                                 </div>
                                 <p class="gray">
                                     <i class="icon iconfont icon-shijian"></i>
                                     {{item.createDate}}
-                                    <span class=" fr ">
-                                 <i class="icon iconfont icon-aixin-copy"></i>
-                                100
-                            </span>
+                                    <!--<span class=" fr ">-->
+                                         <!--<i class="icon iconfont icon-aixin-copy"></i>-->
+                                        <!--100-->
+                                    <!--</span>-->
                                 </p>
                             </div>
                         </div>
@@ -87,7 +90,6 @@
     }
 
     .showdt{
-        margin-top: 0.2rem;
         .borderBottom;
         padding:0.2rem 0;
         .overflow;
@@ -96,6 +98,7 @@
         }
         .left{
             width: 1.1rem;
+            margin-top: 0.1rem;
             .fl;
             img{
                 width: 0.9rem;
@@ -140,7 +143,7 @@
             ])
         },
         mounted(){
-
+            this.getList();
         },
         methods:{
             loadMore() {

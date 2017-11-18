@@ -2,6 +2,7 @@ import axios from 'axios'
 import store from '../store/index.js'
 import router from '../router'
 import Vue from 'vue'
+import {config} from './config.js'
 
 // 请求拦截（配置发送请求的信息）
 axios.interceptors.request.use(function (config){

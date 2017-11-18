@@ -45,7 +45,7 @@
             </div>
         </div>
         <!--积分福利-->
-        <div class="marginAll marginTop border borderRadius bgWhite">
+        <div class="marginAll marginTop border borderRadius bgWhite" v-if="false">
             <div class="subt">
                 <i class="icon iconfont icon-fuli red"></i>
                 <span class="gray">积分福利</span>

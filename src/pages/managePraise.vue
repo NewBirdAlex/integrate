@@ -81,7 +81,6 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-    @import "../assets/font/font1/iconfont.css";
     .fs36{font-size: 0.36rem!important;}
     .ex{
         line-height: 0.4rem;

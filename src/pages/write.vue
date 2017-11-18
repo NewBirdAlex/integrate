@@ -3,14 +3,16 @@
         <div class="bgWhite paddingLeft">
             <div class="paddingTop paddingBottom paddingRight borderBottom fs30">
                 <span>奖励积分</span>
-                <span class="fr ">20分</span>
+                <span class="fr ">{{detail.addScore}}分</span>
             </div>
             <div class="paddingTop paddingBottom paddingRight borderBottom fs30 overflow" v-for="(item,index) in inputList" :key="index">
-                <span class="lp fl">{{item.label}}</span>
-                <input type="text" :placeholder="item.ph" class="rp" v-if="item.type=='input'">
-                <textarea name="" id="" class="rp mul" :placeholder="item.ph" v-else></textarea>
+                <span class="lp fl">{{item.title}}</span>
+                <input type="text" placeholder="请输入" v-model="item.content" class="rp" v-if="item.type==1">
+                <textarea name="" id="" class="rp mul"v-model="item.content" placeholder="请输入" v-else></textarea>
             </div>
         </div>
+        <uploadImg v-model="imgList" class="marginTop"></uploadImg>
+        <div class="confBtn" style="margin-top: 1rem">提交</div>
     </div>
 </template>
 <style scoped lang="less">
@@ -33,37 +35,23 @@
     }
 </style>
 <script>
+    import uploadImg from '../components/uploadImg.vue'
     export default {
         data() {
             return {
-                inputList:[
-                    {
-                        ph:'请填写文字',
-                        label:"今日完成工作",
-                        type:'input'
-                    },
-                    {
-                        ph:'请填写文字',
-                        label:"未完成任务",
-                        type:'input'
-                    },
-                    {
-                        ph:'请填写文字',
-                        label:"工作情况总结",
-                        type:'input'
-                    },
-                    {
-                        ph:'请填写文字',
-                        label:"开发目标客户数量",
-                        type:'input'
-                    },
-                    {
-                        ph:'请填写文字',
-                        label:"审批备注*",
-                        type:'textarea'
-                    }
-                ]
+                detail:{},
+                imgList:'',
+                inputList:[]
             }
+        },
+        components: {
+            uploadImg
+        },
+        mounted(){
+            this.detail = JSON.parse(localStorage.getItem('diaryInf'));
+            this.inputList = JSON.parse(this.detail.modelContent);
+            console.log(this.detail);
+            localStorage.removeItem('diaryInf')
         }
     }
 </script>

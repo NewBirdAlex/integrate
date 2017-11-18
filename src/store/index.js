@@ -19,6 +19,10 @@ const mutations = {
     getLocalUserMessage(state){
         state.userMessage = JSON.parse(localStorage.getItem('HXuserMessage'));
     },
+    logOut(state){
+        state.userMessage = {};
+        localStorage.removeItem('HXuserMessage')
+    },
     hideLoading(state){
         state.showLoading = false;
     },
@@ -56,7 +60,8 @@ const actions = {
     showLoading:({commit})=>commit('showLoading'),
     hideLoading:({commit})=>commit('hideLoading'),
     saveSporder:({commit})=>commit('saveSporder'),
-    getuserBaseInf:({commit})=>commit('getuserBaseInf')
+    getuserBaseInf:({commit})=>commit('getuserBaseInf'),
+    logOut:({commit})=>commit('logOut')
 }
 
 
