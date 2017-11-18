@@ -48,5 +48,6 @@ axios.interceptors.response.use(function (response){
 
 // axios.defaults.baseURL = vue.config.path;0
 axios.defaults.baseURL = 'http://192.168.0.121:8888';
+// axios.defaults.baseURL = 'http://120.25.177.192';//外网
 
 export default axios

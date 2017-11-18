@@ -1,10 +1,10 @@
 <template>
     <div>
         <div class="spTop">
-            <span :class="{active:spType}" @click="spType=!spType">我收到的</span>
-            <span :class="{active:!spType}" @click="spType=!spType">我发出的</span>
+            <span :class="{active:spType}" @click="changeType">我收到的</span>
+            <span :class="{active:!spType}" @click="changeType">我发出的</span>
         </div>
-        <div class="sel">
+        <div v-if="false" class="sel">
             <span class="filterType "  @click="handlehide('search')">
                 <i class="icon iconfont icon-sousuo"></i>
                 搜索
@@ -71,51 +71,47 @@
             </div>
         </div>
 
-        <div class="paddingTop paddingLeft paddingRight bgWhite marginBottom" v-for="i in 5" @click="go">
-            <div class="overflow">
-                <img src="../assets/img/head.png" class="marginRight headPicture fl" alt="">
-                <span class="fr read fs30 borderRadius">已读</span>
-                <div class="lh40">
-                    <p class="fs30">李梦洁的审批</p>
-                    <p class="gray fs26">行政部</p>
-                </div>
-            </div>
-            <div class="fs30 lh40 marginTop borderBottom paddingBottom wp">
-                <p>日报</p>
-                <div class="overflow">
-                    <div class="left fl gray">奖励积分:</div>
-                    <div class="right fl">
-                        20分
+
+        <myInfinite :loading="loading" @getList="getList">
+            <li v-for="(item,index) in list">
+                <div class="paddingTop paddingLeft paddingRight bgWhite marginBottom" >
+                    <router-link tag="div" :to="'/workDiary/diary/'+item.id+'/'+spType" class="overflow">
+                        <img :src="item.userAvatar" class="marginRight headPicture fl" alt="">
+                        <span class="fr" v-if="spType">
+                             <span class="fr unread fs30 borderRadius" v-if="!item.isRead">未读</span>
+                            <span class="fr read fs30 borderRadius active" v-else>已读</span>
+                        </span>
+
+                        <div class="lh40">
+                            <p class="fs30">{{item.userName}}</p>
+                            <p class="gray fs26">{{item.departmentName}}</p>
+                        </div>
+                    </router-link>
+                    <div class="fs30 lh40 marginTop borderBottom paddingBottom wp">
+                        <div class="overflow">
+                            <div class="left fl gray">奖励积分:</div>
+                            <div class="right fl">
+                                {{item.addScore}}分
+                            </div>
+                        </div>
+                        <div class="overflow" v-for="(obj ,index2) in JSON.parse(item.content)">
+                            <div class="left fl gray">{{obj.title}}:</div>
+                            <div class="right fl">
+                                {{obj.content}}
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="overflow">
-                    <div class="left fl gray">今日完成:</div>
-                    <div class="right fl">
-                        发宣传单200份
-                    </div>
-                </div>
-                <div class="overflow">
-                    <div class="left fl gray ">未 完 成 :</div>
-                    <div class="right fl">
-                        未达成签约数量目标
-                    </div>
-                </div>
-                <div class="overflow">
-                    <div class="left fl gray">工作总结:</div>
-                    <div class="right fl">
-                        未达成签约数量目标,需要加强更大的努力来完
-                        成自己预定的目标
-                    </div>
-                </div>
-            </div>
-            <div class="paddingAll gray fs26">
-                <span>08-16 16:08</span>
-                <span class="fr">
-                    <i class="icon iconfont icon-aixin-copy"></i> 200
+                    <div class="paddingAll gray fs26">
+                        <span>{{item.createDate}}</span>
+                        <span class="fr">
+                    <i class="icon iconfont icon-aixin-copy" :class="{'red':item.likeCount}" @click="makeAwsome(item)"></i> {{item.likeCount||0}}
                 </span>
-            </div>
-        </div>
+                    </div>
+                </div>
+            </li>
+        </myInfinite>
     </div>
+
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
@@ -284,6 +280,7 @@
     }
 </style>
 <script>
+    import myInfinite from '../components/myInfinite.vue'
     export default {
         data() {
             return {
@@ -291,6 +288,11 @@
                 filterHeight:0,
                 showWrap:true,
                 showSearch:false,
+                pageNumber: 1,
+                pageSize: 10,
+                lastPage: false,
+                loading: false,
+                list:[],
                 searchHistory:[
                     '品德积分',
                     '人气奖',
@@ -306,6 +308,16 @@
                 //init height
                 this.filterHeight = document.documentElement.clientHeight - this.$refs.myFilter.getBoundingClientRect().top;
             },
+            changeType(){
+                this.spType=!this.spType;
+                this.reset();
+                this.getList();
+            },
+            reset(){
+                this.pageNumber=1;
+                this.lastPage=false;
+                this.list=[];
+            },
             handlehide(msg){
                 if(msg=='search'){
                     this.showSearch=this.showWrap=true;
@@ -315,15 +327,60 @@
                 }
             },
             go(){
-                this.$router.push('/workDiary/diary');
+//                this.$router.push('/workDiary/diary');
+            },
+            makeAwsome(item){
+                let that = this;
+                this.$http.post('/dailyRecord/goodDaily', {
+                    addUserId: item.userId,
+                    id:item.id,
+                })
+                    .then(function (response) {
+                        item.likeCount+=1;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            getList(){
+                if(this.lastPage){
+                    this.$toast({
+                        message: '没有更多数据了',
+                        duration: 2000
+                    });
+                    return
+                }
+                let that = this;
+                var type=1;
+                this.spType? type=2:type=1;
+                this.$http.post('/dailyRecord/listJson', {
+                    departmentId:'',
+                    jobId: '',
+                    pageNumber: this.pageNumber,
+                    pageSize: this.pageSize,
+                    type: type,
+                })
+                    .then(function (response) {
+                        console.log(response)
+                        that.pageNumber += 1;
+                        if (response.data.data.last) {
+                            that.lastPage = true;
+                        }
+                        that.list = that.list.concat(response.data.data.content);
+                        that.loading = false;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
         },
         mounted(){
-            this.init();
+//            this.init();
+            this.getList();
             this.showWrap=false;
         },
         components:{
-
+            myInfinite
         }
     }
 </script>

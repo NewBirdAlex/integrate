@@ -383,7 +383,6 @@
                     checkedStatus: this.spType,//1:待审批;2:已审批 ,
                     pageNumber: this.pageNumber,
                     pageSize: this.pageSize,
-                    searchContext: "",
                     searchContext:this.searchContext,
                     rootId:this.rootId
                 })

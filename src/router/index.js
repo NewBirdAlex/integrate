@@ -199,7 +199,7 @@ const router = new Router({
                     component: Watch
                 },
                 {
-                    path:'/workDiary/diary',
+                    path:'/workDiary/diary/:id/:type',
                     name: 'Diary',
                     component: Diary,
                     meta:{

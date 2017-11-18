@@ -12,7 +12,10 @@
             </div>
         </div>
         <uploadImg v-model="imgList" class="marginTop"></uploadImg>
-        <div class="confBtn" style="margin-top: 1rem">提交</div>
+        <div class="paddingAll bgWhite fs30 marginTop borderBottom"><strong>抄送人</strong></div>
+        <selectStaff v-model="chaosongId"></selectStaff>
+
+        <div class="confBtn" style="margin-top: 1rem" @click="subData">提交</div>
     </div>
 </template>
 <style scoped lang="less">
@@ -36,16 +39,45 @@
 </style>
 <script>
     import uploadImg from '../components/uploadImg.vue'
+    import selectStaff from '../components/selectStaff.vue'
     export default {
         data() {
             return {
-                detail:{},
+                detail:{
+
+                },
+                chaosongId:'',
                 imgList:'',
                 inputList:[]
             }
         },
         components: {
-            uploadImg
+            uploadImg,
+            selectStaff
+        },
+        methods:{
+            subData(){
+                let that = this;
+                let str = '';
+                for(let i = 0;i<this.inputList.length;i++){
+                    str+=JSON.stringify(this.inputList[i]);
+                    if(i!=this.inputList.length-1) str+=',';
+                }
+                let content = '['+str+']';
+                console.log(content)
+                this.$http.post('/dailyRecord/submitDaily', {
+                    checkUser: this.chaosongId,
+                    content: content,
+                    pics:this.imgList,
+                    modelId: this.detail.id,
+                })
+                    .then(function (response) {
+                        that.$router.go(-1)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
         },
         mounted(){
             this.detail = JSON.parse(localStorage.getItem('diaryInf'));

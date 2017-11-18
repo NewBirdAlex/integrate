@@ -166,7 +166,7 @@
                 })
                     .then(function (response) {
 //                        that.$router.push('/spList/'+that.$route.params.spType);
-                        that.$router.push('/work');
+                        that.$router.go(-2);
                     })
                     .catch(function (error) {
                         console.log(error);

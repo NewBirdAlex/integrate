@@ -13,9 +13,12 @@
             </span>
         </div>
         <!--本日统计-->
+        <myInfinite :loading="loading" @getList="getList">
+
+        </myInfinite>
         <div v-if="chooseNum">
-            <div class="list marginTop" v-for="i in 1">
-                <span class="left fl sg tac">{{i}}</span>
+            <div class="list marginTop" >
+                <span class="left fl sg tac"></span>
                 <div class="right fl">
                     <img src="../assets/img/head.png" class="headPicture fl marginRight"  alt="">
                     <div class="fl md">
@@ -26,7 +29,7 @@
                         </div>
                     </div>
                     <div class="fr blue sg marginRight">
-                        588933
+                        588933分
                     </div>
                 </div>
             </div>
@@ -43,7 +46,7 @@
                             </div>
                         </div>
                         <div class="fr blue sg marginRight">
-                            588933
+                            588933分
                         </div>
                     </div>
                 </div>
@@ -52,7 +55,7 @@
 
         <!--本月统计-->
         <div v-if="!chooseNum">
-            <div class="list rb" v-for="i in 7">
+            <div class="list rb">
                 <span class="left fl sg tac">dd</span>
                 <div class="right fl">
                     <img src="../assets/img/head.png" class="headPicture fl marginRight"  alt="">
@@ -61,7 +64,7 @@
                         <p class="gray fs28">正常上班</p>
                     </div>
                     <div class="fl blue sg">
-                        588933
+                        588933分
                     </div>
                     <div class="fr paddingRight tac">
                         <p>10</p>
@@ -122,16 +125,53 @@
     }
 </style>
 <script>
+    import myInfinite from '../components/myInfinite.vue'
+
     export default {
         data() {
             return {
-                chooseNum:true
+                chooseNum:true,
+                pageNumber: 1,
+                pageSize: 10,
+                lastPage: false,
+                loading: false,
+                list:[]
             }
         },
         methods:{
             change(){
                 this.chooseNum=!this.chooseNum;
+            },
+            reset(){
+                this.pageNumber=1;
+                this.lastPage=false;
+                this.list=[];
+            },
+            getList(){
+                let that = this;
+                this.$http.post('/dailyRecord/todayList', {
+                    pageNumber: this.pageNumber,
+                    pageSize: this.pageSize,
+                    selectTime: "",
+                })
+                    .then(function (response) {
+                        that.pageNumber += 1;
+                        if (response.data.data.last) {
+                            that.lastPage = true;
+                        }
+                        that.list = that.list.concat(response.data.data.content);
+                        that.loading = false;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
+        },
+        components:{
+            myInfinite
+        },
+        mounted(){
+            this.getList();
         }
     }
 </script>
