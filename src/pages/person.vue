@@ -38,7 +38,7 @@
                     </router-link>
 
                 </div>
-                <div class="item">
+                <router-link tag="div" to="/workDiary/watch" class="item">
                     <i class="leftPart icon iconfont icon-caidanlanrijihuise"></i>
                     <div class="rightPart">
                         我的日记
@@ -46,18 +46,18 @@
                                             <i class=" icon iconfont icon-xiala1"></i>
                     </span>
                     </div>
-                </div>
-                <div class="item">
-                    <router-link to="/manageDiary">
-                        <i class="leftPart icon iconfont icon-guanli1"></i>
-                        <div class="rightPart">
-                            我的管理
-                            <span class="fr rightArrow">
-                                            <i class=" icon iconfont icon-xiala1"></i>
-                    </span>
-                        </div>
-                    </router-link>
-                </div>
+                </router-link>
+                <!--<div class="item">-->
+                    <!--<router-link to="/manageDiary">-->
+                        <!--<i class="leftPart icon iconfont icon-guanli1"></i>-->
+                        <!--<div class="rightPart">-->
+                            <!--我的管理-->
+                            <!--<span class="fr rightArrow">-->
+                                            <!--<i class=" icon iconfont icon-xiala1"></i>-->
+                    <!--</span>-->
+                        <!--</div>-->
+                    <!--</router-link>-->
+                <!--</div>-->
             </div>
             <div class="logout" @click="logOut">
                 退出登录

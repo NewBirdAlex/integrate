@@ -7,8 +7,8 @@
         <div class="bgWhite paddingAll overflow borderBottom">
             <img src="../assets/img/head.png" class="headPicture fl marginRight" alt="">
             <div class="fl lh" style="padding-top: 0.1rem">
-                <p class="fs30"><strong>李晓露</strong></p>
-                <p class="fs28 gray">设计部</p>
+                <p class="fs30"><strong>{{userMessage.userName}}</strong></p>
+                <p class="fs28 gray">{{userMessage.departmentName}}</p>
             </div>
             <div class="fr tm" @click="openDate">
                 <span v-if="rightTime">{{rightTime}}</span>
@@ -63,7 +63,7 @@
             <div style="padding:1rem 0" v-if="showClockIn">
                 <div class="bwp" @click="checkIn" >
                     <div class="ckbtn">
-                        <p>下班打卡</p>
+                        <p>打卡</p>
                         <p>{{time.h|addZero}}:{{time.m|addZero}}:{{time.s|addZero}}</p>
                     </div>
                 </div>
@@ -170,14 +170,16 @@
 <script>
 //    import {MP} from '../lib/mp.js'
     import {BaiduMap,BmGeolocation} from 'vue-baidu-map'
+
     let timer = null;
+    import { mapGetters } from 'vuex';
     export default {
         data() {
             return {
                 chooseNum:0,
                 rightTime:'',
                 showClockIn:true,
-                ak:'jzbCq3Pg2pZ0wb2A5c6weIO62n2fdlh3',
+                ak:'jzbCq3Pg2pZ0wb2A5c6weIO62n2fdlh3&s=1',
                 center: {lng: 0, lat: 0},
                 zoom: 15,
                 pickerVisible:'',
@@ -202,7 +204,10 @@
             now(){
                 let data = new Date();
                 return data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate();
-            }
+            },
+            ...mapGetters([
+                'userMessage',
+            ])
         },
         methods:{
             getLocation(location){
@@ -240,7 +245,7 @@
             },
             handleClockIn(){
                 //if user could clock in
-                if(this.now == this.rightTime){
+                if(this.rightTime==''){
                     if(this.checkList.length<2){
                         this.showClockIn=true;
                     }else{
