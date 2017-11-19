@@ -11,7 +11,11 @@
                         <p class="fs28">积分：{{baseInf.userScore}}   基础积分：{{baseInf.baseScore}}</p>
                     </div>
                 </router-link>
-                <div id="main" class="bgWhite"></div>
+                <!--echarts-->
+                <div id="main" class="bgWhite marginTop">
+                    <IEcharts :option="bar" :loading="loading" @ready="onReady" @click="onClick"></IEcharts>
+                </div>
+
             </div>
             <div class="pt marginTop opItem fs28">
                 <div class="item">
@@ -71,6 +75,9 @@
 
     #main{
         height: 5rem;
+        width: 120%;
+        position: relative;
+        left:-3%;
     }
     .logout {
         width: 7.1rem;
@@ -132,11 +139,29 @@
     }
 </style>
 <script>
-    var echarts = require('echarts');
+//    var echarts = require('echarts');
+import IEcharts from 'vue-echarts-v3/src/full.js';
     import { mapGetters } from 'vuex';
     export default {
         data() {
-            return {}
+            return {
+                loading: true,
+                bar: {
+                    title: {
+                        text: 'Personnal Score'
+                    },
+                    tooltip: {},
+                    xAxis: {
+                        data: ['基础', '业绩', '行为', '月度', '季度', '总','']
+                    },
+                    yAxis: {},
+                    series: [{
+                        name: '分数',
+                        type: 'bar',
+                        data: [0, 0, 0, 0, 0, 0,0]
+                    }]
+                }
+            }
         },
         computed: {
             ...mapGetters([
@@ -144,29 +169,71 @@
             ])
         },
         methods:{
+            doRandom() {
+                const that = this;
+                let data = [];
+                for (let i = 0, min = 5, max = 99; i < 6; i++) {
+                    data.push(Math.floor(Math.random() * (max + 1 - min) + min));
+                }
+                that.loading = !that.loading;
+                that.bar.series[0].data = data;
+            },
+            onReady(instance) {
+                console.log(instance);
+            },
+            onClick(event, instance, echarts) {
+                console.log(arguments);
+            },
             logOut(){
                 this.$store.commit('logOut');
                 this.$router.push('/login');
+            },
+            getScoreList(){
+                let that = this;
+                this.$http.post('/user/getPieData', {
+                })
+                    .then(function (response) {
+                        that.loading=false;
+                        that.$set( that.bar.series[0].data,0,response.data.data.baseScore||0);
+                        that.$set( that.bar.series[0].data,1,response.data.data.achivment||0);
+                        that.$set( that.bar.series[0].data,2,response.data.data.behavior||0);
+                        that.$set( that.bar.series[0].data,3,response.data.data.monthsAdd||0);
+                        that.$set( that.bar.series[0].data,4,response.data.data.seasonsSdd||0);
+                        that.$set( that.bar.series[0].data,5,response.data.data.userScore||0);
+//                        that.bar.series[0].data[0]=response.data.data.baseScore
+//                        that.bar.series[0].data[1]=response.data.data.baseScore
+//                        that.bar.series[0].data[2]=response.data.data.baseScore
+//                        that.bar.series[0].data[3]=response.data.data.baseScore
+//                        that.bar.series[0].data[4]=response.data.data.baseScore
+//                        that.bar.series[0].data[5]=response.data.data.baseScore
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
         },
+        components:{
+            IEcharts
+        },
         mounted() {
+            this.getScoreList();
             this.$store.commit('getuserBaseInf');
             // 基于准备好的dom，初始化echarts实例
-            var myChart = echarts.init(document.getElementById('main'));
-            // 绘制图表
-            myChart.setOption({
-                title: {text: ''},
-                tooltip: {},
-                xAxis: {
-                    data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
-                },
-                yAxis: {},
-                series: [{
-                    name: '销量',
-                    type: 'bar',
-                    data: [5, 20, 36, 10, 10, 20]
-                }]
-            });
+//            var myChart = echarts.init(document.getElementById('main'));
+//            // 绘制图表
+//            myChart.setOption({
+//                title: {text: ''},
+//                tooltip: {},
+//                xAxis: {
+//                    data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+//                },
+//                yAxis: {},
+//                series: [{
+//                    name: '销量',
+//                    type: 'bar',
+//                    data: [5, 20, 36, 10, 10, 20]
+//                }]
+//            });
         }
     }
 </script>

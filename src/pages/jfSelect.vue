@@ -1,17 +1,22 @@
 <template>
     <div>
         <div class="nav fs30" >
-            <span v-for="(item,index) in idList" :key="index" @click="selId(item)" :class="{'active':item.sel}">
+            <span v-for="(item,index) in idList" :key="index" @click="selId(item,index)" :class="{'active':item.sel}">
                 {{item.name}}
                 <i class="iconfont icon icon-arrLeft-fill"></i>
             </span>
         </div>
+        <div class="mask" v-if="showMask" @click="hideMask">
+            <ul class="bgWhite">
+                <li class="paddingAll tac borderBottom" v-for="(item,index) in list" @click="chooseMissionType(item)">{{item.title}}</li>
+            </ul>
+        </div>
         <div class="marginAll bgWhite search">
             <i class="icon iconfont icon-sousuo"></i>
-            <input type="text" class="myInput fs26 marginLeft" placeholder="请输入你要找的关键字" v-model="searchKeyword" @input="serchList">
+            <input type="text" class="myInput fs26 marginLeft" style="width: 5rem" placeholder="请输入你要找的关键字" v-model="searchKeyword" @keyup="serchList">
         </div>
 
-
+        <myEmpty v-if="!list2.length"></myEmpty>
         <ul  class=" "
              v-infinite-scroll="loadMore"
              infinite-scroll-disabled="loading"
@@ -19,13 +24,12 @@
              infinite-scroll-distance="10"
              v-if="list.length"
         >
-            <li v-for="(item,index) in list" :key="index" class="marginBottom ">
+            <li v-for="(item,index) in list2" :key="index" class="marginBottom " >
                 <div @click="go(item)" class=" paddingAll bgWhite lh50" >
                     <h4 class="fs30 ">{{item.title}}</h4>
-                    <p class="fs26 lh30 littleSpace">积极帮助公司宣传公司的产品可以获得积分,获得额外的积分申
-                        请积分获得积分资格</p>
+                    <p class="fs26 lh30 littleSpace">{{item.context}}</p>
                     <p class="fs28 littleSpace">
-                        积分奖励：<span class="blue">20-600分</span>
+                        积分奖励：<span class="blue">{{item.addScore||0}}分</span>
                         <span class="fr gray fs26">每天一次</span>
                     </p>
                 </div>
@@ -41,6 +45,18 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
+    .mask{
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        left:0;
+        top:0;
+        background: rgba(0,0,0,0.5);
+        overflow: scroll;
+        ul{
+
+        }
+    }
     .loadmore{
         width: 10%;
         margin: 0 auto;
@@ -76,11 +92,12 @@
     }
 </style>
 <script>
-    import { mapGetters } from 'vuex';
+//    import { mapGetters } from 'vuex';
     export default {
         data() {
             return {
                 type:1,
+                showMask:false,
                 searchKeyword:'',
                 idList: [
                     {
@@ -100,38 +117,92 @@
                     }
                 ],
                 list:[],
+                list2:[],
                 num:3,
+                modelType:'',
                 pageNumber:1,
-                pageSize:5,
+                pageNumber2:1,
+                pageSize:100,
+                pageSize2:10,
                 lastPage:false,
-                loading:false
+                loading:false,
+                goReset:false,
+                enter:true
             }
         },
-        computed: {
-            ...mapGetters([
-                'userMessage',
-            ])
-        },
+//        computed: {
+//            ...mapGetters([
+//                'userMessage',
+//            ])
+//        },
         mounted(){
             this.getList();
+            this.chooseMissionType();
         },
         methods: {
+            hideMask($event){
+                if($event.srcElement.tagName=='DIV'){
+                    this.showMask=false;
+                }
+            },
             serchList(){
                 // key word search
-                this.pageNumber=1;
-                this.getList();
+                this.pageNumber2=1;
+                this.goRest=true;
+                this.chooseMissionType();
             },
             selId(item) {
+                this.showMask=true;
                 this.idList.forEach(function (a) {
                     a.sel = false;
                 })
                 item.sel = true;
+                this.goRest=true;
                 this.type=item.type;
-
-                this.pageNumber=1;
                 this.lastPage=false;
                 this.list=[];
                 this.getList();
+            },
+            reset(){
+                this.list=[];
+                for(let i = 0;i<this.list2.length;i++){
+                    this.list2.pop();
+                    console.log(this.list2)
+                }
+//                this.list2=[];
+                //this.pageNumber2=1;
+                this.lastPage=false;
+            },
+            chooseMissionType(item){
+//                this.reset();
+                if(this.goRest){
+                    this.list2=[];
+                    this.pageNumber2=1;
+//                    alert(1)
+                }
+                if(item) this.modelType=item.id;
+                this.showMask=false;
+                let that = this;
+
+                this.$http.post('/actionList/getActionListByCompany',{
+                    modelType: this.modelType,
+                    type:this.type,
+                    pageNumber: this.pageNumber2,
+                    pageSize: this.pageSize2,
+                    title:this.searchKeyword
+                })
+                    .then(function (response) {
+                        that.pageNumber2+=1;
+                        that.list2=that.list2.concat(response.data.data.content)
+//                        for(let i =0;i<response.data.data.content.length;i++){
+//                            that.list2.push(response.data.data.content[i])
+//                        }
+                        that.loading = false;
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
             go(item){
                 this.$router.push('/apply/'+item.id+'/'+this.type);
@@ -150,22 +221,18 @@
             },
             getList(){
                 let that = this;
+
                 this.$http.post('/actionModel/modelListByCom',{
                     type:this.type,
                     pageNumber: this.pageNumber,
                     pageSize: this.pageSize,
-                    sortOrder: "asc",
-                    title:this.searchKeyword,
-                    token:this.userMessage.token,
-                    userId:this.userMessage.userId
                 })
                     .then(function (response) {
-                        that.pageNumber+=1;
-                        if(response.data.data.last){
-                            that.lastPage=true;
+                        if(that.enter){
+                            that.modelType=response.data.data.content[0].id;
+                            that.enter=false;
                         }
                         that.list=that.list.concat(response.data.data.content) ;
-                        that.loading = false;
                     })
                     .catch(function (error) {
                         console.log(error);

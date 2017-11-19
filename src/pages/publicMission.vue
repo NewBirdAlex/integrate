@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="normalTille">您本月的可用积分：600分</div>
+        <div class="normalTille">您本月的可用积分：{{userMessage.flowScore}}分</div>
         <myInput v-for="(item,index) in inputData" :key="index"
                  :conttitle="item.title"
                  :need="item.need"

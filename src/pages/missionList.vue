@@ -10,9 +10,12 @@
                 infinite-scroll-distance="10">
             <li v-for="(item,index) in list" :key="index" class="marginBottom bgWhite">
                 <div class="paddingAll borderBottom">
-                    <p class="fs30">{{item.missionTitle}} <span class="fr blue">+{{item.missionAddScore}}分</span></p>
-                    <p class=" fs28">{{item.missionContext}}</p>
-                    <p class=" gray">{{item.missionEndTime}}2017-9-26  13:30 前完成</p>
+                    <router-link :to="'/orderDetail/'+item.missionId+'/1'">
+                        <p class="fs30">{{item.missionTitle}} <span class="fr blue">+{{item.missionAddScore}}分</span></p>
+                        <p class=" fs28">{{item.missionContext}}</p>
+                        <p class=" gray">{{item.missionEndTime}}2017-9-26  13:30 前完成</p>
+                    </router-link>
+
                     <p class=" fs26 gray">
                         <span v-if="active!=1">剩余： {{item.remainCount}}</span>
                         <span v-else>
@@ -24,17 +27,25 @@
                             <span v-if="item.isRepeat==6"> 无限制 </span>
                             <span v-if="item.isRepeat==7">仅限一次</span>
                         </span>
-                        <span class="fr qd borderRadius" v-if="active==2&&item.getStatus==0" @click="getOrder(item)">抢单</span>
-                        <span class="fr qd borderRadius" v-if="active==3&&item.getStatus==0" @click="getOrder(item)">挑战</span>
+                        <span class="fr qd borderRadius" v-if="active==2&&item.getStatus==0&&item.remainCount>0" @click="getOrder(item)">抢单</span>
+                        <span class="fr qd borderRadius" v-if="active==3&&item.getStatus==0&&item.remainCount>0" @click="getOrder(item)">挑战</span>
                     </p>
                     <!--<i class="icon iconfont icon-icon" v-if="item.isComplete"></i>-->
-                    <span v-if="item.getStatus==1">
-                         <i class="icon iconfont icon-iconcompleted blue" v-if="item.isComplete"></i>
-                         <i class="icon iconfont icon-uncomplete gray" v-else></i>
+                    <!--<span v-if="item.getStatus==1">-->
+                    <span v-if="active==2||active==3">
+                        <span v-if="item.getStatus!=0">
+                            <i class="icon iconfont icon-iconcompleted blue" v-if="item.isComplete==1"></i>
+                            <i class="icon iconfont icon-uncomplete gray" v-else></i>
+                        </span>
+
+                    </span>
+                    <span v-else>
+                         <i class="icon iconfont icon-iconcompleted blue" v-if="item.isComplete&&!item.remainCount"></i>
+                         <i class="icon iconfont icon-uncomplete gray" v-if="!item.isComplete&&item.remainCount"></i>
                     </span>
 
                 </div>
-                <div class="paddingAll gray overflow" v-if="item.list" @click="go(item)">
+                <div class="paddingAll gray overflow" v-if="item.list.length" @click="go(item)">
                     他们已抢单：
                     <span class="rightArrow fr">
                            <i class="icon iconfont icon-xiala1"></i>
@@ -137,7 +148,7 @@
                 list:[],
                 num:3,
                 pageNumber:1,
-                pageSize:5,
+                pageSize:10,
                 lastPage:false,
                 loading:false
             }

@@ -179,6 +179,7 @@
         computed:{
 
         },
+
         methods:{
             reset(){
               this.startTime='选择开始时间';
@@ -276,7 +277,7 @@
             'value'
         ],
         mounted(){
-            console.log(document.documentElement.clientHeight)
+//            console.log(document.documentElement.clientHeight)
             this.getApartment();
             this.getJob();
         }

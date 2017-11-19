@@ -36,13 +36,13 @@
                     <p class="gray">今日积分</p>
                 </div>
             </div>
-            <div class="subt addHead" v-if="scoreRank.noOneName">
+            <router-link tag="div" to="/board" class="subt addHead" v-if="scoreRank.noOneName">
                 <img :src="scoreRank.noOneAvatar" alt="">
                 <span class="blue">{{scoreRank.noOneName}}获得今日的积分冠军</span>
                 <span class="fr gray rightArrow">
                     <i class="icon iconfont icon-xiala1"></i>
                 </span>
-            </div>
+            </router-link>
         </div>
         <!--积分福利-->
         <div class="marginAll marginTop border borderRadius bgWhite" v-if="false">

@@ -13,7 +13,7 @@
         <div v-for="(item,index) in questions" :key="index">
             <div class="paddingAll fs30 lh40">
                 {{index+1}}.{{item.context}}<span class="red">*</span>
-                <span class="gray">（答对得{{item.score}}分，答错不扣分）</span>
+                <span class="gray">（答对得{{item.score}}分）</span>
             </div>
             <div class="marginLeft marginRight bgWhite borderRadius fs28">
                 <div class="paddingAll borderBottom" v-for="(data,index2) in answers[index].questions" :key="index2">
@@ -29,12 +29,12 @@
             </div>
         </div>
 
-        <div class=" bgWhite marginTop">
+        <div class=" bgWhite marginTop" v-if="userRecordList.length" >
             <p class=" paddingAll borderBottom fs30">他们都考核了</p>
             <div class=" paddingAll overflow">
-                <div class="people tac fl marginRight marginTop marginLeft" v-for="i in 9">
-                    <img src="../assets/img/head.png" class="headPicture" alt="">
-                    <p class="fs24 lh40">欧阳莉</p>
+                <div class="people tac fl marginRight marginTop marginLeft" v-for="(item,index) in orderDetail.userRecordList">
+                    <img :src="item.userAvatar" class="headPicture" alt="">
+                    <p class="fs24 lh40">{{item.userName}}</p>
                 </div>
             </div>
         </div>
@@ -44,6 +44,9 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
+    i{
+        vertical-align: bottom;
+    }
     .crl{
         display: inline-block;
         width: 0.4rem;
@@ -67,7 +70,8 @@
             return {
                 orderDetail:{},
                 questions:[],
-                answers:[]
+                answers:[],
+                userRecordList:[]
             }
         },
         methods:{
@@ -99,6 +103,7 @@
                                     message: '考核完成，祝您好运',
                                     duration: 2000
                                 });
+                                that.$router.go(-1);
                                 that.router.push('/kpi');
                             }else{
                                 that.$toast({
@@ -128,6 +133,7 @@
                         console.log(response)
                         that.orderDetail = response.data.data.question;
                         that.questions = response.data.data.quetionList;
+                        that.userRecordList = response.data.data.userRecordList;
                         console.log(that.questions)
 
                         that.questions.forEach(item=>{

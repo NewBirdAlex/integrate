@@ -19,6 +19,7 @@
                 type="date"
                 ref="picker"
                 @confirm="handleConfirm"
+                :endDate="new Date()"
                 year-format="{value} 年"
                 month-format="{value} 月"
                 date-format="{value} 日">
@@ -198,23 +199,26 @@
                     selectTime: "",
                 })
                     .then(function (response) {
-                        that.pageNumber += 1;
-                        if(that.chooseNum){
-                            //today
-                            if (response.data.data.dailyList.last) {
-                                that.lastPage = true;
+                        that.$nextTick(()=>{
+                            that.pageNumber += 1;
+                            if(that.chooseNum){
+                                //today
+                                if (response.data.data.dailyList.last) {
+                                    that.lastPage = true;
+                                }
+                                that.list = that.list.concat(response.data.data.dailyList.content);
+                                that.selfInfo = response.data.data.selfInfo;
+                            }else{
+                                //month
+                                if (response.data.data.last) {
+                                    that.lastPage = true;
+                                }
+                                that.list = that.list.concat(response.data.data.content);
                             }
-                            that.list = that.list.concat(response.data.data.dailyList.content);
-                            that.selfInfo = response.data.data.selfInfo;
-                        }else{
-                            //month
-                            if (response.data.data.last) {
-                                that.lastPage = true;
-                            }
-                            that.list = that.list.concat(response.data.data.content);
-                        }
 
-                        that.loading = false;
+                            that.loading = false;
+                        })
+
                     })
                     .catch(function (error) {
                         console.log(error);

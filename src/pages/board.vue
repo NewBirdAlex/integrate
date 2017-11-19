@@ -120,6 +120,11 @@
         mounted(){
             this.getList();
         },
+        watch:{
+            selUserName(val){
+                this.getList();
+            }
+        },
         methods: {
             collectData(msg){
                 //获取搜索栏的数据

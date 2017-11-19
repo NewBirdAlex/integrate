@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap">
+    <div class="wrap2">
         <i class="icon iconfont icon-nodata"></i>
         <h3 class="gray paddingTop">{{value}}</h3>
     </div>
@@ -18,7 +18,7 @@
     h3{
         padding-top: 0.3rem;
     }
-.wrap{
+.wrap2{
     text-align: center;
     padding:0.3rem 0;
     color:#ccc;

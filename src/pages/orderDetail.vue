@@ -33,8 +33,8 @@
                 </li>
             </ul>
             
-            <div class="showImg">
-                <img :src="item" v-for="item in orderDetail.missionPics.split(',')" alt="">
+            <div class="showImg" v-if="orderDetail.missionPics">
+                <img :src="item"  v-for="item in orderDetail.missionPics.split(',')" alt="">
             </div>
         </div>
         <div class="progress">

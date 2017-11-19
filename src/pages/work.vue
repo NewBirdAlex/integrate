@@ -37,6 +37,8 @@
                 <span class="hline"></span>
                 <span class="vline" ></span>
                 <p > <i class="icon iconfont " :class="item.icon" :style="{color:item.color}"></i></p>
+                <!--<p ><img :src="item.moduleCover" alt=""></p>-->
+
                 <p>{{item.name}}</p>
             </router-link>
         </ul>
@@ -62,12 +64,13 @@
         li{
             float: left;
             width: 25%;
+            padding-bottom: 0.3rem;
             .tac;
             font-size: @fs28;
             position: relative;
             overflow: hidden;
-            width: 1.875rem;
-            height: 1.875rem;
+            /*width: 1.875rem;*/
+            /*height: 1.875rem;*/
             .vline{
                 position: absolute;
                 right: 0;
@@ -122,22 +125,23 @@
         data() {
             return {
                 msg:"2sdfsdf",
+                shenpiNumber:{},
                 aboutMe:[
                     {
                         name:"审批日志",
-                        num:"7",
+                        num:"0",
                         router:'/record'
                     },{
                         name:"待我审批",
-                        num:"70",
+                        num:"0",
                         router:'/spList/1'
                     },{
                         name:"我发起的",
-                        num:"17",
+                        num:"0",
                         router:'/spList/2'
                     },{
                         name:"抄送我的",
-                        num:"27",
+                        num:"0",
                         router:'/spList/3'
                     }
                 ],
@@ -172,6 +176,7 @@
                         name:"考勤",
                         icon:'icon-dingweikaoqin',
                         color:'#3da5d0',
+                        moduleCover:'http://image.vshi5.com/img_jfb/2017/10/13/e4550a4ba9814c519601e2b3c525fb90.png',
                         router:'/checkingin'
                     },
                     {
@@ -187,13 +192,13 @@
                         router:'/missionList'
                     },
                     {
-                        name:"申请积分",
+                        name:"申报积分",
                         icon:'icon-daiban',
                         color:'#fe6973',
                         router:'jfSelect'
                     },
                     {
-                        name:"企业公告",
+                        name:"公告",
                         icon:'icon-gonggao1',
                         color:'#feaa3b',
                         router:'/announcementList'
@@ -217,7 +222,7 @@
                         router:'/freePrize'
                     },
                     {
-                        name:"经济哲学",
+                        name:"经营哲学",
                         icon:'icon-kaohe',
                         color:'#8ddfb9',
                         router:'/philosophy'
@@ -249,6 +254,22 @@
             ])
         },
         methods:{
+            getNumber(){
+                let that = this;
+                this.$http.post('/approveLogs/listJson',{
+                    token:this.userMessage.token,
+                    userId:this.userMessage.userId
+                })
+                    .then(function (response) {
+                        that.aboutMe[0].num= response.data.data.approveLog;
+                        that.aboutMe[1].num= response.data.data.waitApprove;
+                        that.aboutMe[2].num= response.data.data.sendApprove;
+                        that.aboutMe[3].num= response.data.data.copy;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
             getModule(){
                 console.log(this.userMessage.token)
                 let that = this;
@@ -262,6 +283,7 @@
                             for(let i = 0 ; i<response.data.data.length;i++){
                                 if(response.data.data[i].moduleTitle==item.name){
                                     item.show=response.data.data[i].status==1?true:false;
+                                    item.moduleCover=response.data.data[i].moduleCover;
                                     break;
                                 }
                             }
@@ -275,6 +297,7 @@
         },
         mounted(){
             //work stage
+            this.getNumber();
             setTimeout(this.getModule,500)
         }
     }

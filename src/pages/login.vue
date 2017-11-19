@@ -89,6 +89,7 @@
     }
 </style>
 <script>
+    import md5 from 'js-md5';
     export default {
         data() {
             return {
@@ -101,7 +102,7 @@
             subLogin(){
                 let that = this;
                 this.$http.post('/login',{
-                    "password": this.psw,
+                    "password":this.psw,
                     "userName": this.phone
                 }).then(response =>{
                     console.log(response)

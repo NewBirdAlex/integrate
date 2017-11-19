@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="search paddingAll">
+        <div class="search paddingAll" v-if="false">
             <div class="left" @click="showOption=!showOption">
                 企业经营哲学
                 <span class="triangle-down"></span>

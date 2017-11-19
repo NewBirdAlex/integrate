@@ -17,6 +17,7 @@
                 v-model="pickerVisible"
                 type="date"
                 ref="picker"
+                :endDate="new Date()"
                 @confirm="handleConfirm"
                 year-format="{value} 年"
                 month-format="{value} 月"

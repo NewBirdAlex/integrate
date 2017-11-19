@@ -18,7 +18,7 @@
                         </div>
                         <div class="right bgWhite">
                             <i class="icon iconfont icon-sousuo"></i>
-                            <input type="text" placeholder="搜索">
+                            <input type="text" placeholder="搜索" v-model="keyWord" @keyup="keywordSearch">
                         </div>
                         <div style="clear: both"></div>
                         <transition
@@ -27,27 +27,33 @@
                                 leave-active-class="animated bounceOutUp"
                         >
                             <div class="option" v-show="showOption">
-                                <div class="ol">
-                                    <div class=""><i class="icon iconfont icon-renwu"></i>部门</div>
-                                    <div class=""><i class="icon iconfont icon-zhiwei"></i>职位</div>
-                                </div>
-                                <div class="or tac">
-                                    <mt-loadmore  :bottom-method="apartmenloadBottom" :bottom-all-loaded="apartmentallLoaded" ref="loadapartment">
-                                        <ul class="apartmentList">
-                                            <li v-for="(item,index) in apartMentList" :key="index">
-                                                <div>{{item.name}}</div>
-                                            </li>
-                                        </ul>
-                                    </mt-loadmore>
+                                <div class="overflow bgWhite">
+                                    <div class="ol">
+                                        <div class="" @click="showApartment=true"><i class="icon iconfont icon-renwu"></i>部门</div>
+                                        <div class="" @click="showApartment=false"><i class="icon iconfont icon-zhiwei"></i>职位</div>
+                                    </div>
+                                    <div class="or tac">
+                                        <mt-loadmore  :bottom-method="apartmenloadBottom" :bottom-all-loaded="apartmentallLoaded" ref="loadapartment">
+                                            <ul class="apartmentList">
+                                                <li v-for="(item,index) in apartMentList" :key="index" v-if="showApartment" @click="chooseApartment(item)">
+                                                    <div>{{item.name}}</div>
+                                                </li>
+                                                <li v-for="(item,index) in jobList" :key="index" v-if="!showApartment" @click="chooseApartment(item)">
+                                                    <div>{{item.jobTitle}}</div>
+                                                </li>
+                                            </ul>
+                                        </mt-loadmore>
 
+                                    </div>
                                 </div>
+
                             </div>
                         </transition>
                     </div>
 
                     <div class="bgWhite listWrap" :style="{height:listWrap}">
 
-
+                        <myEmpty value="搜索不到员工" v-if="!staffList.length"></myEmpty>
                         <!--load more-->
                         <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
                             <ul>
@@ -65,10 +71,9 @@
 
                                 </li>
                             </ul>
+
                         </mt-loadmore>
-
                     </div>
-
                     <div class="obtn bgWhite">
                         <div class="" @click="cancel">取消</div>
                         <div class="active" @click="outputData">确认</div>
@@ -128,15 +133,19 @@
     }
 
     .option {
-        position: absolute;
+        position: fixed;
         left: 0;
         top: 1rem;
+        height: 100%;
         width: 100%;
+        /*padding-top: 1rem;*/
+        background: rgba(0,0,0,0.4);
         z-index: 10;
-        .bgWhite;
+//        .bgWhite;
         overflow: hidden;
         .ol {
             width: 40%;
+            background: white;
             .fl;
             text-indent: 2em;
             i {
@@ -157,6 +166,7 @@
             box-sizing: border-box;
             padding-top: 0.08rem;
             .border;
+            .bgWhite;
             border-right: none;
             .fl;
         }
@@ -226,9 +236,11 @@
                 apartmentNum:1,
                 apartmentSize:20,
                 lastPage: false,
+                showApartment:true,//click show apartment or joblist
                 keyWord: '',
                 departmentId: '',
                 jobId: '',
+                jobList:[],
                 staffList: [],
                 apartMentList:[],
                 apartmentLast:false
@@ -258,10 +270,19 @@
             }
         },
         methods: {
+            keywordSearch(){
+                this.reset();
+                this.getStaff();
+            },
             apartmenloadBottom(){
                 if(!this.apartmentLast){
                     this.apartmentNum +=1;
-                    this.getApartment();
+                    if(this.showApartment){
+                        this.getApartment();
+                    }else{
+                        this.getJobList();
+                    }
+
                 }else{
                     this.apartmentallLoaded = true;
                 }
@@ -316,6 +337,36 @@
                 this.staffList.forEach(item=>item.pick=false);
                 this.showStaff = !this.showStaff;
             },
+            reset(){
+                this.staffList=[];
+                this.departmentId='';
+                this.jobId='';
+                this.pageNumber=1;
+            },
+            chooseApartment(item){
+                this.showOption=false;
+                this.reset();
+                if(this.showApartment){
+                    this.departmentId=item.id;
+
+                }else{
+                    this.jobId=item.id;
+                }
+                this.getStaff();
+            },
+            getJobList(){
+                let that = this;
+                this.$http.post('/job/listJob', {
+                    pageNumber: this.apartmentNum,
+                    pageSize: this.apartmentSize,
+                })
+                    .then(function (response) {
+                        that.jobList = that.jobList.concat(response.data.data.content)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
             getStaff() {
                 let that = this;
                 this.$http.post('/user/userList', {
@@ -343,6 +394,7 @@
         mounted() {
             this.getStaff();
             this.getApartment();
+            this.getJobList();
         }
     }
 </script>
