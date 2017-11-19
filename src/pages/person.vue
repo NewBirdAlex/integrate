@@ -12,9 +12,10 @@
                     </div>
                 </router-link>
                 <!--echarts-->
-                <div id="main" class="bgWhite marginTop">
-                    <IEcharts :option="bar" :loading="loading" @ready="onReady" @click="onClick"></IEcharts>
-                </div>
+                <div id="main" class="bgWhite marginTop"></div>
+                <!--<div id="main" class="bgWhite marginTop">-->
+                    <!--<IEcharts :option="bar" :loading="loading" @ready="onReady" @click="onClick"></IEcharts>-->
+                <!--</div>-->
 
             </div>
             <div class="pt marginTop opItem fs28">
@@ -139,8 +140,11 @@
     }
 </style>
 <script>
-//    var echarts = require('echarts');
-import IEcharts from 'vue-echarts-v3/src/full.js';
+    // 引入基本模板
+    let echarts = require('echarts/lib/echarts')
+    // 引入柱状图组件
+    require('echarts/lib/chart/bar')
+//import IEcharts from 'vue-echarts-v3/src/full.js';
     import { mapGetters } from 'vuex';
     export default {
         data() {
@@ -213,27 +217,15 @@ import IEcharts from 'vue-echarts-v3/src/full.js';
             }
         },
         components:{
-            IEcharts
+//            IEcharts
         },
         mounted() {
             this.getScoreList();
             this.$store.commit('getuserBaseInf');
             // 基于准备好的dom，初始化echarts实例
-//            var myChart = echarts.init(document.getElementById('main'));
-//            // 绘制图表
-//            myChart.setOption({
-//                title: {text: ''},
-//                tooltip: {},
-//                xAxis: {
-//                    data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
-//                },
-//                yAxis: {},
-//                series: [{
-//                    name: '销量',
-//                    type: 'bar',
-//                    data: [5, 20, 36, 10, 10, 20]
-//                }]
-//            });
+            var myChart = echarts.init(document.getElementById('main'));
+            // 绘制图表
+            myChart.setOption(this.bar);
         }
     }
 </script>

@@ -31,8 +31,8 @@
         </ul>
         <div class="normalTille">日常积分</div>
         <ul class="itemList ">
-            <!--<router-link :to="item.router" tag="li" v-for="(item,index) in thirList" :key="index" class="vpadding" v-if="item.show">-->
-            <router-link :to="item.router" tag="li" v-for="(item,index) in thirList" :key="index" class="vpadding" >
+            <router-link :to="item.router" tag="li" v-for="(item,index) in thirList" :key="index" class="vpadding" v-if="item.show">
+            <!--<router-link :to="item.router" tag="li" v-for="(item,index) in thirList" :key="index" class="vpadding" >-->
                 <!--<span class="new" v-if="index%3==0">New</span>-->
                 <span class="hline"></span>
                 <span class="vline" ></span>
