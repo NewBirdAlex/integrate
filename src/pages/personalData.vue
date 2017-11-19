@@ -56,5 +56,8 @@
                 'baseInf',
             ])
         },
+        mounted(){
+            this.$store.commit('getuserBaseInf')
+        }
     }
 </script>

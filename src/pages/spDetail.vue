@@ -15,7 +15,7 @@
                           :ind="index" :head="item.userAvatar"
                             :checkStatus="item.checkStatus"
                           @changePoint="changePoint">
-                <span class="cl border "  @click="delPerson(index)"><i class="icon iconfont icon-gouxuan fs34"></i></span>
+                <span class="cl" :class="{'border':!item.select}"  @click="selPerson(item)"><i class="icon iconfont icon-gouxuan " v-if="item.select"></i></span>
             </selectSpPeople>
 
             <subTitle :content="'审批备注'"></subTitle>
@@ -38,9 +38,16 @@
 
         width: 0.4rem;
         height: 0.4rem;
+        display: inline-block;
         .tac;
+        vertical-align: middle;
         line-height: 0.4rem;
         border-radius: 50%;
+        .overflow;
+        i{
+            font-size: 0.4rem;
+            display: inline-block;
+        }
     }
     .wrap{
         background:@grayBg;
@@ -97,7 +104,8 @@
                 userName:this.spOrder.userName,
                 addScore:this.spOrder.missionScore,
                 id:this.$route.params.id,
-                userAvatar:this.spOrder.userAvatar
+                userAvatar:this.spOrder.userAvatar,
+                select:true
             }
             this.peopleList.unshift(selfData)
 
@@ -127,7 +135,9 @@
                     pageSize: this.pageSize
                 })
                     .then(function (response) {
+                        response.data.data.content.forEach(item=>item.select=false);
                         that.peopleList = that.peopleList.concat(response.data.data.content) ;
+
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -144,18 +154,11 @@
                 let otherScores = [];
 
                 this.peopleList.forEach(item=>{
-                    if(item.id == this.$route.params.id){
-
-                        if(bol){
-                            otherIds.push(item.id);
-                            otherScores.push(item.addScore)
-                        }
-                        bol = false;
-                    }else{
+                    if(item.select){
                         otherIds.push(item.id);
                         otherScores.push(item.addScore)
                     }
-                })
+                });
                 this.$http.post('/missionApprove/approveById', {
                     approveRemark: this.noteContent,
                     checkedStatus: this.$route.params.type,
@@ -166,6 +169,7 @@
                 })
                     .then(function (response) {
 //                        that.$router.push('/spList/'+that.$route.params.spType);
+                        that.$toast('审批成功');
                         that.$router.go(-2);
                     })
                     .catch(function (error) {
@@ -179,8 +183,8 @@
                     this.src = res.data.src;
                 }
             },
-            delPerson(index){
-                this.peopleList.splice(index, 1)
+            selPerson(item){
+                item.select=!item.select;
             },
             changePoint(msg){
                 console.log(msg)

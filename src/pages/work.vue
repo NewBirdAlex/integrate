@@ -20,20 +20,22 @@
                 <p>{{item.name}}</p>
             </router-link>
         </ul>
-        <div class="normalTille">管理应用（仅管理员可见）</div>
-        <ul class="itemList ">
-            <router-link :to="item.router" tag="li" v-for="(item,index) in subList" :key="index" class="vpadding">
-                <!--<span class="hline"></span>-->
-                <span class="vline"></span>
-                <p > <i class="icon iconfont " :class="item.icon" :style="{color:item.color}"></i></p>
-                <p>{{item.name}}</p>
-            </router-link>
-        </ul>
+        <div v-if="userMessage.isAdmin!=0">
+            <div class="normalTille">管理应用（仅管理员可见）</div>
+            <ul class="itemList ">
+                <router-link :to="item.router" tag="li" v-for="(item,index) in subList" :key="index" class="vpadding">
+                    <!--<span class="hline"></span>-->
+                    <span class="vline"></span>
+                    <p > <i class="icon iconfont " :class="item.icon" :style="{color:item.color}"></i></p>
+                    <p>{{item.name}}</p>
+                </router-link>
+            </ul>
+        </div>
+
         <div class="normalTille">日常积分</div>
         <ul class="itemList ">
-            <!--<router-link :to="item.router" tag="li" v-for="(item,index) in thirList" :key="index" class="vpadding" v-if="item.show">-->
-            <router-link :to="item.router" tag="li" v-for="(item,index) in thirList" :key="index" class="vpadding" >
-                <!--<span class="new" v-if="index%3==0">New</span>-->
+            <router-link :to="item.router" tag="li" v-for="(item,index) in thirList" :key="index" class="vpadding" v-if="item.show">
+                <span class="new" v-if="false">New</span>
                 <span class="hline"></span>
                 <span class="vline" ></span>
                 <p > <i class="icon iconfont " :class="item.icon" :style="{color:item.color}"></i></p>
@@ -177,7 +179,8 @@
                         icon:'icon-dingweikaoqin',
                         color:'#3da5d0',
                         moduleCover:'http://image.vshi5.com/img_jfb/2017/10/13/e4550a4ba9814c519601e2b3c525fb90.png',
-                        router:'/checkingin'
+                        router:'/checkingin',
+                        show:false
                     },
                     {
                         name:"工作日志",
@@ -261,6 +264,7 @@
                     userId:this.userMessage.userId
                 })
                     .then(function (response) {
+//                        if(response.data.data!=200000) return
                         that.aboutMe[0].num= response.data.data.approveLog;
                         that.aboutMe[1].num= response.data.data.waitApprove;
                         that.aboutMe[2].num= response.data.data.sendApprove;
@@ -279,16 +283,18 @@
                 })
                     .then(function (response) {
                         console.log(response)
-                        that.thirList.forEach(item=>{
-                            for(let i = 0 ; i<response.data.data.length;i++){
-                                if(response.data.data[i].moduleTitle==item.name){
-                                    item.show=response.data.data[i].status==1?true:false;
-                                    item.moduleCover=response.data.data[i].moduleCover;
-                                    break;
+                        that.$nextTick(()=>{
+                            that.thirList.forEach(item=>{
+                                for(let i = 0 ; i<response.data.data.length;i++){
+                                    if(response.data.data[i].moduleTitle==item.name){
+                                        item.show=response.data.data[i].status==1?true:false;
+                                        item.moduleCover=response.data.data[i].moduleCover;
+                                        break;
+                                    }
                                 }
-                            }
-
+                            })
                         })
+
                     })
                     .catch(function (error) {
                         console.log(error);

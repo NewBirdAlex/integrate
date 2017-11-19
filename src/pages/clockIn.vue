@@ -8,7 +8,7 @@
             <img src="../assets/img/head.png" class="headPicture fl marginRight" alt="">
             <div class="fl lh" style="padding-top: 0.1rem">
                 <p class="fs30"><strong>{{userMessage.userName}}</strong></p>
-                <p class="fs28 gray">{{userMessage.departmentName}}</p>
+                <p class="fs28 gray">{{userMessage.departmentName||'暂无考勤组'}}</p>
             </div>
             <div class="fr tm" @click="openDate">
                 <span v-if="rightTime">{{rightTime}}</span>

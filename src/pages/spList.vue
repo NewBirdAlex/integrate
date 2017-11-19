@@ -301,6 +301,7 @@
                 //确定输入内容
                 this.showWrap = false;
                 if(!this.searchContext) return
+                this.orderList=[];
                 this.pageNumber=1;
                 this.getList();
 

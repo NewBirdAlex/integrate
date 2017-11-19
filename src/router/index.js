@@ -50,7 +50,7 @@ const Login = () => import('../pages/login.vue');//登录
 const UploadUserPic = () => import('../pages/uploadUserPic.vue');//上传用户头像
 const ApplyMissionPerson = () => import('../pages/applyMissionPerson.vue');//抢单任务人物列表
 const ShensuList = () => import('../pages/shensuList.vue');//申诉列表
-const shensuOrder = () => import('../pages/shensuOrder.vue');//申诉列表
+const shensuOrder = () => import('../pages/shensuOrder.vue');//申诉订单
 
 
 
