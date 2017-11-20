@@ -28,7 +28,7 @@
                 </div>
             </div>
         </div>
-
+        <myEmpty v-if="!list.length"></myEmpty>
         <ul class="marginLeft marginRight"
             v-infinite-scroll="loadMore"
             infinite-scroll-disabled="loading"
@@ -127,7 +127,7 @@
                 showOption:false,
                 list: [],
                 pageNumber: 1,
-                pageSize: 5,
+                pageSize: 10,
                 lastPage: false,
                 loading: false
             }
@@ -156,7 +156,6 @@
             },
             getList() {
                 let that = this;
-                console.log(that.pageNumber)
                 if (!that.lastPage) {
                     this.$http.post('/culture/cultureListByUser', {
                         pageNumber: this.pageNumber,

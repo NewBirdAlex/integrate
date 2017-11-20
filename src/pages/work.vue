@@ -2,11 +2,9 @@
     <div>
         <div class="slide">
             <mt-swipe :auto="4000">
-                <mt-swipe-item>
-                    <img src="../assets/img/1.jpg" alt="">
+                <mt-swipe-item v-for="(item,index) in swipeList" :key='index'>
+                    <img :src="item.cover" alt="">
                 </mt-swipe-item>
-                <mt-swipe-item><img src="../assets/img/2.jpg" alt=""></mt-swipe-item>
-                <mt-swipe-item><img src="../assets/img/3.jpg" alt=""></mt-swipe-item>
             </mt-swipe>
         </div>
         <div class="normalTille">审批日记</div>
@@ -126,6 +124,7 @@
     export default {
         data() {
             return {
+                swipeList:[],
                 msg:"2sdfsdf",
                 shenpiNumber:{},
                 aboutMe:[
@@ -285,6 +284,20 @@
                         console.log(error);
                     });
             },
+            getSwipe(){
+                //swiper
+                let that = this;
+                this.$http.post('/advert/listByCom',{
+                    companyId:this.userMessage.companyId,
+                    locationType:2
+                })
+                    .then(function (response) {
+                        that.swipeList = response.data.data.content;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
             getModule(){
                 console.log(this.userMessage.token)
                 let that = this;
@@ -316,6 +329,7 @@
         },
         mounted(){
             //work stage
+            this.getSwipe();
             this.getNumber();
             setTimeout(this.getModule,500)
         }

@@ -38,7 +38,7 @@
 
             <subTitle :content="'申请人'" :subWord="'(默认申请自己的，可帮其他同事申请)'" :need="true"></subTitle>
 
-            <choosePeople v-for="(item,index) in peopleList" :name="item.userName"
+            <choosePeople v-if="!mission" v-for="(item,index) in peopleList" :name="item.userName"
                           :key="index" :point="item.selectAddScore" :range="scoreRange"
                           :ind="index"
                           :head="item.userAvatar"
@@ -46,62 +46,40 @@
                           @changePoint="changePoint">
                 <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
             </choosePeople>
+            <div class="paddingAll bgWhite fs30 lh50" v-if="mission">
+                <img class="headPicture"  :src="userMessage.userAvatar" alt="">
+                <span>{{userMessage.userName}}</span>
+                <span class="fr " style="margin-top: 0.2rem"> {{detail.score}}分</span>
+            </div>
 
-
-            <div class="bgWhite paddingAll lh40 fs28">
+            <div class="bgWhite paddingAll lh40 fs28" v-if="!mission">
                 <strong>全选积分</strong>
                 <span class="gray">(选择可批量修改申请的积分)</span>
                 <span class="fr marginRight cl" :class="{'border':!selAll}" @click="selAll=!selAll"><i class="icon iconfont icon-gouxuan blue fs36" v-if="selAll"></i></span>
             </div>
 
             <!--选择员工-->
-            <chooseStaff  @getData="accept"></chooseStaff>
+            <chooseStaff  @getData="accept" v-if="!mission"></chooseStaff>
 
 
             <!--审批人-->
             <div class="marginTop">
                 <subTitle :content="'审批人'" :subWord="''" :need="true"></subTitle>
-                <div class="paddingAll overflow bgWhite tac fs28">
+                <div class="paddingAll overflow bgWhite tal fs28" v-if="approveUserList">
                     <div class="spr overflow fl marginBottom" v-for="(item,index) in approveUserList" :key="index">
                         <div class="ps fl">
                             <img :src="item.userAvatar" class="headPicture" alt="">
                             <p class="marginTop" v-html="item.userName"></p>
                         </div>
-                        <div class="pt fl marginTop gray marginLeft marginRight">
-                            .......
-                        </div>
                     </div>
-                    <div class="spr overflow fl marginBottom" v-for="(item,index) in shenpiList" :key="index">
-                        <div class="ps fl">
-                            <img :src="item.userAvatar" class="headPicture" alt="">
-                            <p class="marginTop" v-html="item.userName"></p>
-                        </div>
-                        <div class="pt fl marginTop gray marginLeft marginRight">
-                            .......
-                        </div>
-                    </div>
-                    <div class="add fl" @click="shenpi" v-if="!approveUserList">
-                        <i class="icon iconfont icon-jia gray"></i>
-                    </div>
+
                 </div>
+                <selectStaff v-else v-model="shenpiren"></selectStaff>
             </div>
             <!--抄送-->
             <div class="marginTop">
                 <subTitle :content="'抄送'" :subWord="''" :need="false"></subTitle>
-                <div class="paddingAll overflow bgWhite tac fs28">
-                    <div class="spr overflow fl marginBottom"  v-for="(item,index) in chaosongList" :key="index" v-if="item">
-                        <div class="ps fl" >
-                            <img :src="item.userAvatar" class="headPicture" alt="">
-                            <p class="marginTop" v-html="item.userName"></p>
-                        </div>
-                        <div class="pt fl marginTop gray marginLeft marginRight">
-                            .......
-                        </div>
-                    </div>
-                    <div class="add fl" @click="markPerson('chaosong')">
-                        <i class="icon iconfont icon-jia gray"></i>
-                    </div>
-                </div>
+                <selectStaff v-model="chaosongren"></selectStaff>
             </div>
         </div>
         <div class="confBtn" @click="subData">确定</div>
@@ -222,10 +200,13 @@
     import choosePeople from '../components/choosePeople.vue'
     import chooseStaff from '../components/chooseStaff.vue'
     import uploadImg from '../components/uploadImg.vue'
+    import selectStaff from '../components/selectStaff.vue'
     import { mapGetters } from 'vuex';
     export default {
         data() {
             return {
+                chaosongren:'',
+                shenpiren:'',
                 newImgList:'http://120.25.177.192/imghouse/jfb/upload/image/2017/7/2/g0hb568H52zi3y5iO8uFRByCoX2i1DPh_$xxx$05_05.jpg',
                 showStaff:false,
                 dialogImageUrl: '',
@@ -266,6 +247,7 @@
         computed: {
             ...mapGetters([
                 'userMessage',
+                'mission'
             ])
         },
         methods: {
@@ -334,8 +316,10 @@
                 console.log(file)
             },
             getDetail(){
+                let url = '';
+                this.mission? url='/missionRecord/getMissionDetail': url = '/actionList/getActionDetail';
                 let that = this;
-                this.$http.post('/actionList/getActionDetail', {
+                this.$http.post(url, {
                     id:this.$route.params.id
                 })
                     .then(function (response) {
@@ -366,27 +350,33 @@
             },
             subData(){
                 let score = [];
+                if(this.mission){
+                    score.push(this.detail.score);
+                }else{
+                    this.peopleList.forEach(item=>{
+                        score.push(item.selectAddScore)
+                    })
+                }
                 let that = this;
-                this.peopleList.forEach(item=>{
-                    score.push(item.selectAddScore)
-                })
-                let approveUserId = [];
-                if(this.approveUserList.length){
+
+                //审批人
+                let approveUserId = null;
+                if(this.approveUserList){
+                    approveUserId=[];
                     this.approveUserList.forEach(item=>{
                         approveUserId.push(item.id);
                     })
-                }else if(this.shenpiList){
-                    this.shenpiList.forEach(item=>{
-                        approveUserId.push(item.id);
-                    })
+                }else{
+                    approveUserId = this.shenpiren.split(',');
                 }
+                //被审批人
                 let beApproveUserId = [];
                 this.peopleList.forEach(item=>{
                     beApproveUserId.push(item.id);
                 })
                 let copyUserId = [];
-                if(this.chaosongList) {
-                    this.chaosongList.forEach(item=> copyUserId.push(item.id));
+                if(this.chaosongren) {
+                    copyUserId = this.chaosongren.split(',')
                 }
                 this.$http.post('/missionApprove/submitMissionApprove', {
                     addScore: score.join(','),
@@ -402,18 +392,11 @@
                     type:this.$route.params.type,
                 })
                     .then(function (response) {
-                        if(response.data.code==200000){
-                            that.$toast({
-                                message:'提交成功',
-                                duration: 2000
-                            });
-                            that.$router.go(-1);
-                        }else{
-                            that.$toast({
-                                message:response.data.message,
-                                duration: 2000
-                            });
-                        }
+                        that.$toast({
+                            message:'提交成功',
+                            duration: 2000
+                        });
+                        that.$router.go(-1);
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -422,14 +405,14 @@
         },
         mounted(){
             this.getDetail();
-
-
+            this.$store.commit('getMissionValue');
         },
         components: {
             myInput,
             subTitle,
             uploadImg,
             choosePeople,
+            selectStaff,
             chooseStaff
         }
     }

@@ -19,7 +19,7 @@
                          ref="loadmore"
             >
                 <ul class="">
-                    <router-link tag="li" :to="'/infor/'+item.id" v-for="(item,index) in list" :key="index">
+                    <router-link tag="li" :to="'/infor/'+item.appUserId" v-for="(item,index) in list" :key="index">
                         <div class="bgWhite listWrap" >
                             <span>
                                 <i v-if="index>=4||index==0">{{index+1}}</i>
@@ -110,7 +110,7 @@
                 endTime:'',
                 allLoaded:false,
                 pageNumber:1,
-                pageSize:10,
+                pageSize:20,
                 lastPage:false,
                 loading:false,
                 list: [],
@@ -125,10 +125,15 @@
         },
         watch:{
             selUserName(val){
-                this.getList();
+
+                this.searchByName();
             }
         },
         methods: {
+            searchByName(){
+                if(!this.selUserName) return;
+                this.getList();
+            },
             collectData(msg){
                 //获取搜索栏的数据
                 console.log(msg)

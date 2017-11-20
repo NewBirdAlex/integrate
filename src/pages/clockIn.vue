@@ -14,8 +14,10 @@
                 <span v-if="rightTime">{{rightTime}}</span>
                 <span v-else>{{now}}</span>
                 <i class="icon iconfont icon-xiala fs26"></i>
+                <!--<input type="date" v-model="time" class="timepicker">-->
             </div>
         </div>
+
         <!--date-->
         <mt-datetime-picker
                 v-model="pickerVisible"
@@ -91,6 +93,7 @@
         background-color: rgba(221, 241, 255, 1);
         border-radius: 6px 6px 6px 6px;
         color: #338ecc;
+        position: relative;
     }
     .bwp{
         position: relative;
@@ -188,6 +191,7 @@
     export default {
         data() {
             return {
+                time:'',
                 chooseNum:0,
                 rightTime:'',
                 ak:'jzbCq3Pg2pZ0wb2A5c6weIO62n2fdlh3&s=1',
@@ -288,7 +292,8 @@
                         that.endTime = response.data.data.endTime;
                         if(that.rightTime!=that.now){
                             //today or not
-                            that.couldClick=false;
+                            setTimeout(function(){that.couldClick=false;},2000)
+
                         }else{
                             alert(1)
                             that.checkList.length==2?that.couldClick=false:that.couldClick=true;

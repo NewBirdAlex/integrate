@@ -1,95 +1,3 @@
-<template>
-    <div class="wrap">
-        <div class="top overflow">
-            <img src="../assets/img/coujiang.jpg" class="fl w100" alt="">
-        </div>
-        <div class="paddingTop"></div>
-        <div class="wp1 marginAll myLottery marginTop marginBottom borderRadius">
-            <div class="wp2 spc borderRadius">
-                <img src="../assets/img/sanjiao.png" class="sanjiao" alt="">
-                <img src="../assets/img/sanjiao2.png" class="sanjiao" alt="">
-                <img src="../assets/img/sanjiao3.png" class="sanjiao" alt="">
-                <div class="title">我的抽奖</div>
-                <table class="cjTable">
-                    <tr class="fs30">
-                        <td>抽奖主题</td>
-                        <td class="tac">排名</td>
-                        <td class="tac">抽奖次数</td>
-                    </tr>
-                    <tr v-for="i in 3" class="fs28">
-                        <td>{{i}}. 8月设计部积分抽奖</td>
-                        <td class="tac">2</td>
-                        <td class="tac">1</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="rec borderRadius">
-            <div class="borderRadius">
-                <div class="">
-                    <router-link tag="div" to="/lotteryRec" class="paddingTop paddingRight paddingBottom borderBottom fs30 wdYellow">
-                        我的抽奖记录
-                        <span class="rightArrow fr"><i class="icon iconfont icon-xiala1 fs30"></i></span>
-                    </router-link>
-                    <div class="roll">
-                        <div class="item  tac fs28 bgWhite" v-for="(item,index) in priceList" :key="index"
-                             :class="{'midSpace':index==1||index==4||index==7}" v-if="index!=4">
-                            <img src="../assets/img/1.jpg" alt="">
-                            <p class="paddingAll" >乐扣保温杯</p>
-                            <div class="" :class="{'cover':item.light}"></div>
-                        </div>
-                        <div v-else class="item tac midSpace midItem">
-                            <div @click="start">
-                                <div>
-                                    <p>START</p>
-                                    <p>开始抽奖</p>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="wp1 marginAll myLottery marginTop marginBottom borderRadius">
-            <div class="wp2 spc borderRadius">
-                <div class="title">中奖记录</div>
-                <table class="cjTable">
-                    <tr class="fs30" v-for="i in 3">
-                        <td>刘诗梦抽奖抽中</td>
-                        <td class="tac">乐扣不锈钢保温杯</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="wp1 marginAll myLottery marginTop marginBottom borderRadius rec">
-            <div class="wp2 spc borderRadius">
-                <div class="title">抽奖规则</div>
-                <table class="cjTable">
-                    <tr class="fs30" v-for="i in 3">
-                        <td>1. 刘诗梦抽奖抽换机单，看看打开了经济订单哦多开开
-                            发护肤贷款发放货到付款开发。</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-
-        <div class="result" v-if="showResult">
-            <div class="inner tac ">
-                <p class="overflow"><i class="icon iconfont icon-close48 fr" @click="showResult=!showResult"></i></p>
-                <p>哎呦，没抽到！</p>
-                <div><i class="icon iconfont icon-sad1"></i></div>
-                <div><i class="icon iconfont icon-Smile"></i></div>
-                <p>再试下呗~</p>
-                <div class="goon" @click="showResult=!showResult">继续抽奖</div>
-            </div>
-        </div>
-    </div>
-</template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
 
@@ -221,6 +129,8 @@
         .item {
             margin-top: 0.2rem;
             width: 2.1rem;
+            border-radius: 0.1rem;
+            overflow: hidden;
             height: 2.7rem;
             display: inline-block;
             position: relative;
@@ -231,8 +141,6 @@
             .paddingAll {
                 padding: 0.15rem 0
             }
-            /*&:nth-child(2n+3){*/
-            /*}*/
             .cover {
                 position: absolute;
                 left: 0;
@@ -244,8 +152,18 @@
             }
         }
         .midSpace {
-            margin: 0.2rem 0.18rem;
+            margin: 0.2rem 0.18rem 0;
 
+        }
+        .img-co{
+        	height: 2.1rem;
+        	overflow: hidden;
+        	background: #fefefe;
+        	color: #666;
+        	font-size: 1rem;
+        	img{
+        		min-height: 100%;
+        	}
         }
     }
 
@@ -280,10 +198,108 @@
             }
         }
     }
+    .recode-a-l{
+    	tr{
+    		display: flex;
+    	}
+		td{
+			flex: 1;
+		}
+    }
 </style>
-<script>
-    //    import '../lib/tween'
+<template>
+    <div class="wrap">
+        <div class="top overflow">
+            <img src="../assets/img/coujiang.jpg" class="fl w100" alt="">
+        </div>
+        <div class="paddingTop"></div>
+        <div class="wp1 marginAll myLottery marginTop marginBottom borderRadius">
+            <div class="wp2 spc borderRadius">
+                <img src="../assets/img/sanjiao.png" class="sanjiao" alt="">
+                <img src="../assets/img/sanjiao2.png" class="sanjiao" alt="">
+                <img src="../assets/img/sanjiao3.png" class="sanjiao" alt="">
+                <div class="title">我的抽奖</div>
+                <table class="cjTable">
+                    <tr class="fs30">
+                        <td>抽奖主题</td>
+                        <td class="tac">排名</td>
+                        <td class="tac">抽奖次数</td>
+                    </tr>
+                    <tr v-for="(t,i) in luckList" class="fs28">
+                        <td>{{i+1}}. {{ t.listTitle }}</td>
+                        <td class="tac">{{ t.sort }}</td>
+                        <td class="tac">{{ t.count }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
+        <div class="rec borderRadius">
+            <div class="borderRadius">
+                <div class="">
+                    <router-link tag="div" to="/lotteryRec" class="paddingTop paddingRight paddingBottom borderBottom fs30 wdYellow">
+                        	我的抽奖记录
+                        <span class="rightArrow fr"><i class="icon iconfont icon-xiala1 fs30"></i></span>
+                    </router-link>
+                    <div class="roll">
+                        <div class="item  tac fs28 bgWhite" v-for="(item,index) in prizeList" :key="index"
+                             :class="{'midSpace':index==1||index==4||index==7}" v-if="index!=4">
+                            <div class="img-co iconfont">
+                            	<img :src="item.luckyShopPic" v-if="item.luckyShopPic" alt="">
+                            	<img src="../assets/img/qiuqiu.jpg" v-if="!item.luckyShopPic" alt="">
+                            </div>
+                            <p class="paddingAll" >{{ item.luckyShopName }}</p>
+                            <div class='fuck' :class="{'cover':item.light}"></div>
+                        </div>
+                        <div v-else class="item tac midSpace midItem">
+                            <div @click="start">
+                                <div>
+                                    <p>START</p>
+                                    <p>开始抽奖</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="wp1 marginAll myLottery marginTop marginBottom borderRadius">
+            <div class="wp2 spc borderRadius">
+                <router-link tag='div' to='/lotteryRec?type=me' class="title">中奖记录</router-link>
+                <table class="cjTable recode-a-l">
+                    <tr class="fs30" v-for="(t,i) in recordAL">
+                        <td>{{ t.username?t.username:'***' }}</td>
+                        <td class="tac">{{ t.luckName }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="wp1 marginAll myLottery marginTop marginBottom borderRadius rec">
+            <div class="wp2 spc borderRadius">
+                <div class="title">抽奖规则</div>
+                <table class="cjTable">
+                    <tr class="fs30" v-for="i in 3">
+                        <td>1. 刘诗梦抽奖抽换机单，看看打开了经济订单哦多开开
+                            发护肤贷款发放货到付款开发。</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="result" v-if="showResult">
+            <div class="inner tac">
+                <p>{{ prize.groupTitle }}</p>
+                <div><i class="icon iconfont icon-Smile"></i></div>
+                <p>{{ prize.luckyShopName }}</p>
+                <div class="goon" @click="continuer">继续抽奖</div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
     let timer = null;
     export default {
         data() {
@@ -291,46 +307,22 @@
                 showResult:false,
                 rollArr: [0, 1, 2, 5, 8, 7, 6, 3],
                 canClick: true,
-                timer: null,
+                timer: null,//计时器id
                 times: 0,
                 speed: 500,
                 circle: 48,
                 maskIndex: 0,
-                priceList: [
-                    {
-                        light: true
-                    },
-                    {
-                        light: false
-                    },
-                    {
-                        light: false
-                    },
-                    {
-                        light: false
-                    },
-                    {
-                        light: false
-                    },
-                    {
-                        light: false
-                    },
-                    {
-                        light: false
-                    },
-                    {
-                        light: false
-                    },
-                    {
-                        light: false
-                    }
-                ]
+                prizeList:[],
+                luckList:[],
+                prize:null,//抽到的奖品
+                recordAL:null,
             }
         },
         methods: {
             activeMask(num) {
-                this.priceList.forEach(item => item.light = false);
-                this.priceList[this.rollArr[num]].light = true;
+                this.prizeList.forEach(item => item.light = false);
+            	let act = this.rollArr[num];
+            	this.$set(this.prizeList[act],'light',true);
             },
             init() {
                 this.speed = 500;
@@ -338,30 +330,99 @@
                 this.maskIndex = 0;
             },
             start() {
-                console.log(this.canClick)
                 if (this.canClick) {
                     this.init();
                     this.canClick = false;
                     this.roll();
+                    this.getLuckDrawRes();
                 }
+            },
+            getLuckDrawRes(){
+            	this.$http.post('/luckyRecord/userStartLuckyDraw',{
+            		"pageNumber": 1,
+					"pageSize": 1000,
+					"sortOrder": "desc",
+					"sortType": "id",
+					"token": "string",
+					"userId": 0,
+            	}).then(r=>{
+            		if(r.data.code == "500000"){
+            			this.$toast(r.data.msg);
+            		}else{
+            			this.prize = r.data.data.luckShop;
+            		}
+            		console.log('抽奖结果',this.prize);
+            	})
             },
             roll() {
                 let that = this;
                 clearTimeout(that.timer);
-
                 that.times++;
-                that.speed -= 20;
-                that.speed <= 40 ? that.speed = 40 : '';
-                if (that.times >= 100) {
-                    that.canClick=true;
-                    return
+				that.speed = that.speed < 60 ?60:(that.speed - (130/that.times));
+                if (that.times >= 50 && this.prize) {
+                	this.prizeList.forEach((v,i)=>{
+	                	if(v.id == this.prize.id){
+	                		this.prize.index = i;
+	                		this.brake();
+	                		return;
+	                	}
+	                });
                 }
-                that.maskIndex += 1;
-                that.maskIndex >= that.rollArr.length ? that.maskIndex = 0 : '';
+                if(that.times >= 500){
+                	this.$toast('抽奖超时');
+                	this.$router.push('/');
+                }
+				that.maskIndex = that.maskIndex+2 > that.rollArr.length?0:that.maskIndex + 1;
                 that.activeMask(that.maskIndex);
-                console.log(that.speed)
-                that.timer = setTimeout(that.roll, that.speed)
+                that.timer = setTimeout(that.roll,that.speed)
+            },
+            brake(){
+            	this.speed = this.speed > 300?300:(this.speed + 50);
+            	this.maskIndex = this.maskIndex+2 > this.rollArr.length?0:this.maskIndex + 1;
+            	this.activeMask(this.maskIndex);
+            	let nowId = this.prizeList[this.rollArr[this.maskIndex]].id;
+            	if(this.speed >= 300 && this.prize.id == nowId){
+					this.showResult = true;
+            		return;
+            	}else{
+            		clearTimeout(this.timer);
+            		this.timer = setTimeout(this.brake,this.speed);
+            	}
+            },
+            getLuckListByUser(){
+            	this.$http.post('/luckUser/luckListByUser',{
+	            	pageNumber: 1,
+	            	pageSize: 8,
+	            	sortOrder: "desc",
+	            	sortType: "id",
+	            }).then(r=>{
+	            	this.luckList = r.data.data.luckList;
+                    r.data.data.drawShop.forEach((v,i)=>{
+                        v[light] = false;
+                    })
+	            	r.data.data.drawShop.splice(4,0,[]);
+	            	this.prizeList = r.data.data.drawShop;
+	            }).catch(e=>{
+	            	if(e) console.log(e)
+	            });
+            },
+            continuer(){
+            	Object.assign(this.$data, this.$options.data());
+            	this.getLuckListByUser();
+            },
+            recordByAll(){
+            	this.$http.post('/luckyRecord/luckRecordByAll',{
+				  "pageNumber": 1,
+				  "pageSize": 10,
+				}).then(r=>{
+					this.recordAL = r.data.data.content;
+					console.log(r,'？？？');
+				})
             }
-        }
+        },
+        created(){
+            this.getLuckListByUser();
+            this.recordByAll();
+        },
     }
 </script>

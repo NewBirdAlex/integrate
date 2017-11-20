@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="normalTille">您本月的可用积分：{{userMessage.flowScore}}分</div>
+        <div class="normalTille">您本月的可用积分：{{baseInf.flowScore}}分</div>
         <myInput v-for="(item,index) in inputData" :key="index"
                  :conttitle="item.title"
                  :need="item.need"
@@ -35,7 +35,7 @@
         data() {
             return {
                 apartMentId: [],
-                jfType:0,
+                jfType:1,
                 inputData: [
                     {
                         title: "任务标题",
@@ -72,8 +72,11 @@
         },
         computed: {
             ...mapGetters([
-                'userMessage',
+                'baseInf',
             ])
+        },
+        mounted(){
+            this.$store.commit('getuserBaseInf');
         },
         methods: {
             getRange(data) {

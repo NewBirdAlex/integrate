@@ -241,7 +241,7 @@ const router = new Router({
             }
         },
         {
-            path: '/product',
+            path: '/product/:id',
             name: 'Product',
             component: Product,
             meta:{

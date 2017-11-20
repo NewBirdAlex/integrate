@@ -137,7 +137,7 @@
 //        },
         mounted(){
             this.getList();
-            this.chooseMissionType();
+            this.$store.commit('removeMissionValue');
         },
         methods: {
             hideMask($event){
@@ -205,6 +205,7 @@
                     });
             },
             go(item){
+
                 this.$router.push('/apply/'+item.id+'/'+this.type);
             },
             loadMore() {
@@ -229,8 +230,10 @@
                 })
                     .then(function (response) {
                         if(that.enter){
+                            //first enter page
                             that.modelType=response.data.data.content[0].id;
                             that.enter=false;
+                            that.chooseMissionType();
                         }
                         that.list=that.list.concat(response.data.data.content) ;
                     })

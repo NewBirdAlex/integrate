@@ -14,7 +14,7 @@
         <div v-html="detail.context" class="paddingAll bgWhite marginTop lh40">
 
         </div>
-        <div class=" bgWhite marginTop">
+        <div class=" bgWhite marginTop" v-if="recordUser.length">
             <p class=" paddingAll borderBottom fs30">他们都阅读了</p>
             <div class=" paddingAll overflow">
                 <div class="people tac fl marginRight marginTop marginLeft" v-for="(item,index) in recordUser">
@@ -25,8 +25,8 @@
             </div>
         </div>
 
-        <div class="btn fs30 " :class="{'forbiden':forbiden}" @click="read">
-            已阅读并遵守（+20分）
+        <div class="btn fs30 " :class="{'forbiden':forbiden||detail.isRead==1}" @click="read">
+            已阅读并遵守（+{{detail.score}}分）
         </div>
     </div>
 </template>
@@ -58,6 +58,7 @@
         },
         methods:{
             read(){
+                if(this.detail.isRead==1)return;
                 let that = this;
                 this.$http.post('/culture/userReadCulture', {
                     id:this.$route.params.id

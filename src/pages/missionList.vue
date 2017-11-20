@@ -3,6 +3,7 @@
         <div class="nav fs30" >
             <span v-for="item in idList" @click="selId(item)" :class="{'active':item.sel}">{{item.name}}</span>
         </div>
+        <myEmpty v-if="!list.length"></myEmpty>
         <ul  class="  ml"
                 v-infinite-scroll="loadMore"
                 infinite-scroll-disabled="loading"
@@ -10,11 +11,11 @@
                 infinite-scroll-distance="10">
             <li v-for="(item,index) in list" :key="index" class="marginBottom bgWhite">
                 <div class="paddingAll borderBottom">
-                    <router-link :to="'/orderDetail/'+item.missionId+'/1'">
+                    <div @click="goApply(item)" >
                         <p class="fs30">{{item.missionTitle}} <span class="fr blue">+{{item.missionAddScore}}分</span></p>
                         <p class=" fs28">{{item.missionContext}}</p>
                         <p class=" gray">{{item.missionEndTime}}2017-9-26  13:30 前完成</p>
-                    </router-link>
+                    </div>
 
                     <p class=" fs26 gray">
                         <span v-if="active!=1">剩余： {{item.remainCount}}</span>
@@ -159,9 +160,17 @@
             ])
         },
         mounted(){
-            this.getList();
+            let that = this;
+            setTimeout(function () {
+                that.getList();
+            },200)
+
         },
         methods: {
+            goApply(item){
+                this.$store.commit('setFromMission');
+                this.$router.push('/apply/'+item.missionId+'/'+item.type);
+            },
             go(item){
                 this.active==3?this.active=2:'';
                 this.$router.push({ name: 'ApplyMissionPerson', params: { id: item.missionId,type:this.active }})
@@ -170,6 +179,7 @@
                 this.pageNumber=1;
                 this.lastPage=false;
                 this.list=[];
+
                 this.getList();
             },
             getOrder(item){

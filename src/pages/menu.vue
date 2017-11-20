@@ -2,7 +2,7 @@
     <div>
         <div class="overflow bgWhite" >
             <div class="tac item" v-for=" (item,index) in list" :key="index" @click="go(item)">
-                <img src="../assets/img/head.png" alt="">
+                <img :src="item.modelCover" alt="">
                 <p class="">{{item.modelTitle}}</p>
             </div>
         </div>

@@ -26,10 +26,10 @@
                                     <strong>{{item.userName}}</strong>
                                     <span class="fr blue">
                                         <span class="marginAll"><span v-if="item.addScore>0">+</span>{{item.addScore}}</span>
-                                        <span v-if="item.scoreType==1">品德分</span>
-                                        <span v-if="item.scoreType==2">业绩分</span>
-                                        <span v-if="item.scoreType==3">行为分</span>
-                                        <span v-if="item.scoreType==4">基础积分分</span>
+                                        <span v-if="item.scoreType==1">A分</span>
+                                        <span v-if="item.scoreType==2">B分</span>
+                                        <span v-if="item.scoreType==3">C分</span>
+                                        <span v-if="item.scoreType==4">基础分</span>
                                     </span>
                                 </h4>
                                 <p class="gray lh50">{{item.jobTitle}}</p>

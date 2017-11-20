@@ -2,16 +2,16 @@
     <div>
 
         <div class=" wrap">
-            <div >
-                <label for="selList">
-                    <i class="icon iconfont icon-xiala gray fs30"></i>
-                </label>
-                <select name="" id="selList" v-model="inputData[0].content">
-                    <option value="租房">租房</option>
-                    <option value="煮饭">煮饭</option>
-                    <option value="游泳">游泳</option>
-                </select>
-            </div>
+            <!--<div >-->
+                <!--<label for="selList">-->
+                    <!--<i class="icon iconfont icon-xiala gray fs30"></i>-->
+                <!--</label>-->
+                <!--<select name="" id="selList" v-model="inputData[0].content">-->
+                    <!--<option value="租房">租房</option>-->
+                    <!--<option value="煮饭">煮饭</option>-->
+                    <!--<option value="游泳">游泳</option>-->
+                <!--</select>-->
+            <!--</div>-->
 
             <myInput v-for="(item,index) in inputData" :key="index"
                      :conttitle="item.title"
@@ -34,6 +34,7 @@
                     type="date"
                     ref="picker"
                     @confirm="handleConfirm"
+                    :endDate="new Date()"
                     year-format="{value} 年"
                     month-format="{value} 月"
                     date-format="{value} 日">

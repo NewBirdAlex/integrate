@@ -96,9 +96,10 @@
 
     .opItem {
         .item {
-            padding-top: 0.2rem;
+            padding-top: 0.3rem;
             font-size: @fs30;
             .overflow;
+            &:first-child{padding-top: 0}
             .leftPart {
                 float: left;
                 width: 10%;
@@ -123,6 +124,7 @@
         overflow: hidden;
         .bgWhite;
         .paddingAll;
+        padding-bottom: 0;
         border-radius: 8px 8px 8px 8px;
         .phead {
             display: inline-block;

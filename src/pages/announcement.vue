@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h3>发布公告</h3>
         <myInput
                  :conttitle="inputData.title"
                  :need="inputData.need"

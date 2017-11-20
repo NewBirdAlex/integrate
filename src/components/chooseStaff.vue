@@ -312,7 +312,6 @@
                         message: '已加载全部员工',
                         duration: 2000
                     });
-                    //this.allLoaded = true;// 若数据已全部获取完毕
                 }else{
                     this.getStaff();
                     this.$refs.loadmore.onBottomLoaded();

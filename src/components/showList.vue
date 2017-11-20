@@ -1,7 +1,6 @@
 <template>
     <div class="wrap">
-        <img class="head" :src="data.userAvatar" v-if="data.userAvatar" alt="">
-        <img src="../assets/img/defaultHead.png" v-else class="head" alt="">
+        <img class="head" :src="data.userAvatar||'../assets/img/defaultHead.png'" v-if="data.userAvatar" alt="">
         <div class="right">
             <p>
                 {{data.userName}}
