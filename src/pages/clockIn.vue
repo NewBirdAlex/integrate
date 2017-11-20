@@ -290,12 +290,12 @@
                         that.checkList = response.data.data.checkList;
                         that.startTime = response.data.data.startTime;
                         that.endTime = response.data.data.endTime;
-                        if(that.rightTime!=that.now){
+                        console.log(that.rightTime)
+                        console.log(that.now)
+                        if(that.rightTime!=that.now&&that.rightTime){
                             //today or not
-                            setTimeout(function(){that.couldClick=false;},2000)
-
+                            setTimeout(function(){that.couldClick=false;},500)
                         }else{
-                            alert(1)
                             that.checkList.length==2?that.couldClick=false:that.couldClick=true;
                         }
 

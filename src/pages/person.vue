@@ -210,7 +210,7 @@
                         that.loading=false;
                         let bar = {
                             title: {
-                                text: 'Personnal Score'
+                                text: ''
                             },
                             tooltip: {},
                             xAxis: {
