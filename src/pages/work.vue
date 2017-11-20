@@ -130,19 +130,19 @@
                 aboutMe:[
                     {
                         name:"审批日志",
-                        num:"0",
+                        num:" ",
                         router:'/record'
                     },{
                         name:"待我审批",
-                        num:"0",
+                        num:" ",
                         router:'/spList/1'
                     },{
                         name:"我发起的",
-                        num:"0",
+                        num:" ",
                         router:'/spList/2'
                     },{
                         name:"抄送我的",
-                        num:"0",
+                        num:" ",
                         router:'/spList/3'
                     }
                 ],
@@ -270,11 +270,8 @@
             getNumber(){
                 let that = this;
                 this.$http.post('/approveLogs/getCount',{
-                    token:this.userMessage.token,
-                    userId:this.userMessage.userId
                 })
                     .then(function (response) {
-//                        if(response.data.data!=200000) return
                         that.aboutMe[0].num= response.data.data.approveLog;
                         that.aboutMe[1].num= response.data.data.waitApprove;
                         that.aboutMe[2].num= response.data.data.sendApprove;
@@ -330,7 +327,7 @@
         mounted(){
             //work stage
             this.getSwipe();
-            this.getNumber();
+//            this.getNumber();
             setTimeout(this.getModule,500)
         }
     }
