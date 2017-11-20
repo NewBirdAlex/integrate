@@ -247,6 +247,7 @@
                     longitude: String(this.longitude),
                 })
                     .then(function (response) {
+                        if(response.data.code!='200000') return
                         that.$toast('成功打卡，元气满满');
                         that.getClockIn();
                     })
