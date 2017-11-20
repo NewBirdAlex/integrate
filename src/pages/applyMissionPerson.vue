@@ -8,7 +8,8 @@
             infinite-scroll-distance="10">
             <li v-for="(item,index) in list" :key="index" class="marginBottom bgWhite">
                 <div class="paddingAll borderBottom item">
-                    <img :src="item.userAvatar" class="headPicture fl marginRight" alt="">
+                    <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture fl marginRight" alt="">
+                    <img src="../assets/img/defaultHead.png" v-else class="headPicture fl marginRight" alt="">
                     <p class="fs30 lh50">
                         {{item.userName}}
                         <span class="fr blue">+{{item.missionAddScore}}分</span>

@@ -72,7 +72,7 @@
             position: relative;
             overflow: hidden;
             /*width: 1.875rem;*/
-            /*height: 1.875rem;*/
+            /*min-height: 1.875rem;*/
             .vline{
                 position: absolute;
                 right: 0;
@@ -186,67 +186,78 @@
                         name:"工作日志",
                         icon:'icon-rizhi',
                         color:'#84d76f',
-                        router:'/workDiary'
+                        router:'/workDiary',
+                        show:false
                     },
                     {
                         name:"悬赏任务",
                         icon:'icon-renwuxuanshang',
                         color:'#feaa3b',
-                        router:'/missionList'
+                        router:'/missionList',
+                        show:false
                     },
                     {
                         name:"申报积分",
                         icon:'icon-daiban',
                         color:'#fe6973',
-                        router:'jfSelect'
+                        router:'jfSelect',
+                        show:false
                     },
                     {
                         name:"公告",
                         icon:'icon-gonggao1',
                         color:'#feaa3b',
-                        router:'/announcementList'
+                        router:'/announcementList',
+                        show:false
                     },
                     {
                         name:"爱心点赞",
                         icon:'icon-hongxin',
                         color:'#fb3333',
-                        router:'love'
+                        router:'love',
+                        show:false
                     },
                     {
                         name:"积分申诉",
                         icon:'icon-tanhao1',
                         color:'#cbefd5',
-                        router:'/shensuList'
+                        router:'/shensuList',
+                        show:false
                     },
                     {
                         name:"自由奖扣",
                         icon:'icon-moneychange',
                         color:'#5bb3d3',
-                        router:'/freePrize'
+                        router:'/freePrize',
+                        show:false
                     },
                     {
                         name:"经营哲学",
                         icon:'icon-kaohe',
                         color:'#8ddfb9',
-                        router:'/philosophy'
+                        router:'/philosophy',
+                        show:false
                     },
                     {
                         name:"水平考核",
                         icon:'icon-kaohe',
                         color:'#78c7e3',
-                        router:'/kpi'
+                        router:'/kpi',
+                        show:false
                     },
                     {
                         name:"积分商城",
                         icon:'icon-lianmengkeyongjifen',
                         color:'#fa6e77',
-                        router:'/shop'
+                        router:'/shop',
+                        show:false
                     },
                     {
                         name:"积分抽奖",
                         icon:'icon-choujiang',
                         color:'#feaa3b',
-                        router:'/lottery'
+                        router:'/lottery',
+                        show:false
                     }
                 ]
             }
@@ -259,7 +270,7 @@
         methods:{
             getNumber(){
                 let that = this;
-                this.$http.post('/approveLogs/listJson',{
+                this.$http.post('/approveLogs/getCount',{
                     token:this.userMessage.token,
                     userId:this.userMessage.userId
                 })
@@ -287,8 +298,10 @@
                             that.thirList.forEach(item=>{
                                 for(let i = 0 ; i<response.data.data.length;i++){
                                     if(response.data.data[i].moduleTitle==item.name){
+
                                         item.show=response.data.data[i].status==1?true:false;
                                         item.moduleCover=response.data.data[i].moduleCover;
+//                                        alert(item.show)
                                         break;
                                     }
                                 }

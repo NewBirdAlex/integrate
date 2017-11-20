@@ -2,7 +2,7 @@
     <div class="wrap bgWhite" :style="{height:height}">
         <div class="top">
             <img src="../assets/img/hx.png" alt="">
-            <p>华象积分宝</p>
+            <p style="font-size: 0.5rem">积分宝</p>
         </div>
 
         <div class="middle bgWhite">
@@ -102,7 +102,7 @@
             subLogin(){
                 let that = this;
                 this.$http.post('/login',{
-                    "password":this.psw,
+                    "password":md5(this.psw),
                     "userName": this.phone
                 }).then(response =>{
                     console.log(response)

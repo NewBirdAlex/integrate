@@ -2,7 +2,8 @@
     <div>
         <div class="head bgWhite paddingAll overflow">
             <div class="left">
-                <img class="headPicture" :src="userInf.userAvatar" alt="">
+                <img class="headPicture" v-if="userInf.userAvatar" :src="userInf.userAvatar" alt="">
+                <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
             </div>
             <div class="right">
                 <p>

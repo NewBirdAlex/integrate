@@ -22,7 +22,10 @@
                     <div class="overflow  fs36  ">
                         <div class="fl left  ">{{index+1}}</div>
                         <div class="fl right">
-                            <router-link :to="'/loveRank/'+item.id" tag="div" class="fl marginRight"><img :src="item.userAvatar" class="headPicture" alt=""></router-link>
+                            <router-link :to="'/loveRank/'+item.id" tag="div" class="fl marginRight">
+                                <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture" alt="">
+                                <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
+                            </router-link>
                             <div class="fl">
                                 <p><strong>{{item.userName}}</strong></p>
                                 <p class="gray fs30">本月 {{item.userScore}}分</p>

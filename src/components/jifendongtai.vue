@@ -18,7 +18,8 @@
                     <div class="paddingAll borderBottom">
                         <div class="showdt">
                             <div class="left">
-                                <img :src="item.userAvatar" alt="">
+                                <img :src="item.userAvatar" v-if="item.userAvatar" alt="">
+                                <img src="../assets/img/defaultHead.png" alt="" v-else >
                             </div>
                             <div class="right">
                                 <h4 class="lh40">

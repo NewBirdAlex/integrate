@@ -37,7 +37,8 @@
             <li v-for="(item,index) in staffList" :key="index" class=" bgWhite">
                 <div class="borderBottom bgWhite">
                     <div class="overflow paddingAll people fs30 ">
-                        <img :src="item.userAvatar" class="headPicture fl marginRight" alt="">
+                        <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture fl marginRight" alt="">
+                        <img src="../assets/img/defaultHead.png" v-else class="headPicture fl marginRight" alt="">
                         <div class="fl">
                             <p> <span style="display: inline-block;width: 2rem">{{item.userName}}</span> <span class="rp" v-if="item.isAdmin">管理员</span></p>
                             <p class="gray">{{item.jobTitle}}</p>

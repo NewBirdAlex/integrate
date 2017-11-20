@@ -18,7 +18,8 @@
             <p class=" paddingAll borderBottom fs30">他们都阅读了</p>
             <div class=" paddingAll overflow">
                 <div class="people tac fl marginRight marginTop marginLeft" v-for="(item,index) in recordUser">
-                    <img :src="item.userAvatar" class="headPicture" alt="">
+                    <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture" alt="">
+                    <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
                     <p class="fs24 lh40">{{item.userName}}</p>
                 </div>
             </div>

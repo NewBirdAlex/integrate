@@ -24,25 +24,26 @@
                 date-format="{value} 日">
         </mt-datetime-picker>
         <!--今日考勤榜-->
-        <!--<div v-if="chooseNum">-->
-        <div class="list"  v-for="(item,index) in myCheck" :key="index">
-                <span class="left fl sg tac">{{index+1}}</span>
-                <div class="right fl">
-                    <img :src="item.userAvatar" class="headPicture fl marginRight"  alt="">
-                    <div class="fl md lh40">
-                        <p class="fs30">{{item.userName}}</p>
-                        <p class="gray fs28"><span>{{item.checkTime.split(' ')[0]}}</span> 正常上班</p>
-                    </div>
-                    <div class="fr paddingRight tac marginLeft">
-                        <p>{{item.score||0}}</p>
-                        <i class="icon iconfont icon-dianzanmw gray" :class="{'blue':item.score>0}"></i>
-                    </div>
-                    <div class="fr blue sg" >
-                        {{item.checkTime.split(" ")[1]}}
-                    </div>
+        <!--<div ">-->
+        <div class="list " v-if="myCheck.length&&chooseNum" v-for="(item,index) in myCheck" :key="index">
+            <span class="left fl sg tac">{{index + 1}}</span>
+            <div class="right fl">111
+                <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture fl marginRight" alt="">
+                <img src="../assets/img/defaultHead.png" v-else alt="" class="headPicture fl marginRight">
+                <div class="fl md lh40">
+                    <p class="fs30">{{item.userName}}</p>
+                    <p class="gray fs28"><span>{{item.checkTime.split(' ')[0]}}</span> 正常上班</p>
+                </div>
+                <div class="fr paddingRight tac marginLeft">
+                    <p>{{item.score || 0}}</p>
+                    <i class="icon iconfont icon-dianzanmw gray" :class="{'blue':item.score>0}"></i>
+                </div>
+                <div class="fr blue sg">
+                    {{item.checkTime.split(" ")[1]}}
                 </div>
             </div>
-
+        </div>
+        <div class="marginBottom"></div>
         <myEmpty value="没有考勤记录" v-if="!list.length"></myEmpty>
         <ul class=""
             v-infinite-scroll="loadMore"
@@ -53,9 +54,10 @@
             <li v-for="(item,index) in list" :key="index" class=" bgWhite">
                 <div class="list" v-if="chooseNum">
                     <!--本日考勤-->
-                    <span class="left fl sg tac">{{index+1}}</span>
-                    <div class="right fl">
-                        <img :src="item.userAvatar" class="headPicture fl marginRight"  alt="">
+                    <span class="left fl sg tac">{{index + 1}}</span>
+                    <div class="right fl">22
+                        <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture fl marginRight" alt="">
+                        <img src="../assets/img/defaultHead.png" v-else class="headPicture fl marginRight" alt="">
                         <div class="fl md lh40">
                             <p class="fs30">{{item.userName}}</p>
                             <p class="gray fs28">
@@ -72,19 +74,21 @@
                             </p>
                         </div>
                         <div class="fr paddingRight tac marginLeft">
-                            <p>{{item.score||0}}</p>
-                            <span @click="makeAwsome(item)"><i class="icon iconfont icon-dianzanmw fs36 gray" :class="{'blue':item.score>0}" ></i></span>
+                            <p>{{item.score || 0}}</p>
+                            <span @click="makeAwsome(item)"><i class="icon iconfont icon-dianzanmw fs36 gray"
+                                                               :class="{'blue':item.score>0}"></i></span>
                         </div>
-                        <div class="fr blue sg" >
+                        <div class="fr blue sg">
                             {{item.checkTime.split(" ")[1]}}
                         </div>
                     </div>
                 </div>
                 <!--本月考勤-->
                 <div class="list rb" v-else>
-                    <span class="left fl sg tac">{{index+1}}</span>
+                    <span class="left fl sg tac">{{index + 1}}</span>
                     <div class="right fl">
-                        <img :src="item.userAvatar" class="headPicture fl marginRight"  alt="">
+                        <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture fl marginRight" alt="">
+                        <img src="../assets/img/defaultHead.png" v-else class="headPicture fl marginRight" alt="">
                         <div class="fl md">
                             <p class="fs30">{{item.userName}}</p>
                             <p class="gray fs28" v-if="chooseNum">
@@ -103,10 +107,11 @@
 
                         </div>
                         <div class="fr paddingRight tac marginLeft">
-                            <p>{{item.score||0}}</p>
-                            <span @click="makeAwsome(item)"><i class="icon iconfont icon-dianzanmw fs36 gray" :class="{'blue':item.score>0}" ></i></span>
+                            <p>{{item.score || 0}}</p>
+                            <span @click="makeAwsome(item)"><i class="icon iconfont icon-dianzanmw fs36 gray"
+                                                               :class="{'blue':item.score>0}"></i></span>
                         </div>
-                        <div class="fr blue sg" >
+                        <div class="fr blue sg">
                             {{item.totalScore}} 分
                         </div>
 
@@ -121,72 +126,85 @@
             </li>
         </ul>
         <!--<i class="icon iconfont icon-damuzhi red specilIcon" :class="{'activeIcon':clickHeart}" v-if="clickHeart"></i>-->
-        <i class="icon iconfont icon-damuzhi red specilIcon activeIcon" :class="{'activeIcon':clickHeart}" v-if="clickHeart" ></i>
+        <i class="icon iconfont icon-damuzhi red specilIcon activeIcon" :class="{'activeIcon':clickHeart}"
+           v-if="clickHeart"></i>
     </div>
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-    .specilIcon{
+
+    .specilIcon {
         position: fixed;
-        left:50%;
-        top:50%;
-        transform: translate(-50%,-50%);
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
         font-size: 4rem;
         /*animation-duration: 1s;*/
         transition: all 1s;
         /*animation: kiss 0s linear 1s infinite ;*/
     }
-    .activeIcon{
+
+    .activeIcon {
         /*transform: translate(-50%,-50%) scale(3)!important;*/
-        animation: kiss 1s linear 500ms 1 ;
+        animation: kiss 1s linear 500ms 1;
     }
+
     @keyframes kiss {
-        0%{ transform: translate(-50%,-50%) scale(1);}
-        50%{ transform: translate(-50%,-75%) scale(3);}
-        100%{transform: translate(-50%,-50%) scale(6);opacity: 0;}
+        0% {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+            transform: translate(-50%, -75%) scale(3);
+        }
+        100% {
+            transform: translate(-50%, -50%) scale(6);
+            opacity: 0;
+        }
     }
-    .list{
+
+    .list {
         .overflow;
         .bgWhite;
         line-height: 0.4rem;
         .fs28;
         .borderBottom;
-        &.rb{
-            border:none;
-            .right{
+        &.rb {
+            border: none;
+            .right {
                 .borderBottom;
             }
         }
         .paddingTop;
-        .sg{
+        .sg {
             margin-top: 0.25rem;
         }
-        .left{
+        .left {
             width: 10%;
             height: 100%;
             .tac;
             .fs36;
         }
-        .right{
+        .right {
             width: 90%;
             .paddingBottom;
-            .md{
+            .md {
                 width: 3.2rem;
 
             }
-            .icon{
+            .icon {
                 font-size: 0.5rem;
             }
         }
 
     }
-    .top{
-        .active{
+
+    .top {
+        .active {
             .blue;
             border-bottom: 1px solid @blue;
         }
         .borderBottom;
-        span{
+        span {
             display: inline-block;
             width: 30%;
             margin: 0 5%;
@@ -198,44 +216,45 @@
     export default {
         data() {
             return {
-                clickHeart:false,
-                chooseNum:true,
-                selectTime:false,
-                rightTime:'',
-                pickerVisible:'',
+                clickHeart: false,
+                chooseNum: true,
+                selectTime: false,
+                rightTime: '',
+                pickerVisible: '',
                 list: [],
-                myCheck:[],
+                myCheck: [],
+                needMycheck:true,
                 pageNumber: 1,
                 pageSize: 10,
                 lastPage: false,
                 loading: false
             }
         },
-        computed:{
-            now(){
+        computed: {
+            now() {
                 let data = new Date();
-                return data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate();
+                return data.getFullYear() + '-' + (data.getMonth() + 1) + '-' + data.getDate();
             }
         },
-        mounted(){
+        mounted() {
             this.getList();
         },
-        methods:{
-            pickTime(){
+        methods: {
+            pickTime() {
                 this.$refs.picker.open();
             },
-            handleConfirm(data){
-                this.selectTime=true;
-                this.rightTime = data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate();
+            handleConfirm(data) {
+                this.selectTime = true;
+                this.rightTime = data.getFullYear() + '-' + (data.getMonth() + 1) + '-' + data.getDate();
                 this.reset();
                 this.getList();
             },
-            change(){
-                this.chooseNum=!this.chooseNum;
+            change() {
+                this.chooseNum = !this.chooseNum;
                 this.reset();
                 this.getList();
             },
-            makeAwsome(item){
+            makeAwsome(item) {
                 let that = this;
                 this.$http.post('/dailyCheck/checkGood', {
                     addUserId: item.userId,
@@ -243,12 +262,12 @@
                 })
                     .then(function (response) {
                         //animation going
-                        that.clickHeart=true;
+                        that.clickHeart = true;
                         let timer = null;
                         clearTimeout(timer);
-                        setTimeout(()=>that.clickHeart=false,1000)
+                        setTimeout(() => that.clickHeart = false, 1000)
                         //add awsome
-                        item.score+=1;
+                        item.score += 1;
 
                     })
                     .catch(function (error) {
@@ -267,18 +286,18 @@
                     });
                 }
             },
-            reset(){
-                this.lastPage=false;
-                this.pageNumber=1;
-                this.list=[];
+            reset() {
+                this.lastPage = false;
+                this.pageNumber = 1;
+                this.list = [];
             },
             getList() {
                 let that = this;
-                if(this.chooseNum){
+                if (this.chooseNum) {
                     this.$http.post('/dailyCheck/todayOrder', {
                         pageNumber: this.pageNumber,
                         pageSize: this.pageSize,
-                        selectTime:this.rightTime
+                        selectTime: this.rightTime
                     })
                         .then(function (response) {
                             that.pageNumber += 1;
@@ -286,12 +305,18 @@
                                 that.lastPage = true;
                             }
                             that.list = that.list.concat(response.data.data.list.content);
+                            console.log(response.data.data.list.content)
+                            if(that.needMycheck && response.data.data.myCheck) {
+                                that.needMycheck=false;
+                                that.myCheck = response.data.data.myCheck;
+                            }
+
                             that.loading = false;
                         })
                         .catch(function (error) {
                             console.log(error);
                         });
-                }else{
+                } else {
                     this.$http.post('/dailyCheck/monthOrder', {
                         pageNumber: this.pageNumber,
                         pageSize: this.pageSize

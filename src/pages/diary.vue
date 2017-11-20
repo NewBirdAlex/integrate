@@ -1,7 +1,8 @@
 <template>
     <div>
         <div class="paddingAll borderBottom bgWhite overflow">
-            <img :src="detail.userAvatar" class="headPicture fl marginRight"  alt="">
+            <img :src="detail.userAvatar" v-if="detail.userAvatar" class="headPicture fl marginRight"  alt="">
+            <img src="../assets/img/defaultHead.png" v-else class="headPicture fl marginRight" alt="">
             <i class="icon iconfont "></i>
             <p class="lh40 fs30">{{detail.userName}}</p>
             <p class="lh40 fs26 gray">{{detail.departmentName}}</p>
@@ -35,7 +36,8 @@
         </div>
         <div class="overflow bgWhite paddingAll" v-if="goodList.length">
             <div class="hd" v-for="(item,index) in goodList">
-                <img :src="item.userAvatar"  class="headPicture" alt="">
+                <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture" alt="">
+                <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
                 <p class="fs24 lh40">{{item.userName}}</p>
             </div>
         </div>
@@ -47,7 +49,8 @@
         <div class=" bgWhite">
             <div class="list" v-for="(item,index) in commentList">
                 <div class="left">
-                    <img :src="item.userAvatar" class="headPicture" alt="">
+                    <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture" alt="">
+                    <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
                 </div>
                 <div class="right">
                     <div class="fs30 overflow">

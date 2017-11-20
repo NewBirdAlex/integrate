@@ -3,7 +3,8 @@
         <div class="inner">
 
             <slot></slot>
-            <img :src="head" class="headPicture" alt="">
+            <img :src="head" v-if="head" class="headPicture" alt="">
+            <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
             <span>{{name}}</span>
             <div class="fr">
                 {{point}}分

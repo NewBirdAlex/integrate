@@ -4,7 +4,8 @@
         <div class="bgWhite marginTop ">
             <router-link tag="div" to="/uploadUserPic" class="borderBottom paddingAll overflow tar fs30" style="line-height: 0.5rem">
                  <span class=" fl">头像</span>
-                <img :src="baseInf.userAvatar" class="littleHead " alt="">
+                <img :src="baseInf.userAvatar" v-if="baseInf.userAvatar" class="littleHead " alt="">
+                <img src="../assets/img/defaultHead.png" v-else class="littleHead" alt="">
                 <span class="rightArrow fr">
                    <i class="icon iconfont icon-xiala1"></i>
                 </span>

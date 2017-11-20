@@ -2,7 +2,8 @@
     <div>
         <div class="content">
             <div class="head fs30">
-                <img :src="orderDetail.userAvatar" alt="">
+                <img :src="orderDetail.userAvatar" v-if="orderDetail.userAvatar" alt="">
+                <img src="../assets/img/defaultHead.png" v-else class="head" alt="">
                 <span>{{orderDetail.userName}}</span>
                 <span class="yellow fr" v-if="orderDetail.checkStatus==1">等待审批</span>
                 <span class="green fr" v-if="orderDetail.checkStatus==2">审批通过</span>
@@ -45,7 +46,10 @@
                     <i class="icon iconfont icon-reject red" v-if="item.checkStatus==3"></i>
                 </div>
                 <div class="content">
-                    <div class="left"><img :src="item.userAvatar" class="headPicture" alt=""></div>
+                    <div class="left">
+                        <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture" alt="">
+                        <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
+                    </div>
                     <div class="right">
                         <p class="overflow">
                             {{item.userName}}

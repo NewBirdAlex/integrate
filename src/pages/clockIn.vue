@@ -30,26 +30,23 @@
         </mt-datetime-picker>
 
         <div class="paddingAll bgWhite">
-            <div class="inf  bgWhite " v-if="checkList[0]">
-                <p>上班时间  {{startTime}}</p>
-                <p><span class="btn">{{checkList[0].checkDesc}}</span>  <span class="btn">{{checkList[0].tip}}</span></p>
-                <p class="gray">打卡时间  {{checkList[0].checkTime}}</p>
-                <span class="type active">上</span>
+            <div class="inf  bgWhite " >
+                <p class="fs30 lh50">上班时间  {{startTime}}</p>
+                <p v-if="checkList[0]"><span class="btn">{{checkList[0].checkDesc}}</span>  <span class="btn">{{checkList[0].tip}}</span></p>
+                <p class="gray" v-if="checkList[0]">打卡时间  {{checkList[0].checkTime}}</p>
+                <p v-else class="gray">无打卡信息</p>
+                <span class="type " :class="{'active':checkList[0]}">上</span>
             </div>
-            <div class="inf  bgWhite " v-if="checkList[1]">
-                <p>下班时间  {{endTime}}</p>
-                <p><span class="btn">{{checkList[1].checkDesc}}</span>  <span class="btn">{{checkList[1].tip}}</span></p>
-                <p class="gray">打卡时间  {{checkList[1].checkTime}}</p>
-                <span class="type active">下</span>
+            <div class="inf  bgWhite marginTop" >
+                <p class="fs30 lh50">下班时间  {{endTime}}</p>
+                <p v-if="checkList[1]"><span class="btn" >{{checkList[1].checkDesc}}</span>  <span class="btn">{{checkList[1].tip}}</span></p>
+                <p class="gray" v-if="checkList[1]">打卡时间  {{checkList[1].checkTime}}</p>
+                <p v-else class="gray">无打卡信息</p>
+                <span class="type " :class="{'active':checkList[1]}">下</span>
             </div>
-            <!--<div class="inf  bgWhite " >-->
-                <!--<p>下班班时间  {{endTime}}</p>-->
-                <!--<p><span class="btn">已打卡</span>  <span class="btn">正常上班</span></p>-->
-                <!--<p class="gray">打卡时间  08:56</p>-->
-                <!--<span class="type active">下</span>-->
-            <!--</div>-->
+            <!--<myEmpty value="没有考勤数据" v-if="!checkList.length"></myEmpty>-->
         </div>
-        <div class="marginTop mpwrap">
+        <div class=" mpwrap">
             <!--baidu map-->
             <!--<div id="allmap"></div>-->
             <baidu-map class="map" :ak="ak" :center="center" :zoom="zoom" @ready="handler">
@@ -57,14 +54,16 @@
                         anchor="BMAP_ANCHOR_BOTTOM_RIGHT"
                         :showAddressBar="true"
                         :autoLocation="true"
+                        ref="myLocation"
+                        id="myLocation"
                         @locationSuccess="getLocation"
                         @locationError="getLocationFail"
                 >
                 </bm-geolocation>
             </baidu-map>
-            <div style="padding:1rem 0" v-if="showClockIn">
-                <div class="bwp" @click="checkIn" >
-                    <div class="ckbtn">
+            <div style="padding:1rem 0" >
+                <div class="bwp" :class="{'blackBg':!couldClick}" @click="checkIn" >
+                    <div class="ckbtn" :class="{'grayBg':!couldClick}">
                         <p>打卡</p>
                         <p>{{time.h|addZero}}:{{time.m|addZero}}:{{time.s|addZero}}</p>
                     </div>
@@ -76,6 +75,13 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
+    .blackBg{
+        background: #ccc!important;
+    }
+    .grayBg{
+        background: #ccc!important;
+    }
+
     .map{
         width: 100%;
         height: 4rem;
@@ -87,17 +93,21 @@
         color: #338ecc;
     }
     .bwp{
-        padding: 0.2rem;
+        position: relative;
         border-radius: 50%;
         background-color: rgba(162, 242, 235, 1);
-        border:1px solid #a2f2eb;
+        /*border:1px solid #a2f2eb;*/
         margin: 0.2rem auto;
         .tac;
-        width: 2rem;
-        height: 2rem;
+        width: 2.2rem;
+        height: 2.2rem;
         line-height: 2rem;
     }
     .ckbtn{
+        position: absolute;
+        left:50%;
+        top:50%;
+        transform: translate(-50%,-50%);
         width: 2rem;
         height: 2rem;
         border-radius: 50%;
@@ -180,7 +190,6 @@
             return {
                 chooseNum:0,
                 rightTime:'',
-                showClockIn:true,
                 ak:'jzbCq3Pg2pZ0wb2A5c6weIO62n2fdlh3&s=1',
                 center: {lng: 0, lat: 0},
                 zoom: 15,
@@ -194,6 +203,7 @@
                 checkList:[],
                 startTime:'',
                 endTime:'',
+                couldClick:true,
                 //submit params
                 time:{
                     h:'',
@@ -213,7 +223,6 @@
         },
         methods:{
             getLocation(location){
-                console.log(location)
                 this.latitude = location.point.lat;
                 this.longitude = location.point.lng;
                 let address = location.addressComponent;
@@ -223,6 +232,8 @@
                 console.log(status)
             },
             checkIn(){
+                if(!this.couldClick) return
+                this.couldClick = false;
                 let that = this;
                 this.$http.post('/dailyCheck/userCheck', {
                     checkAddress: this.checkAddress,
@@ -232,7 +243,7 @@
                     longitude: String(this.longitude),
                 })
                     .then(function (response) {
-                        this.getClockIn();
+                        that.getClockIn();
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -243,19 +254,6 @@
                 this.center.lng = 116.404
                 this.center.lat = 39.915
                 this.zoom = 15
-
-            },
-            handleClockIn(){
-                //if user could clock in
-                if(this.rightTime==''){
-                    if(this.checkList.length<2){
-                        this.showClockIn=true;
-                    }else{
-                        this.showClockIn=false;
-                    }
-                }else{
-                    this.showClockIn=false;
-                }
 
             },
             handleConfirm(data){
@@ -282,12 +280,20 @@
                 //check clock in information
                 let that = this;
                 this.$http.post('/dailyCheck/getCheckDetail', {
+                    selectTime:this.rightTime
                 })
                     .then(function (response) {
                         that.checkList = response.data.data.checkList;
                         that.startTime = response.data.data.startTime;
                         that.endTime = response.data.data.endTime;
-                        that.handleClockIn();
+                        if(that.rightTime!=that.now){
+                            //today or not
+                            that.couldClick=false;
+                        }else{
+                            alert(1)
+                            that.checkList.length==2?that.couldClick=false:that.couldClick=true;
+                        }
+
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -299,8 +305,12 @@
             BmGeolocation
         },
         mounted(){
+            let that = this;
             this.countTime();
             this.getClockIn();
+            setTimeout(function(){
+                document.getElementsByClassName('BMap_geolocationIcon')[0].click();
+            },1000)
         },
         beforeDestroy(){
             clearInterval(timer);

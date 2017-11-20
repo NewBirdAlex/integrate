@@ -2,7 +2,8 @@
     <div >
         <div class="bgWhite paddingTop paddingBottom">
             <div v-for="(item,index) in topImgList" :key="index" class="topList">
-                <img :src="item.userAvatar" class="headPicture" alt="">
+                <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture" alt="">
+                <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
                 <p class="tac lh50">{{item.userName}}</p>
             </div>
             <div class="  " id="selectPeople" @click="showStaff=!showStaff">

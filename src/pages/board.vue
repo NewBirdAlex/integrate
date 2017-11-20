@@ -26,7 +26,10 @@
                                     <i class="icon iconfont " :class="{'icon-jin':index==1,'icon-jin icon-tong':index==2,'icon-yin':index==3}"
                                        v-if="index<4"></i>
                             </span>
-                            <span><img :src="item.userAvatar" class="headPicture" alt=""></span>
+                            <span>
+                                <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture" alt="">
+                                <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
+                            </span>
                             <span>{{item.userName}}</span>
                             <span>{{item.addScore}}</span>
                             <span>{{item.minusScore}}</span>

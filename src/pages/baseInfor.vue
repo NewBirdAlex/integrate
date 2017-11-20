@@ -1,7 +1,10 @@
 <template>
     <div>
         <div class="head  tac bgWhite paddingAll borderBottom">
-            <div><img :src="userInf.userAvatar" alt=""></div>
+            <div>
+                <img :src="userInf.userAvatar" v-if="userInf.userAvatar" alt="">
+                <img src="../assets/img/defaultHead.png" v-else  alt="">
+            </div>
             <p>{{userInf.userName}}的基础信息</p>
             <p><span class="blue">基础积分：{{userInf.baseScore}}</span></p>
         </div>
