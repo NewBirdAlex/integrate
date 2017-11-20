@@ -247,7 +247,7 @@
                     longitude: String(this.longitude),
                 })
                     .then(function (response) {
-                        this.$toast('成功打卡，元气满满');
+                        that.$toast('成功打卡，元气满满');
                         that.getClockIn();
                     })
                     .catch(function (error) {
