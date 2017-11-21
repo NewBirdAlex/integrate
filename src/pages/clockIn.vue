@@ -207,7 +207,7 @@
                 checkList:[],
                 startTime:'',
                 endTime:'',
-                couldClick:true,
+                couldClick:false,
                 //submit params
                 time:{
                     h:'',
@@ -227,6 +227,7 @@
         },
         methods:{
             getLocation(location){
+                this.couldClick = true;
                 this.latitude = location.point.lat;
                 this.longitude = location.point.lng;
                 let address = location.addressComponent;
@@ -236,7 +237,7 @@
                 console.log(status)
             },
             checkIn(){
-                if(!this.couldClick) return
+                if(!this.couldClick) return;
                 this.couldClick = false;
                 let that = this;
                 this.$http.post('/dailyCheck/userCheck', {

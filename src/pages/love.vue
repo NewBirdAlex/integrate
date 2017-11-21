@@ -211,7 +211,7 @@
                 })
                     .then(function (response) {
                         if(response.data.data.code=200000){
-                            that.list = response.data.data.content;
+                            that.list = that.list.concat(response.data.data.content);
                             if(response.data.data.last) that.lastPage = true;
                             that.loading = false;
                         }
