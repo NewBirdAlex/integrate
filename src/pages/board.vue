@@ -22,13 +22,12 @@
                     <router-link tag="li" :to="'/infor/'+item.appUserId" v-for="(item,index) in list" :key="index">
                         <div class="bgWhite listWrap" >
                             <span>
-                                <i v-if="index>=4||index==0">{{index+1}}</i>
-                                    <i class="icon iconfont " :class="{'icon-jin':index==1,'icon-jin icon-tong':index==2,'icon-yin':index==3}"
-                                       v-if="index<4"></i>
+                                <i v-if="index>=3">{{index+1}}</i>
+                                    <i class="icon iconfont " :class="{'icon-jin':index==0,'icon-jin icon-tong':index==1,'icon-yin':index==2}"
+                                       v-if="index<3"></i>
                             </span>
                             <span>
-                                <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture" alt="">
-                                <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
+                                <img :src="item.userAvatar||'../assets/img/defaultHead.png'"  class="headPicture" alt="">
                             </span>
                             <span>{{item.userName}}</span>
                             <span>{{item.addScore}}</span>
@@ -163,7 +162,7 @@
                     departmentId: this.departmentId,
                     jobId:this.jobId,
                     endTime:this.endTime,
-                    type:this.type,
+                    scoreType:this.type,
                     startTime:this.startTime,
                     userName:this.selUserName,
                     pageNumber: this.pageNumber,

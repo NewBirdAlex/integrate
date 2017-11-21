@@ -120,6 +120,30 @@ const mutations = {
             state.mission=false;
         }
     },
+    //获取工作台
+    getWorkStation(state){
+        if(!state.initPage) {
+            state.initPage=false;
+            return
+        }
+        axios.post('/module/listModuleByUser',{})
+            .then(function (response) {
+                state.thirList.forEach(item=>{
+                    for(let i = 0 ; i<response.data.data.length;i++){
+                        if(response.data.data[i].moduleTitle==item.name){
+
+                            item.show=response.data.data[i].status==1?true:false;
+                            item.moduleCover=response.data.data[i].moduleCover;
+                            break;
+                        }
+                    }
+                })
+
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    },
     getLocalUserMessage(state){
         state.userMessage = JSON.parse(localStorage.getItem('HXuserMessage'));
     },
@@ -160,6 +184,7 @@ const actions = {
     showLoading:({commit})=>commit('showLoading'),
     hideLoading:({commit})=>commit('hideLoading'),
     saveSporder:({commit})=>commit('saveSporder'),
+    getWorkStation:({commit})=>commit('getWorkStation'),
     getuserBaseInf:({commit})=>commit('getuserBaseInf'),
     setFromMission:({commit})=>commit('setFromMission'),
     getMissionValue:({commit})=>commit('getMissionValue'),
@@ -173,6 +198,7 @@ const getters = {
     showLoading:state => state.showLoading,
     userMessage:state => state.userMessage,
     spOrder:state => state.spOrder,
+    thirList:state => state.thirList,
     mission:state => state.mission,
     baseInf:state=>state.baseInf
 }

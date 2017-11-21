@@ -172,98 +172,99 @@
                         router:'/announcement'
                     }
                 ],
-                thirList:[
-                    {
-                        name:"考勤",
-                        icon:'icon-dingweikaoqin',
-                        color:'#3da5d0',
-                        moduleCover:'http://image.vshi5.com/img_jfb/2017/10/13/e4550a4ba9814c519601e2b3c525fb90.png',
-                        router:'/checkingin',
-                        show:false
-                    },
-                    {
-                        name:"工作日志",
-                        icon:'icon-rizhi',
-                        color:'#84d76f',
-                        router:'/workDiary',
-                        show:false
-                    },
-                    {
-                        name:"悬赏任务",
-                        icon:'icon-renwuxuanshang',
-                        color:'#feaa3b',
-                        router:'/missionList',
-                        show:false
-                    },
-                    {
-                        name:"申报积分",
-                        icon:'icon-daiban',
-                        color:'#fe6973',
-                        router:'jfSelect',
-                        show:false
-                    },
-                    {
-                        name:"公告",
-                        icon:'icon-gonggao1',
-                        color:'#feaa3b',
-                        router:'/announcementList',
-                        show:false
-                    },
-                    {
-                        name:"爱心点赞",
-                        icon:'icon-hongxin',
-                        color:'#fb3333',
-                        router:'love',
-                        show:false
-                    },
-                    {
-                        name:"积分申诉",
-                        icon:'icon-tanhao1',
-                        color:'#cbefd5',
-                        router:'/shensuList',
-                        show:false
-                    },
-                    {
-                        name:"自由奖扣",
-                        icon:'icon-moneychange',
-                        color:'#5bb3d3',
-                        router:'/freePrize',
-                        show:false
-                    },
-                    {
-                        name:"经营哲学",
-                        icon:'icon-kaohe',
-                        color:'#8ddfb9',
-                        router:'/philosophy',
-                        show:false
-                    },
-                    {
-                        name:"水平考核",
-                        icon:'icon-kaohe',
-                        color:'#78c7e3',
-                        router:'/kpi',
-                        show:false
-                    },
-                    {
-                        name:"积分商城",
-                        icon:'icon-lianmengkeyongjifen',
-                        color:'#fa6e77',
-                        router:'/shop',
-                        show:false
-                    },
-                    {
-                        name:"积分抽奖",
-                        icon:'icon-choujiang',
-                        color:'#feaa3b',
-                        router:'/lottery',
-                        show:false
-                    }
-                ]
+//                thirList:[
+//                    {
+//                        name:"考勤",
+//                        icon:'icon-dingweikaoqin',
+//                        color:'#3da5d0',
+//                        moduleCover:'http://image.vshi5.com/img_jfb/2017/10/13/e4550a4ba9814c519601e2b3c525fb90.png',
+//                        router:'/checkingin',
+//                        show:false
+//                    },
+//                    {
+//                        name:"工作日志",
+//                        icon:'icon-rizhi',
+//                        color:'#84d76f',
+//                        router:'/workDiary',
+//                        show:false
+//                    },
+//                    {
+//                        name:"悬赏任务",
+//                        icon:'icon-renwuxuanshang',
+//                        color:'#feaa3b',
+//                        router:'/missionList',
+//                        show:false
+//                    },
+//                    {
+//                        name:"申报积分",
+//                        icon:'icon-daiban',
+//                        color:'#fe6973',
+//                        router:'jfSelect',
+//                        show:false
+//                    },
+//                    {
+//                        name:"公告",
+//                        icon:'icon-gonggao1',
+//                        color:'#feaa3b',
+//                        router:'/announcementList',
+//                        show:false
+//                    },
+//                    {
+//                        name:"爱心点赞",
+//                        icon:'icon-hongxin',
+//                        color:'#fb3333',
+//                        router:'love',
+//                        show:false
+//                    },
+//                    {
+//                        name:"积分申诉",
+//                        icon:'icon-tanhao1',
+//                        color:'#cbefd5',
+//                        router:'/shensuList',
+//                        show:false
+//                    },
+//                    {
+//                        name:"自由奖扣",
+//                        icon:'icon-moneychange',
+//                        color:'#5bb3d3',
+//                        router:'/freePrize',
+//                        show:false
+//                    },
+//                    {
+//                        name:"经营哲学",
+//                        icon:'icon-kaohe',
+//                        color:'#8ddfb9',
+//                        router:'/philosophy',
+//                        show:false
+//                    },
+//                    {
+//                        name:"水平考核",
+//                        icon:'icon-kaohe',
+//                        color:'#78c7e3',
+//                        router:'/kpi',
+//                        show:false
+//                    },
+//                    {
+//                        name:"积分商城",
+//                        icon:'icon-lianmengkeyongjifen',
+//                        color:'#fa6e77',
+//                        router:'/shop',
+//                        show:false
+//                    },
+//                    {
+//                        name:"积分抽奖",
+//                        icon:'icon-choujiang',
+//                        color:'#feaa3b',
+//                        router:'/lottery',
+//                        show:false
+//                    }
+//                ]
             }
         },
         computed: {
             ...mapGetters([
                 'userMessage',
+                'thirList'
             ])
         },
         methods:{
@@ -311,7 +312,6 @@
 
                                         item.show=response.data.data[i].status==1?true:false;
                                         item.moduleCover=response.data.data[i].moduleCover;
-//                                        alert(item.show)
                                         break;
                                     }
                                 }
@@ -327,8 +327,9 @@
         mounted(){
             //work stage
             this.getSwipe();
+
 //            this.getNumber();
-            setTimeout(this.getModule,500)
+//            setTimeout(this.getModule,500)
         }
     }
 </script>

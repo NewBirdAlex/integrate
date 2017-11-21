@@ -25,7 +25,12 @@
                           @changePoint="changePoint">
                 <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
             </choosePeople>
-
+            <div class="paddingAll borderBottom fs30 newList" >
+                <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
+                <img src="../assets/img/head.png" class="headPicture marginRight" alt="">
+                <span>alex</span>
+                <input type="text" class="fr tar vam marginTop " placeholder="输入奖扣分数">
+            </div>
 
             <div class="bgWhite paddingAll lh40 fs28">
                 <strong>全选积分</strong>
@@ -89,7 +94,12 @@
     @import "../assets/css/common.less";
     /*@import "../assets/font/font1/iconfont.css";*/
 
-
+    .newList{
+        input{
+            border: none;
+            outline: none;
+        }
+    }
     .wrap2{
         position: relative;
         padding:0 0.2rem;

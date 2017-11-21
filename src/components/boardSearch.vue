@@ -16,35 +16,38 @@
                     leave-active-class="animated bounceOutLeft"
             >
                 <div class="option " v-if="showOption">
-                    <div>
-                        <p class="subt">时间段</p>
-                        <div class="overflow">
-                            <span class="btn" @click="pickTime(true)">{{startTime}}</span>
-                            <span class="btn " @click="pickTime(false)">{{endTime}}</span>
+                    <div class="paddingAll calcHeight">
+                        <div>
+                            <p class="subt">时间段</p>
+                            <div class="overflow">
+                                <span class="btn" @click="pickTime(true)">{{startTime}}</span>
+                                <span class="btn " @click="pickTime(false)">{{endTime}}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div >
-                        <p class="subt">部门</p>
-                        <div class="overflow">
-                            <span class="btn"  :class="{'active':item.active}" v-for="(item,index) in apartMentList" :key="index" @click="selectApartment(item,index)">{{item.name}}</span>
+                        <div >
+                            <p class="subt">部门</p>
+                            <div class="overflow">
+                                <span class="btn"  :class="{'active':item.active}" v-for="(item,index) in apartMentList" :key="index" @click="selectApartment(item,index)">{{item.name}}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <p class="subt">职位</p>
-                        <div class="overflow">
+                        <div>
+                            <p class="subt">职位</p>
+                            <div class="overflow">
 
-                            <span class="btn"  :class="{'active':item.active}" v-for="(item,index) in jobList" :key="index" @click="selectJob(item,index)">{{item.jobTitle}}</span>
+                                <span class="btn"  :class="{'active':item.active}" v-for="(item,index) in jobList" :key="index" @click="selectJob(item,index)">{{item.jobTitle}}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="subt">积分</p>
+                            <div class="overflow">
+                                <span class="btn" :class="{'active':item.active}" v-for="(item,index) in jfType" @click="selectType(item)">{{item.name}}</span>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <p class="subt">积分</p>
-                        <div class="overflow">
-                            <span class="btn" :class="{'active':item.active}" v-for="(item,index) in jfType" @click="selectType(item)">{{item.name}}</span>
-                        </div>
-                    </div>
+
                     <div class="tac cbtn overflow"  style="margin-top: 1rem">
                         <span class="fl" @click="reset">重置</span>
-                        <span class="fr" @click="subData">确认</span>
+                        <span class="fr blueBg" @click="subData">确认</span>
                     </div>
                 </div>
             </transition>
@@ -64,10 +67,15 @@
 <style scoped lang="less">
     @import "../assets/css/common.less";
     .cbtn {
+        position: fixed;
+        background: white;
+        bottom: 0;
+        left:0;
+        width: 100%;
         span {
             display: inline-block;
             width: 40%;
-            line-height: 0.5rem;
+            line-height: 0.7rem;
             .border;
             .borderRadius;
             margin: 0.3rem;
@@ -77,13 +85,14 @@
         position: fixed;
         left: 0;
         top: 0;
-        padding-top: 1.2rem;
-        width: 7.1rem;
-        height: 100%;
-        overflow: scroll;
+        width: 100%;
+        height: 100vh;
+        overflow-y: scroll;
         z-index: 10;
         .bgWhite;
-        .paddingAll;
+        .calcHeight{
+            padding-bottom: 1.5rem;
+        }
         .subt {
             line-height: 0.5rem;
             font-size: @fs30;
@@ -277,7 +286,7 @@
             'value'
         ],
         mounted(){
-//            console.log(document.documentElement.clientHeight)
+            console.log(document.documentElement.clientHeight)
             this.getApartment();
             this.getJob();
         }

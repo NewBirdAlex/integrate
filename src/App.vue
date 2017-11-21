@@ -80,6 +80,7 @@
         },
         mounted(){
             this.$store.commit('getLocalUserMessage')
+            this.$store.commit('getWorkStation')
         },
         methods: {
             handleClick(item, index) {
