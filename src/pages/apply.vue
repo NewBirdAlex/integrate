@@ -269,7 +269,7 @@
                     this.shenpiList = data;
                     localStorage.removeItem('shenpiren')
                 }else{
-                    let that =this
+                    let that =this;
                     this.peopleList = data;
                     this.peopleList.unshift(this.selfInf);
                     this.peopleList.forEach(item=>item.selectAddScore=that.scoreRange[0])

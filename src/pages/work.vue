@@ -273,10 +273,10 @@
                 this.$http.post('/approveLogs/getCount',{
                 })
                     .then(function (response) {
-                        that.aboutMe[0].num= response.data.data.approveLog;
-                        that.aboutMe[1].num= response.data.data.waitApprove;
-                        that.aboutMe[2].num= response.data.data.sendApprove;
-                        that.aboutMe[3].num= response.data.data.copy;
+                        that.aboutMe[0].num= response.data.data[0].approveLog;
+                        that.aboutMe[1].num= response.data.data[0].waitApprove;
+                        that.aboutMe[2].num= response.data.data[0].sendApprove;
+                        that.aboutMe[3].num= response.data.data[0].copy;
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -328,8 +328,8 @@
             //work stage
             this.getSwipe();
 
-//            this.getNumber();
-//            setTimeout(this.getModule,500)
+            this.getNumber();
+//            setTimeout(t  his.getModule,500)
         }
     }
 </script>

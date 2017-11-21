@@ -7,7 +7,7 @@
             <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
             <span>{{name}}</span>
             <div class="fr">
-                {{point}}分
+                {{showPoint}}分
                 <label :for="selId" ><i class="icon iconfont icon-xialakuangtishitubiao"></i></label>
             </div>
         </div>
@@ -65,6 +65,7 @@
     export default {
         data() {
             return {
+                showPoint:'',
                 selValue:""
             }
         },
@@ -76,12 +77,12 @@
         methods:{
             handleSelect(){
                 console.log(this.selValue)
-                this.point = this.selValue;
-                this.$emit('changePoint',{index:this.ind,value:this.point});
+                this.showPoint = this.selValue;
+                this.$emit('changePoint',{index:this.ind,value:this.selValue});
             }
         },
         mounted(){
-//            this.showValue = this.point;
+            this.showPoint = this.point;
         },
         props:[
             "name",

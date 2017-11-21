@@ -121,7 +121,6 @@
                         for(let i = 0 ; i<=(response.data.data.moduleDetail.maxScore-response.data.data.moduleDetail.minuxScore)/response.data.data.moduleDetail.level ; i++){
                             that.scoreRange.push(response.data.data.moduleDetail.minuxScore+i*response.data.data.moduleDetail.level)
                         }
-                        console.log(that.scoreRange)
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -144,7 +143,6 @@
                     });
             },
             getData(data) {
-                console.log(data);
                 this.inputData[data.index].content = data.content;
             },
             confirmHandle(){
@@ -168,7 +166,6 @@
                     pics: this.imgList
                 })
                     .then(function (response) {
-//                        that.$router.push('/spList/'+that.$route.params.spType);
                         that.$toast('审批成功');
                         that.$router.go(-2);
                     })
@@ -187,8 +184,7 @@
                 item.select=!item.select;
             },
             changePoint(msg){
-                console.log(msg)
-                this.peopleList[msg.index].point=msg.value;
+                this.peopleList[msg.index].addScore=msg.value;
             }
         },
         components: {

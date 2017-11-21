@@ -411,7 +411,10 @@
             this.showWrap=false;
 
             //get history
-            this.history = localStorage.getItem('spHistory').split(',');
+            if(localStorage.getItem('spHistory')){
+                this.history = localStorage.getItem('spHistory').split(',');
+
+            }
         },
         components:{
             showList
