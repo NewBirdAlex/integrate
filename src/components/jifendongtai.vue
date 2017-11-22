@@ -38,7 +38,8 @@
                                     {{item.approveContext}}
                                 </p>
                                 <div class="cp" v-if="item.approvePics">
-                                    <img :src="item.approvePics.split(',')"  alt="">
+                                    <!--<img :src="item.approvePics.split(',')"  alt="">-->
+                                    <scaleImg :imgList="item.approvePics.split(',')"></scaleImg>
                                 </div>
                                 <p class="gray">
                                     <i class="icon iconfont icon-shijian"></i>
@@ -127,6 +128,7 @@
 </style>
 <script>
     import { mapGetters } from 'vuex';
+    import scaleImg from '../components/scaleImg.vue'
     export default {
         data() {
             return {
@@ -142,6 +144,9 @@
             ...mapGetters([
                 'userMessage',
             ])
+        },
+        components:{
+            scaleImg
         },
         mounted(){
             this.getList();

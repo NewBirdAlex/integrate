@@ -35,7 +35,8 @@
             </ul>
             
             <div class="showImg" v-if="orderDetail.missionPics">
-                <img :src="item"  v-for="item in orderDetail.missionPics.split(',')" alt="">
+                <!--<img :src="item"  v-for="item in orderDetail.missionPics.split(',')" alt="">-->
+                <scaleImg :imgList="orderDetail.missionPics.split(',')"></scaleImg>
             </div>
         </div>
         <div class="progress" v-if="orderDetail.approveUserList&&orderDetail.approveUserList.length">
@@ -70,7 +71,8 @@
                             {{item.context}}
                         </p>
                         <div class="rec_img" v-if="item.pics">
-                            <img :src="item" alt="" v-for="item in item.pics.split(',')">
+                            <!--<img :src="item" alt="" v-for="item in item.pics.split(',')">-->
+                            <scaleImg :imgList="item.pics.split(',')"></scaleImg>
                         </div>
                     </div>
                 </div>
@@ -230,6 +232,7 @@
 </style>
 <script>
     import itemList from '../components/itemList.vue'
+    import scaleImg from '../components/scaleImg.vue'
     export default {
         data() {
             return {
@@ -265,7 +268,8 @@
             this.getDetail();
         },
         components:{
-            itemList
+            itemList,
+            scaleImg
         }
     }
 </script>

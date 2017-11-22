@@ -7,8 +7,11 @@
             <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
             <span>{{name}}</span>
             <div class="fr">
-                {{showPoint}}分
-                <label :for="selId" ><i class="icon iconfont icon-xialakuangtishitubiao"></i></label>
+
+                <label :for="selId" >
+                    {{showPoint}}分
+                    <i class="icon iconfont icon-xialakuangtishitubiao"></i>
+                </label>
             </div>
         </div>
 
@@ -82,11 +85,10 @@
             }
         },
         mounted(){
-            this.showPoint = this.point;
+            this.showPoint = this.range[0];
         },
         props:[
             "name",
-            'point',
             'range',
             'ind',
             'head'

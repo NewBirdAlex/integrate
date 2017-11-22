@@ -118,9 +118,35 @@
                 this.$http.post('/module/getModuleDetail', {
                 })
                     .then(function (response) {
-                        for(let i = 0 ; i<=(response.data.data.moduleDetail.maxScore-response.data.data.moduleDetail.minuxScore)/response.data.data.moduleDetail.level ; i++){
-                            that.scoreRange.push(response.data.data.moduleDetail.minuxScore+i*response.data.data.moduleDetail.level)
+
+                        // get score select range
+                        let minScore = response.data.data.moduleDetail.minuxScore;
+                        let maxScore = response.data.data.moduleDetail.maxScore;
+                        let level = response.data.data.moduleDetail.level;
+                        let max = null;
+                        let min = null;
+                        let numArr = [];
+                        if(maxScore==minScore){
+                            that.scoreRange=[minScore]
+                        }else{
+
+                            if(maxScore>minScore){
+                                max = maxScore;
+                                min = minScore;
+                            }else{
+                                max = minScore;
+                                min = maxScore;
+                            }
+                            console.log(min)
+                            for(let i = 0; i<=Math.ceil((max-min)/level);i++){
+                                numArr.push(min+i*level)
+                            }
+                            if(max<0&&min<0){
+                                numArr.reverse();
+                            }
                         }
+                        that.scoreRange = numArr;
+                        // get score select range
                     })
                     .catch(function (error) {
                         console.log(error);

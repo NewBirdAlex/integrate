@@ -13,8 +13,11 @@
                 <span class="red " v-if="checkStatus==3">审批不通过</span>
             </div>
             <div class="fr">
-                {{point}}分
-                <label :for="selId" ><i class="icon iconfont icon-xialakuangtishitubiao"></i></label>
+
+                <label :for="selId" >
+                    {{point}}分
+                    <i class="icon iconfont icon-xialakuangtishitubiao"></i>
+                </label>
             </div>
         </div>
 

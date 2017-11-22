@@ -39,7 +39,7 @@
             <subTitle :content="'申请人'" :subWord="'(默认申请自己的，可帮其他同事申请)'" :need="true"></subTitle>
 
             <choosePeople v-if="!mission" v-for="(item,index) in peopleList" :name="item.userName"
-                          :key="index" :point="scoreRange[0]" :range="scoreRange"
+                          :key="index"  :range="scoreRange"
                           :ind="index"
                           :head="item.userAvatar"
                           ref="choosePeople"
@@ -291,17 +291,15 @@
                 //选择分数
                 if(this.selAll){//select all
                     for(let i = 0 ; i<this.peopleList.length;i++){
-
-                        var obj =  this.peopleList[i];
-                        obj.selectAddScore=msg.value;
-                        this.$set(this.peopleList,i,obj);
+//                        var obj =  this.peopleList[i];
+//                        obj.selectAddScore=msg.value;
+//                        this.$set(this.peopleList,i,obj);
+                        this.peopleList[i].selectAddScore=msg.value;
                     }
 
                 }else{
                     //select one
                     this.peopleList[msg.index].selectAddScore=msg.value;
-
-
                 }
             },
             handleRemove(file, fileList) {
@@ -329,13 +327,37 @@
                             that.approveUserList = response.data.data.approveUser;
 
                         }else{
-//                            that.approveUserList=null;
+                            //that.approveUserList=null;
                         }
                         // get score select range
-                        let score = that.detail.minuxScore;
-                        for(let i = 0; i<(that.detail.maxScore-that.detail.minuxScore)/that.detail.scoreLevel;i++){
-                            that.scoreRange.push(that.detail.minuxScore+i*that.detail.scoreLevel)
+                        let minScore = that.detail.minuxScore;
+                        let maxScore = that.detail.maxScore;
+                        let level = that.detail.scoreLevel;
+                        let max = null;
+                        let min = null;
+                        let numArr = [];
+                        if(maxScore==minScore){
+                            that.scoreRange=[minScore]
+                        }else{
+
+                            if(maxScore>minScore){
+                                max = maxScore;
+                                min = minScore;
+                            }else{
+                                max = minScore;
+                                min = maxScore;
+                            }
+                            console.log(min)
+                            for(let i = 0; i<=Math.ceil((max-min)/level);i++){
+                                numArr.push(min+i*level)
+                            }
+                            if(max<0&&min<0){
+                                numArr.reverse();
+                            }
                         }
+                        that.scoreRange = numArr;
+                        // get score select range
+
                         that.peopleList = [];
                         that.selfInf = {
                             id:that.userMessage.userId,
@@ -378,6 +400,7 @@
                 if(this.chaosongren) {
                     copyUserId = this.chaosongren.split(',')
                 }
+                console.log(score.join(','))
                 this.$http.post('/missionApprove/submitMissionApprove', {
                     addScore: score.join(','),
                     aimId: this.$route.params.id,

@@ -12,40 +12,60 @@
         </div>
         <myEmpty v-if="!list.length"></myEmpty>
         <!--loadmore-->
-        <div style="height: 9rem;overflow: scroll;" class="marginTop">
-            <mt-loadmore
-                    :bottom-all-loaded="allLoaded "
-                         :bottom-method="loadBottom"
-                         ref="loadmore"
-            >
-                <ul class="">
-                    <router-link tag="li" :to="'/infor/'+item.appUserId" v-for="(item,index) in list" :key="index">
-                        <div class="bgWhite listWrap tal" >
+        <!--<div style="height: 9rem;overflow: scroll;" class="marginTop">-->
+            <!--<mt-loadmore-->
+                    <!--:bottom-all-loaded="allLoaded "-->
+                         <!--:bottom-method="loadBottom"-->
+                         <!--ref="loadmore"-->
+            <!--&gt;-->
+                <!--<ul class="">-->
+                    <!--<router-link tag="li" :to="'/infor/'+item.appUserId" v-for="(item,index) in list" :key="index">-->
+                        <!--<div class="bgWhite listWrap tal" >-->
+                            <!--<span>-->
+                                <!--<i v-if="index>=3">{{index+1}}</i>-->
+                                    <!--<i class="icon iconfont " :class="{'icon-jin':index==0,'icon-jin icon-tong':index==1,'icon-yin':index==2}"-->
+                                       <!--v-if="index<3"></i>-->
+                            <!--</span>-->
+                            <!--<span>-->
+                                <!--<img :src="item.userAvatar||'../assets/img/defaultHead.png'"  class="headPicture" alt="">-->
+                            <!--</span>-->
+                            <!--<span>{{item.userName}}</span>-->
+                            <!--<span>{{item.addScore}}</span>-->
+                            <!--<span>{{item.minusScore}}</span>-->
+                            <!--<span class="blue ">{{item.plusScore}}</span>-->
+                        <!--</div>-->
+                    <!--</router-link>-->
+                <!--</ul>-->
+                <!--<div slot="top" class="mint-loadmore-top">-->
+                    <!--<span v-show="topStatus !== 'loading'" :class="{ 'rotate': topStatus === 'drop' }">↓</span>-->
+                    <!--<span v-show="topStatus === 'loading'">Loading...</span>-->
+                <!--</div>-->
+            <!--</mt-loadmore>-->
+
+        <!--</div>-->
+
+        <!--loadmore-->
+        <ul
+                v-infinite-scroll="loadBottom"
+                infinite-scroll-disabled="loading"
+                infinite-scroll-distance="10">
+            <router-link tag="li" :to="'/infor/'+item.appUserId" v-for="(item,index) in list" :key="index">
+                <div class="bgWhite listWrap tal" >
                             <span>
                                 <i v-if="index>=3">{{index+1}}</i>
                                     <i class="icon iconfont " :class="{'icon-jin':index==0,'icon-jin icon-tong':index==1,'icon-yin':index==2}"
                                        v-if="index<3"></i>
                             </span>
-                            <span>
+                    <span>
                                 <img :src="item.userAvatar||'../assets/img/defaultHead.png'"  class="headPicture" alt="">
                             </span>
-                            <span>{{item.userName}}</span>
-                            <span>{{item.addScore}}</span>
-                            <span>{{item.minusScore}}</span>
-                            <span class="blue ">{{item.plusScore}}</span>
-                        </div>
-                    </router-link>
-                </ul>
-                <div slot="top" class="mint-loadmore-top">
-                    <span v-show="topStatus !== 'loading'" :class="{ 'rotate': topStatus === 'drop' }">↓</span>
-                    <span v-show="topStatus === 'loading'">Loading...</span>
+                    <span>{{item.userName}}</span>
+                    <span>{{item.addScore}}</span>
+                    <span>{{item.minusScore}}</span>
+                    <span class="blue ">{{item.plusScore}}</span>
                 </div>
-            </mt-loadmore>
-
-        </div>
-
-        <!--loadmore-->
-
+            </router-link>
+        </ul>
     </div>
 </template>
 <style scoped lang="less">
@@ -149,7 +169,6 @@
                  // 加载更多数据
                 //this.allLoaded = true;// 若数据已全部获取完毕
                 //this.$refs.loadmore.onBottomLoaded();
-                console.log(3)
                 if(!this.lastPage){
                     this.getList();
                     this.pageNumber+=1;

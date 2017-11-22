@@ -78,7 +78,8 @@
                                 {{item.context}}
                             </p>
                             <div class="rec_img" v-if="item.pics">
-                                <img :src="item" alt="" v-for="item in item.pics.split(',')">
+                                <!--<img :src="item" alt="" v-for="item in item.pics.split(',')">-->
+                                <scaleImg :imgList="item.pics.split(',')"></scaleImg>
                             </div>
                         </div>
                     </div>
@@ -289,6 +290,8 @@
     import chooseStaff from '../components/chooseStaff.vue'
     import uploadImg from '../components/uploadImg.vue'
     import jifenType from '../components/jifenType.vue'
+    import scaleImg from '../components/scaleImg.vue'
+
     import { mapGetters } from 'vuex';
     export default {
         data() {
@@ -488,6 +491,7 @@
             uploadImg,
             choosePeople,
             jifenType,
+            scaleImg,
             chooseStaff
         }
     }
