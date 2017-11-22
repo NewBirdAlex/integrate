@@ -158,7 +158,7 @@
             selModelType(item){
                   this.modelType=item.id;
                   this.type=item.type;
-                  this.goReset = true;
+                  this.goReset=true;
                   this.chooseMissionType();
             },
             serchList(){
@@ -187,6 +187,7 @@
                     item.sel = true;
                     this.type = item.type;
                     this.modelType = '';
+                    this.goReset=true;
                     this.chooseMissionType();
                 }
             },
@@ -197,7 +198,10 @@
             },
             chooseMissionType(){
                 let that = this;
-
+                if(that.goReset){
+                    that.reset();
+                    that.goReset=false;
+                }
                 this.$http.post('/actionList/getActionListByCompany',{
                     modelType: this.modelType,
                     type:this.type,
@@ -206,16 +210,13 @@
                     title:this.searchKeyword
                 })
                     .then(function (response) {
-                        that.pageNumber+=1;
-                        if(that.goReset||that.enter){
-                            that.reset();
-                            that.goReset=false;
-                        }
 
+                        that.pageNumber+=1;
                         that.list2=that.list2.concat(response.data.data.content)
                         if(response.data.data.last){
                             that.lastPage=true;
                         }
+
                         that.loading = false;
 
                     })

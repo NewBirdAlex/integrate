@@ -39,7 +39,7 @@
             <subTitle :content="'申请人'" :subWord="'(默认申请自己的，可帮其他同事申请)'" :need="true"></subTitle>
 
             <choosePeople v-if="!mission" v-for="(item,index) in peopleList" :name="item.userName"
-                          :key="index"  :range="scoreRange"
+                          :key="index"  :range="scoreRange"  :showValue="item.selectAddScore"
                           :ind="index"
                           :head="item.userAvatar"
                           ref="choosePeople"
@@ -337,7 +337,7 @@
                         let min = null;
                         let numArr = [];
                         if(maxScore==minScore){
-                            that.scoreRange=[minScore]
+                            numArr=[minScore]
                         }else{
 
                             if(maxScore>minScore){
@@ -347,7 +347,7 @@
                                 max = minScore;
                                 min = maxScore;
                             }
-                            console.log(min)
+                            console.log(max,min)
                             for(let i = 0; i<=Math.ceil((max-min)/level);i++){
                                 numArr.push(min+i*level)
                             }
@@ -355,6 +355,7 @@
                                 numArr.reverse();
                             }
                         }
+                        console.log(numArr)
                         that.scoreRange = numArr;
                         // get score select range
 

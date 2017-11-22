@@ -17,7 +17,7 @@
             >
                 <div class="option " v-if="showOption">
                     <div class="paddingAll calcHeight">
-                        <div>
+                        <div v-if="type!=2">
                             <p class="subt">时间段</p>
                             <div class="overflow">
                                 <span class="btn" @click="pickTime(true)">{{startTime}}</span>
@@ -37,7 +37,7 @@
                                 <span class="btn"  :class="{'active':item.active}" v-for="(item,index) in jobList" :key="index" @click="selectJob(item,index)">{{item.jobTitle}}</span>
                             </div>
                         </div>
-                        <div>
+                        <div v-if="type!=2">
                             <p class="subt">积分</p>
                             <div class="overflow">
                                 <span class="btn" :class="{'active':item.active}" v-for="(item,index) in jfType" @click="selectType(item)">{{item.name}}</span>
@@ -288,9 +288,15 @@
                 item.active=true;
             }
         },
-        props:[
-            'value'
-        ],
+        props:{
+            value:{
+                type:String
+            },
+            type:{
+                type:Number,
+                default:1
+            }
+        },
         mounted(){
             console.log(document.documentElement.clientHeight)
             this.getApartment();

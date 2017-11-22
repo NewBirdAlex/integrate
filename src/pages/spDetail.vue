@@ -192,13 +192,15 @@
                     pics: this.imgList
                 })
                     .then(function (response) {
-                        that.$toast('审批成功');
-                        that.$router.go(-2);
+
+                        if(response.data.code=='200000'){
+                            that.$toast('审批成功');
+                            that.$router.go(-2);
+                        }
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
-
             },
 //            上传图片recall
             imageuploaded(res) {

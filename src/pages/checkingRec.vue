@@ -126,7 +126,7 @@
             </li>
         </ul>
         <!--<i class="icon iconfont icon-damuzhi red specilIcon" :class="{'activeIcon':clickHeart}" v-if="clickHeart"></i>-->
-        <i class="icon iconfont icon-damuzhi red specilIcon activeIcon" :class="{'activeIcon':clickHeart}"
+        <i class="icon iconfont icon-damuzhi red specilIcon" :class="{'activeIcon':clickHeart}"
            v-if="clickHeart"></i>
     </div>
 </template>

@@ -9,7 +9,7 @@
             <div class="fr">
 
                 <label :for="selId" >
-                    {{showPoint}}分
+                    {{showValue}}分
                     <i class="icon iconfont icon-xialakuangtishitubiao"></i>
                 </label>
             </div>
@@ -91,6 +91,7 @@
             "name",
             'range',
             'ind',
+            'showValue',
             'head'
         ]
     }

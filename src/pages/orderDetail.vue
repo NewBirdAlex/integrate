@@ -248,8 +248,27 @@
                 this.active=true;
             },
             go(type){
-                this.$store.commit('saveSporder',this.orderDetail)
-                this.$router.push('/spDetail/'+type+'/'+this.$route.params.id+'/'+this.$route.params.spType);
+                let that = this;
+
+                if(type==4){
+                    //cancel
+                    this.$http.post('/missionApprove/copyToMeList', {
+                        id:this.$route.params.id
+                    })
+                        .then(function (response) {
+                            if(response.data.code=='200000'){
+                                this.$router.go(-1)
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }else{
+                    this.$store.commit('saveSporder',this.orderDetail)
+                    this.$router.push('/spDetail/'+type+'/'+this.$route.params.id+'/'+this.$route.params.spType);
+                }
+
+
             },
             getDetail(){
                 let that = this;
