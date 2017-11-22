@@ -20,7 +20,7 @@
             >
                 <ul class="">
                     <router-link tag="li" :to="'/infor/'+item.appUserId" v-for="(item,index) in list" :key="index">
-                        <div class="bgWhite listWrap" >
+                        <div class="bgWhite listWrap tal" >
                             <span>
                                 <i v-if="index>=3">{{index+1}}</i>
                                     <i class="icon iconfont " :class="{'icon-jin':index==0,'icon-jin icon-tong':index==1,'icon-yin':index==2}"
@@ -130,7 +130,8 @@
         },
         methods: {
             searchByName(){
-                if(!this.selUserName) return;
+//                if(!this.selUserName) return;
+                this.pageNumber=1;
                 this.getList();
             },
             collectData(msg){

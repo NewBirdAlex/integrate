@@ -39,7 +39,7 @@
             <subTitle :content="'申请人'" :subWord="'(默认申请自己的，可帮其他同事申请)'" :need="true"></subTitle>
 
             <choosePeople v-if="!mission" v-for="(item,index) in peopleList" :name="item.userName"
-                          :key="index" :point="item.selectAddScore" :range="scoreRange"
+                          :key="index" :point="scoreRange[0]" :range="scoreRange"
                           :ind="index"
                           :head="item.userAvatar"
                           ref="choosePeople"

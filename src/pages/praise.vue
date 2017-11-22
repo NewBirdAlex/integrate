@@ -47,7 +47,7 @@
 
             <div class="marginTop"></div>
 
-            <subTitle :content="'表扬员工'" :subWord="''" :need="true"></subTitle>
+            <subTitle :content="$route.params.type==1?'表扬员工':'奖扣员工'" :subWord="''" :need="true"></subTitle>
 
             <choosePeople v-for="(item,index) in peopleList" :name="item.userName"
                           :key="index" :point="item.selectAddScore" :range="scoreRange"
@@ -231,7 +231,47 @@
             }
         },
         mounted(){
+
             this.getScoreRange();
+        },
+        created(){
+            if(this.$route.params.type==1){
+                this.inputData = [
+                    {
+                        title: "表扬标题",
+                        need: true,
+                        ph: "请输入内容",
+                        content: "",
+                        type: 'input'
+                    },
+                    {
+                        title: "表扬内容",
+                        need: true,
+                        ph: "请输入内容",
+                        content: "",
+                        type: 'input',
+                        selRange:[]
+                    }
+                ]
+            }else{
+                this.inputData = [
+                    {
+                        title: "奖扣标题",
+                        need: true,
+                        ph: "请输入内容",
+                        content: "",
+                        type: 'input'
+                    },
+                    {
+                        title: "奖扣内容",
+                        need: true,
+                        ph: "请输入内容",
+                        content: "",
+                        type: 'input',
+                        selRange:[]
+                    }
+                ]
+            }
         },
         components: {
             subTitle,

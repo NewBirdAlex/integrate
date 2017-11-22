@@ -38,7 +38,7 @@
                 <img :src="item"  v-for="item in orderDetail.missionPics.split(',')" alt="">
             </div>
         </div>
-        <div class="progress">
+        <div class="progress" v-if="orderDetail.approveUserList&&orderDetail.approveUserList.length">
             <div class="prog_list" v-for="item in orderDetail.approveUserList">
                 <div class="time">
                     <i class="icon iconfont icon-gouxuan blue" v-if="item.checkStatus==0||item.checkStatus==2"></i>

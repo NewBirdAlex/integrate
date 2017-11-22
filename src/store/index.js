@@ -126,6 +126,7 @@ const mutations = {
             state.initPage=false;
             return
         }
+
         axios.post('/module/listModuleByUser',{})
             .then(function (response) {
                 state.thirList.forEach(item=>{

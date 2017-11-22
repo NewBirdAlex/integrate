@@ -56,7 +56,7 @@ Object.keys(filters).forEach(key => Vue.filter(key, filters[key]));
 //ajax
 import axios from './lib/myAxios'
 Vue.prototype.$http = axios ; //其他页面在使用axios的时候直接  this.$http就可以了
-//ajax
+
 
 //no data
 import myEmpty from './components/empty'

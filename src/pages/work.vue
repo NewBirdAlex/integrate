@@ -327,7 +327,7 @@
         mounted(){
             //work stage
             this.getSwipe();
-
+            this.$store.commit('getWorkStation')
             this.getNumber();
 //            setTimeout(t  his.getModule,500)
         }

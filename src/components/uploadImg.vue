@@ -11,7 +11,7 @@
             <img  :src='item' alt="">
             <i class="icon iconfont icon-shanchu" @click="delImg(index)"></i>
         </div>
-        <div class="paddingAll setFrame" >
+        <div class="paddingAll setFrame" v-if="imgNum<9">
             <vue-core-image-upload
                     class="btn btn-primary"
                     :crop="false"
@@ -91,6 +91,7 @@
                 let that  = this;
 
                 if (res.code == "200000") {
+                    if(that.imgNum>=9) return
                     that.imgNum+=1;
                     console.log(that.imgNum)
                     that.imgList .push(res.data.url)

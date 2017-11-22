@@ -57,6 +57,7 @@
                 v-model="pickerVisible"
                 type="date"
                 ref="picker"
+                :endDate="new Date()"
                 @confirm="handleConfirm"
                 year-format="{value} 年"
                 month-format="{value} 月"
@@ -150,6 +151,11 @@
                 endTime:'选择结束时间',
                 jfType:[
                     {
+                        name:'全部',
+                        active:false,
+                        value:0
+                    },
+                    {
                         name:'品德A分',
                         active:false,
                         value:1
@@ -215,7 +221,7 @@
                 //submit the search data
                 let obj = {}
                 if(this.startTime!='选择开始时间') obj.startTime = this.startTime;
-                if(this.endTime!='选择结束时间') obj.startTime = this.endTime;
+                if(this.endTime!='选择结束时间') obj.endTime = this.endTime;
                 this.apartMentList.forEach(item=>{
                     if(item.active){
                         obj.apartment = item;

@@ -19,7 +19,7 @@
                     <span class="fr">{{item.content}}</span>
                 </div>
                 <div class="overflow" v-if="detail.pics">
-                    <img :src="item" v-for="item in detail.pics.split(',')" class="fl iw" alt="">
+                    <scaleImg :imgList="detail.pics.split(',')"></scaleImg>
                 </div>
                 <!--<div class="paddingTop paddingBottom gray fs26">-->
                     <!--<span>{{detail.createDate}}</span>-->
@@ -63,6 +63,8 @@
                 </div>
             </div>
         </div>
+
+
         <div class="cmbtn" v-if="$route.params.type=='true'">
             <input type="text" placeholder="请输入您的评论内容" v-model="comment">
             <span class="fs36" @click="subComment">发送</span>
@@ -132,6 +134,7 @@
     }
 </style>
 <script>
+    import scaleImg from '../components/scaleImg.vue'
     export default {
         data() {
             return {
@@ -142,6 +145,9 @@
                 goodList:[],
                 commentList:[]
             }
+        },
+        components:{
+            scaleImg
         },
         methods:{
             getDetail(){

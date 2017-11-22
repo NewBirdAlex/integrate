@@ -4,7 +4,7 @@
             <span v-for="(item,index) in idList" :key="index" @click="selId(item,index)" :class="{'active':item.sel}">
                 {{item.name}}
                 <i class="iconfont icon icon-arrLeft-fill"></i>
-                <ul v-if="item.sel" class="black">
+                <ul v-if="item.showNav" class="black">
                     <li v-for="(obj,index2) in item.subList" @click="selModelType(obj)" :key="index2">{{obj.title}}</li>
                 </ul>
             </span>
@@ -113,18 +113,21 @@
                         type:1,
                         name: '行为积分',
                         sel: false,
+                        showNav:false,
                         subList:[]
                     },
                     {
                         type:2,
                         name: '品德积分',
                         sel: false,
+                        showNav:false,
                         subList:[]
                     },
                     {
                         type:3,
                         name: '业绩积分',
                         sel: false,
+                        showNav:false,
                         subList:[]
                     }
                 ],
@@ -165,13 +168,26 @@
                 this.chooseMissionType();
             },
             selId(item) {
+                this.searchKeyword = '';
                 if(item.sel){
                     item.sel=!item.sel;
+                    if(item.showNav){
+                        item.sel=!item.sel;
+                        item.showNav=false;
+                    }else{
+                        item.sel=true;
+                        item.showNav=true;
+                        this.modelType='';
+
+                    }
                 }else{
                     this.idList.forEach(function (a) {
                         a.sel = false;
                     })
                     item.sel = true;
+                    this.type = item.type;
+                    this.modelType = '';
+                    this.chooseMissionType();
                 }
             },
             reset(){
@@ -197,9 +213,9 @@
                         }
 
                         that.list2=that.list2.concat(response.data.data.content)
-//                        for(let i =0;i<response.data.data.content.length;i++){
-//                            that.list2.push(response.data.data.content[i])
-//                        }
+                        if(response.data.data.last){
+                            that.lastPage=true;
+                        }
                         that.loading = false;
 
                     })
