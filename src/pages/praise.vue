@@ -50,8 +50,11 @@
             <subTitle :content="$route.params.type==1?'表扬员工':'奖扣员工'" v-if="$route.params.type==1" :subWord="'（可用积分'+baseInf.flowScore+')'" :need="true"></subTitle>
             <subTitle :content="$route.params.type==1?'表扬员工':'奖扣员工'" v-else :subWord="''" :need="true"></subTitle>
 
-            <choosePeople v-for="(item,index) in peopleList" :name="item.userName"
-                          :key="index" :showValue="item.selectAddScore" :range="scoreRange"
+            <choosePeople v-for="(item,index) in peopleList"
+                          :name="item.userName"
+                          :key="index"
+                          :showValue="item.selectAddScore"
+                          :range="scoreRange"
                           :ind="index"
                           :head="item.userAvatar"
                           ref="choosePeople"
@@ -117,6 +120,7 @@
     import chooseStaff from '../components/chooseStaff.vue'
     import jifenType from '../components/jifenType.vue'
     import { mapGetters } from 'vuex';
+    import {myTool} from '../lib/myTool'
 
     export default {
         data() {
@@ -160,10 +164,12 @@
                 this.$http.post('/module/getModuleDetail', {
                 })
                     .then(function (response) {
-                        for(let i = 0 ; i<=(response.data.data.moduleDetail.maxScore-response.data.data.moduleDetail.minuxScore)/response.data.data.moduleDetail.level ; i++){
-                            that.scoreRange.push(response.data.data.moduleDetail.minuxScore+i*response.data.data.moduleDetail.level)
-                        }
-                        console.log(that.scoreRange)
+                        // get score select range
+                        let minScore = response.data.data.moduleDetail.minuxScore;
+                        let maxScore = response.data.data.moduleDetail.maxScore;
+                        let level = response.data.data.moduleDetail.level;
+                        that.scoreRange = myTool.getScoreRange(minScore,maxScore,level);
+                        // get score select range
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -183,22 +189,18 @@
 
             },
             changePoint(msg){
-                console.log(msg)
-//                this.peopleList[msg.index].point=msg.value;
                 //选择分数
                 if(this.selAll){//select all
                     for(let i = 0 ; i<this.peopleList.length;i++){
-                        console.log(i);
-                        var obj =  this.peopleList[i];
-                        obj.selectAddScore=msg.value;
-                        this.$set(this.peopleList,i,obj);
+                        this.peopleList[i].selectAddScore=msg.value;
+                        let newObj=this.peopleList[i];
+                        this.$set(this.peopleList,i,newObj)
                     }
-                    console.log(this.peopleList)
                 }else{
                     //select one
                     this.peopleList[msg.index].selectAddScore=msg.value;
-                    console.log(this.peopleList[msg.index].selectAddScore)
-
+                    let newObj=this.peopleList[msg.index];
+                    this.$set(this.peopleList,msg.index,newObj)
                 }
             },
             subData(){
@@ -234,7 +236,7 @@
             }
         },
         mounted(){
-
+            this.$store.commit('getuserBaseInf');
             this.getScoreRange();
         },
         created(){
