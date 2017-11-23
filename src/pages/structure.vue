@@ -46,7 +46,7 @@
                             <p> <span style="display: inline-block;width: 2rem">{{item.userName}}</span> <span class="rp" v-if="item.isAdmin">管理员</span></p>
                             <p class="gray">{{item.jobTitle}}</p>
                         </div>
-                        <span class="blue fr">{{item.userPhone}}</span>
+                        <a class="blue fr" :href="'tel:'+item.userPhone">{{item.userPhone}}</a>
                     </div>
                 </div>
             </li>

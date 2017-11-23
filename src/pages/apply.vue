@@ -40,7 +40,7 @@
 
             <subTitle :content="'申请人'" :subWord="'(默认申请自己的，可帮其他同事申请)'" :need="true"></subTitle>
 
-            <choosePeople v-if="!mission" v-for="(item,index) in peopleList" :name="item.userName"
+            <choosePeople v-if="$route.params.mission!='true'" v-for="(item,index) in peopleList" :name="item.userName"
                           :key="index"  :range="scoreRange"  :showValue="item.selectAddScore"
                           :ind="index"
                           :head="item.userAvatar"
@@ -48,20 +48,20 @@
                           @changePoint="changePoint">
                 <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
             </choosePeople>
-            <div class="paddingAll bgWhite fs30 lh50" v-if="mission">
+            <div class="paddingAll bgWhite fs30 lh50" v-if="$route.params.mission=='true'">
                 <img class="headPicture"  :src="userMessage.userAvatar" alt="">
                 <span>{{userMessage.userName}}</span>
                 <span class="fr " style="margin-top: 0.2rem"> {{detail.score}}分</span>
             </div>
 
-            <div class="bgWhite paddingAll lh40 fs28" v-if="!mission">
+            <div class="bgWhite paddingAll lh40 fs28" v-if="$route.params.mission!='true'">
                 <strong>全选积分</strong>
                 <span class="gray">(选择可批量修改申请的积分)</span>
                 <span class="fr marginRight cl" :class="{'border':!selAll}" @click="selAll=!selAll"><i class="icon iconfont icon-gouxuan blue fs36" v-if="selAll"></i></span>
             </div>
 
             <!--选择员工-->
-            <chooseStaff  @getData="accept" v-if="!mission"></chooseStaff>
+            <chooseStaff  @getData="accept" v-if="$route.params.mission!='true'"></chooseStaff>
 
 
             <!--审批人-->
@@ -204,6 +204,7 @@
     import uploadImg from '../components/uploadImg.vue'
     import selectStaff from '../components/selectStaff.vue'
     import { mapGetters } from 'vuex';
+    import {myTool} from '../lib/myTool'
     export default {
         data() {
             return {
@@ -273,35 +274,25 @@
                 }else{
                     let that =this;
                     this.peopleList = data;
-                    this.peopleList.unshift(this.selfInf);
                     this.peopleList.forEach(item=>item.selectAddScore=that.scoreRange[0])
                 }
 
             },
 
             delPerson(index){
-                if(this.peopleList[index].userName==this.userMessage.userName){
-                    this.$toast({
-                        message: '不能删除自己哦',
-                        duration: 2000
-                    });
-                    return;
-                }
                 this.peopleList.splice(index, 1)
             },
             changePoint(msg){
                 //选择分数
                 if(this.selAll){//select all
                     for(let i = 0 ; i<this.peopleList.length;i++){
-//                        var obj =  this.peopleList[i];
-//                        obj.selectAddScore=msg.value;
-//                        this.$set(this.peopleList,i,obj);
                         this.peopleList[i].selectAddScore=msg.value;
                     }
-
                 }else{
                     //select one
                     this.peopleList[msg.index].selectAddScore=msg.value;
+                    let newObj=
+                    this.$set(this.peopleList,msg.index,)
                 }
             },
             handleRemove(file, fileList) {
@@ -317,7 +308,7 @@
             },
             getDetail(){
                 let url = '';
-                this.mission? url='/missionRecord/getMissionDetail': url = '/actionList/getActionDetail';
+                this.$route.params.mission=='true'? url='/missionRecord/getMissionDetail': url = '/actionList/getActionDetail';
                 let that = this;
                 this.$http.post(url, {
                     id:this.$route.params.id
@@ -335,54 +326,27 @@
                         let minScore = that.detail.minuxScore;
                         let maxScore = that.detail.maxScore;
                         let level = that.detail.scoreLevel;
-                        let max = null;
-                        let min = null;
-                        let numArr = [];
-                        if(maxScore==minScore){
-                            numArr=[minScore]
-                        }else{
-
-                            if(maxScore>minScore){
-                                max = maxScore;
-                                min = minScore;
-                            }else{
-                                max = minScore;
-                                min = maxScore;
-                            }
-                            console.log(max,min)
-                            for(let i = 0; i<=Math.ceil((max-min)/level);i++){
-                                numArr.push(min+i*level)
-                            }
-                            if(max<0&&min<0){
-                                numArr.reverse();
-                            }
-                        }
-                        console.log(numArr)
-                        that.scoreRange = numArr;
+                        that.scoreRange = myTool.getScoreRange(minScore,maxScore,level);
                         // get score select range
 
                         that.peopleList = [];
-                        that.selfInf = {
-                            id:that.userMessage.userId,
-                            userName:that.userMessage.userName,
-                            selectAddScore:that.scoreRange[0]
-                        }
-                        that.peopleList.push(that.selfInf)
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
             },
             subData(){
+                let that = this;
+
                 let score = [];
-                if(this.mission){
+                if(this.$route.params.mission=='true'){
                     score.push(this.detail.score);
                 }else{
                     this.peopleList.forEach(item=>{
                         score.push(item.selectAddScore)
                     })
                 }
-                let that = this;
+
 
                 //审批人
                 let approveUserId = null;
@@ -396,9 +360,14 @@
                 }
                 //被审批人
                 let beApproveUserId = [];
-                this.peopleList.forEach(item=>{
-                    beApproveUserId.push(item.id);
-                })
+                if(this.$route.params.mission=='true'){
+                    beApproveUserId.push(this.userMessage.userId)
+                }else{
+                    this.peopleList.forEach(item=>{
+                        beApproveUserId.push(item.id);
+                    })
+                }
+
                 let copyUserId = [];
                 if(this.chaosongren) {
                     copyUserId = this.chaosongren.split(',')
@@ -419,10 +388,9 @@
                 })
                     .then(function (response) {
                         if(response.data.code=='200000'){
-                            that.$toast('审批成功')
+                            that.$toast('成功')
                             that.$router.go(-1);
                         }
-
                     })
                     .catch(function (error) {
                         console.log(error);

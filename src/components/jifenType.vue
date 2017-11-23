@@ -7,9 +7,9 @@
             </strong>
             <label :for="selId">
                 <span class="fs30 gray" v-if="!selValue">请选择</span>
-                <span class="fs30 " v-else-if="selValue==1">行为积分</span>
-                <span class="fs30 " v-else-if="selValue==2">品德积分</span>
-                <span class="fs30 " v-else-if="selValue==3">业绩积分</span>
+                <span class="fs30 " v-else-if="selValue==3">行为积分</span>
+                <span class="fs30 " v-else-if="selValue==1">品德积分</span>
+                <span class="fs30 " v-else-if="selValue==2">业绩积分</span>
                 <span class="fs30 " v-else-if="selValue==4">基础积分</span>
             </label>
             <label :for="selId" class="fr"><i class="icon iconfont icon-xiala1"></i></label>

@@ -168,8 +168,13 @@
         },
         methods: {
             goApply(item){
-                this.$store.commit('setFromMission');
-                this.$router.push('/apply/'+item.missionId+'/'+item.type);
+                console.log(item);
+                if(item.getStatus==0){
+                    this.$toast('请先领取任务');
+                }else{
+                    this.$router.push('/apply/'+item.missionId+'/'+item.type+'/true');
+                }
+
             },
             go(item){
                 this.active==3?this.active=2:'';

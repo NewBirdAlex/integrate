@@ -18,6 +18,7 @@
                     @imageuploaded="imageuploaded"
                     @imagechanged="imagechanged"
                     compress="60"
+                    :maxFileSize="5242880"
                     inputOfFile="file"
                     :url="url+'/imageUpload/imgUploadFile'" >
                 <i class="icon iconfont icon-upload"></i>
@@ -61,7 +62,11 @@
             height: 2rem;
         }
     }
-
+    .icon-upload{
+        vertical-align: bottom;
+        /*margin-bottom: 0.2rem;*/
+        display: inline-block;
+    }
 </style>
 <script>
     import VueCoreImageUpload from 'vue-core-image-upload'
@@ -87,14 +92,12 @@
             },
             //            上传图片recall
             imageuploaded(res) {
-                console.log(res)
                 let that  = this;
-                this.$store.commit('hideLoading')
-                if (res.code == "200000") {
 
+                if (res.code == "200000") {
+                    this.$store.commit('hideLoading')
                     if(that.imgNum>=9) return
                     that.imgNum+=1;
-                    console.log(that.imgNum)
                     that.imgList .push(res.data.url)
                     that.$emit('getData',this.imgList)
                 }else{
@@ -107,9 +110,10 @@
             // 异常处理
             errorHandle(err) {
                 console.log(err)
-//                console.error(err);
             },
             imagechanged(data){
+                console.log(data)
+                if(data.size>5242880) this.$toast('图片大小超出限制')
                 this.$store.commit('showLoading')
             },
         },

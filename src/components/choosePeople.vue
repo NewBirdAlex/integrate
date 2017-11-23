@@ -55,7 +55,6 @@
             top: 0.2rem;
             width: 1.5rem;
             height: 1rem;
-            -webkit-appearance: none;
             z-index: 100;
             opacity: 0;
         }
@@ -79,6 +78,8 @@
             selId(){
                 return Math.random().toString(36).substr(3)
             }
+        },
+        watch:{
         },
         methods:{
             handleSelect(){

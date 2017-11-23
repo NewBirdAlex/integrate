@@ -6,7 +6,7 @@
             infinite-scroll-immediate-check="true"
             v-if="list.length!=0"
             infinite-scroll-distance="10">
-            <li v-for="(item,index) in list" :key="index" class="marginBottom bgWhite">
+            <router-link tag="li" :to="'/orderDetail/'+item.id+'/1'" v-for="(item,index) in list" :key="index" class="marginBottom bgWhite">
                 <div class="left">
                     <img :src="item.userAvatar" v-if="item.userAvatar"  class="headPicture" alt="">
                     <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
@@ -20,7 +20,7 @@
                         <span class="gray fr">{{item.createDate}}</span>
                     </p>
                 </div>
-            </li>
+            </router-link>
 
             <li class="tac" v-if="loading">
                 <div class="loadmore">

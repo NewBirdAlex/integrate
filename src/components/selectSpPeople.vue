@@ -14,10 +14,11 @@
             </div>
             <div class="fr">
 
-                <label :for="selId" >
+                <label :for="selId" v-if="range.length">
                     {{point}}分
                     <i class="icon iconfont icon-xialakuangtishitubiao"></i>
                 </label>
+                <input type="text" placeholder="请输入分数" class="myInput" v-else>
             </div>
         </div>
 
@@ -28,6 +29,10 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
+    .myInput{
+        width: 2rem;
+        text-align: right;
+    }
     .wrap2{
         position: relative;
         padding:0 0.2rem;
@@ -57,10 +62,12 @@
         }
         select{
             position: absolute;
-            left: 0.5rem;
+            right: 0.4rem;
             top: 0.2rem;
-            width: 1px;
-            height: 1px;
+            width: 1.5rem;
+            height: 1rem;
+            z-index: 100;
+            opacity: 0;
         }
     }
     .icon-xialakuangtishitubiao{

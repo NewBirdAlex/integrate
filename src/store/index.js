@@ -105,21 +105,6 @@ const mutations = {
     showLoading(state){
         state.showLoading = true;
     },
-    setFromMission(state){
-        localStorage.setItem('fromeMission','true')
-        state.mission=true;
-    },
-    getMissionValue(state){
-        if(localStorage.getItem('fromeMission')=='true'){
-            state.mission=true;
-        }
-    },
-    removeMissionValue(state){
-        if(localStorage.getItem('fromeMission')){
-            localStorage.removeItem('fromeMission')
-            state.mission=false;
-        }
-    },
     //获取工作台
     getWorkStation(state){
         if(!state.initPage) {
@@ -187,9 +172,6 @@ const actions = {
     saveSporder:({commit})=>commit('saveSporder'),
     getWorkStation:({commit})=>commit('getWorkStation'),
     getuserBaseInf:({commit})=>commit('getuserBaseInf'),
-    setFromMission:({commit})=>commit('setFromMission'),
-    getMissionValue:({commit})=>commit('getMissionValue'),
-    removeMissionValue:({commit})=>commit('removeMissionValue'),
     logOut:({commit})=>commit('logOut')
 }
 

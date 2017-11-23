@@ -313,7 +313,7 @@ const router = new Router({
             }
         },
         {
-            path: '/apply/:id/:type',
+            path: '/apply/:id/:type/:mission',
             name: 'Apply',
             component: Apply,
             meta:{

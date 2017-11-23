@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div class="" style="padding-bottom: 3rem">
         <!--<h3 class="tac paddingAll ">个人中心</h3>-->
         <div class="paddingAll">
             <div class="pt">

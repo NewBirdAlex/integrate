@@ -4,8 +4,6 @@ export default {
         let str =  val.toString()
         str.length==1?str='0'+str:'';
         return str
-    },
-    changeDate(val){
-
     }
+
 }

@@ -10,30 +10,40 @@
                 <span class="red fr" v-if="orderDetail.checkStatus==3">审批不通过</span>
             </div>
             <ul class="myUl">
-                <li >
+                <li>
                     <span class="gray">审批编号</span>
-                    <span class="fr" >{{orderDetail.approveCode}}</span>
-                </li><li >
+                    <span class="fr">{{orderDetail.approveCode}}</span>
+                </li>
+                <li>
                     <span class="gray">所在部门</span>
-                    <span class="fr" >{{orderDetail.departmentName}}</span>
-                </li><li >
+                    <span class="fr">{{orderDetail.departmentName}}</span>
+                </li>
+                <li>
                     <span class="gray">审批标题</span>
-                    <span class="fr" >{{orderDetail.approveTitle}}</span>
-                </li><li >
+                    <span class="fr">{{orderDetail.approveTitle}}</span>
+                </li>
+                <li>
+                    <span class="gray">审批内容</span>
+                    <span class="fr">{{orderDetail.approveContext}}</span>
+                </li>
+                <li>
                     <span class="gray">审批时间</span>
-                    <span class="fr" >{{orderDetail.approveDate}}</span>
-                </li><li >
+                    <span class="fr">{{orderDetail.approveDate}}</span>
+                </li>
+                <li>
                     <span class="gray">积分类型</span>
-                    <span class="fr" >{{orderDetail.type}}</span>
-                </li><li >
+                    <span class="fr">{{orderDetail.type}}</span>
+                </li>
+                <li>
                     <span class="gray">申请积分</span>
-                    <span class="fr" >{{orderDetail.missionScore}}</span>
-                </li><li >
+                    <span class="fr">{{orderDetail.missionScore}}</span>
+                </li>
+                <li>
                     <span class="gray">备注</span>
-                    <span class="fr" >{{orderDetail.approveRemark}}   </span>
+                    <span class="fr">{{orderDetail.approveRemark}}   </span>
                 </li>
             </ul>
-            
+
             <div class="showImg" v-if="orderDetail.missionPics">
                 <!--<img :src="item"  v-for="item in orderDetail.missionPics.split(',')" alt="">-->
                 <scaleImg :imgList="orderDetail.missionPics.split(',')"></scaleImg>
@@ -89,50 +99,59 @@
 <style scoped lang="less">
     @import "../assets/css/common.less";
 
-    .myUl{
+    .myUl {
         padding-top: 0.2rem;
-        li{
+        li {
             font-size: @fs28;
             padding: 0.1rem 0;
+            overflow: hidden;
+            .fr{
+                width: 4rem;
+                text-align: right;
+            }
         }
     }
-    h3{
+
+    h3 {
         .tac;
-        padding:0.26rem;
+        padding: 0.26rem;
         font-size: 0.34rem;
         color: #323232;
         background: #fafafa;
     }
-    .opBtn{
+
+    .opBtn {
         font-size: @fs30;
         text-align: center;
-        padding:0.3rem 0;
+        padding: 0.3rem 0;
         background: white;
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
-        span{
+        span {
             display: inline-block;
             width: 32%;
             border-right: @border;
-            &:last-child{
+            &:last-child {
                 border-right: none;
             }
         }
     }
 
-    .content{
+    .content {
         .paddingAll;
         background: white;
     }
-    .head{
+
+    .head {
         .borderBottom;
         line-height: 0.9rem;
-        padding:0.2rem 0;
-
-
-        img{
+        padding: 0.2rem 0;
+        .fr{
+//            .marginTop;
+        }
+        img {
             width: 0.9rem;
             height: 0.9rem;
             border-radius: 50%;
@@ -140,14 +159,17 @@
             margin-right: 0.2rem;
             font-size: @fs30;
             transition: all 3s;
+            border: 0;
         }
     }
-    .active{
+
+    .active {
         transform: rotate(1800deg);
     }
-    .showImg{
+
+    .showImg {
         overflow: hidden;
-        img{
+        img {
             float: left;
             width: 1.2rem;
             height: 1.2rem;
@@ -155,6 +177,7 @@
             border-radius: 6px 6px 6px 6px;
         }
     }
+
     .triangle-left {
         width: 0;
         height: 0;
@@ -162,34 +185,35 @@
         border-right: 0.2rem solid white;
         border-bottom: 0.1rem solid transparent;
     }
-    .progress{
+
+    .progress {
         background: #efeff4;
         margin-bottom: 1rem;
         .paddingAll;
-        .prog_list{
+        .prog_list {
             overflow: hidden;
             padding-bottom: 0.2rem;
-            .time{
+            .time {
                 width: 0.58rem;
                 float: left;
                 height: 0.2rem;
-                i{
+                i {
                     margin-top: 0.6rem;
                     display: inline-block;
                 }
             }
-            .content{
+            .content {
                 float: left;
                 width: 6.1rem;
-                .left{
+                .left {
                     display: inline-block;
-                    img{
+                    img {
                         width: 0.9rem;
                         width: 0.9rem;
                         border-radius: 50%;
                     }
                 }
-                .right{
+                .right {
                     display: inline-block;
                     width: 5rem;
                     vertical-align: top;
@@ -197,32 +221,34 @@
                     line-height: 0.4rem;
                     font-size: @fs30;
                     position: relative;
-                    .triangle-left{
+                    .triangle-left {
                         position: absolute;
-                        left:-1.3rem;
-                        top:0.4rem;
+                        left: -1.3rem;
+                        top: 0.4rem;
                     }
-                    p{
+                    p {
                         padding-top: 0.05rem;
-                        &:nth-child(2){
+                        &:nth-child(2) {
                             font-size: @fs28;
-                            span{font-size: @fs24;}
+                            span {
+                                font-size: @fs24;
+                            }
                         }
                     }
                 }
-                .recommend{
+                .recommend {
                     margin-top: 0.2rem;
-                    p{
-                       font-size: @fs30;
+                    p {
+                        font-size: @fs30;
                         line-height: 0.4rem;
                         padding-top: 0.1rem;
                     }
-                    .rec_img{
+                    .rec_img {
                         overflow: hidden;
-                        img{
+                        img {
                             width: 0.8rem;
                             height: 0.8rem;
-                            margin:0.1rem 0.1rem;
+                            margin: 0.1rem 0.1rem;
                         }
                     }
                 }
@@ -233,47 +259,49 @@
 <script>
     import itemList from '../components/itemList.vue'
     import scaleImg from '../components/scaleImg.vue'
+
     export default {
         data() {
             return {
-                active:false,
-                orderDetail:{
-                    userAvatar:'',
-                    missionPics:''
+                active: false,
+                orderDetail: {
+                    userAvatar: '',
+                    missionPics: ''
                 }
             }
         },
-        methods:{
-            addActive(){
-                this.active=true;
+        methods: {
+            addActive() {
+                this.active = true;
             },
-            go(type){
+            go(type) {
                 let that = this;
 
-                if(type==4){
+                if (type == 4) {
                     //cancel
-                    this.$http.post('/missionApprove/copyToMeList', {
-                        id:this.$route.params.id
+                    this.$http.post('/missionApprove/cancelApprove', {
+                        id: this.$route.params.id
                     })
                         .then(function (response) {
-                            if(response.data.code=='200000'){
-                                this.$router.go(-1)
+                            if (response.data.code == '200000') {
+                                that.$toast('撤销成功');
+                                that.$router.go(-1)
                             }
                         })
                         .catch(function (error) {
                             console.log(error);
                         });
-                }else{
-                    this.$store.commit('saveSporder',this.orderDetail)
-                    this.$router.push('/spDetail/'+type+'/'+this.$route.params.id+'/'+this.$route.params.spType);
+                } else {
+                    this.$store.commit('saveSporder', this.orderDetail)
+                    this.$router.push('/spDetail/' + type + '/' + this.$route.params.id + '/' + this.$route.params.spType);
                 }
 
 
             },
-            getDetail(){
+            getDetail() {
                 let that = this;
                 this.$http.post('/missionApprove/approveDetail', {
-                    id:this.$route.params.id
+                    id: this.$route.params.id
                 })
                     .then(function (response) {
                         that.orderDetail = response.data.data;
@@ -283,10 +311,10 @@
                     });
             }
         },
-        mounted(){
+        mounted() {
             this.getDetail();
         },
-        components:{
+        components: {
             itemList,
             scaleImg
         }
