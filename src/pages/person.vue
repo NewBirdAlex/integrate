@@ -34,7 +34,7 @@
 
                 </div>
                 <div class="item">
-                    <router-link to="/missionList">
+                    <router-link to="/missionList/2">
                         <i class="leftPart icon iconfont icon-renwu1"></i>
                         <div class="rightPart">
                             我的任务

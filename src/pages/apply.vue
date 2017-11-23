@@ -19,7 +19,9 @@
                 </div>
                 <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom">
                     <strong class="fs30">积分类型 <span class="red">*</span></strong>
-                    <span class="rightPart fs30 lh40 ">A</span>
+                    <span class="rightPart fs30 lh40 " v-if="detail.type==1">A</span>
+                    <span class="rightPart fs30 lh40 " v-if="detail.type==2">B</span>
+                    <span class="rightPart fs30 lh40 " v-if="detail.type==3">C</span>
                 </div>
             </div>
 
@@ -418,7 +420,7 @@
                     .then(function (response) {
                         that.$toast({
                             message:'提交成功',
-                            duration: 2000
+                            duration: 1000
                         });
                         that.$router.go(-1);
                     })

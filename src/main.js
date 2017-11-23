@@ -7,7 +7,7 @@ import store from './store'
 
 // import vconsole from 'vconsole'
 import "./assets/font/font1/iconfont.css"
-import "./assets/font/font2/iconfont.css"
+// import "./assets/font/font2/iconfont.css"
 
 //reset css inport
 import './assets/css/reset.css'

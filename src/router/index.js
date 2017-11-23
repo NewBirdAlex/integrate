@@ -367,7 +367,7 @@ const router = new Router({
             }
         },
         {
-            path: '/missionList',
+            path: '/missionList/:type',
             name: 'MissionList',
             component: MissionList,
             meta:{

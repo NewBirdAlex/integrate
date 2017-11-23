@@ -19,7 +19,6 @@
                     @imagechanged="imagechanged"
                     compress="60"
                     inputOfFile="file"
-                    :max-file-size="5242880"
                     :url="url+'/imageUpload/imgUploadFile'" >
                 <i class="icon iconfont icon-upload"></i>
             </vue-core-image-upload>
@@ -102,6 +101,12 @@
                         duration: 2000
                     });
                 }
+            },
+            // 异常处理
+            errorHandle(err) {
+                alert(1)
+                console.log(err)
+//                console.error(err);
             },
             imagechanged(data){
 

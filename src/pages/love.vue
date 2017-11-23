@@ -28,7 +28,7 @@
                             </router-link>
                             <div class="fl">
                                 <p><strong>{{item.userName}}</strong></p>
-                                <p class="gray fs30">本月 {{item.userScore}}分</p>
+                                <p class="gray fs30">本月 {{item.allLove}}分</p>
                             </div>
                             <div class="fr  tac marginRight marginLeft">
                                 <p>{{item.loveAdd}}</p>

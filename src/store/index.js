@@ -30,7 +30,7 @@ const state = {
             name:"悬赏任务",
             icon:'icon-renwuxuanshang',
             color:'#feaa3b',
-            router:'/missionList',
+            router:'/missionList/1',
             show:false
         },
         {

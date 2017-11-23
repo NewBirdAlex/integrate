@@ -14,7 +14,7 @@
                     <div @click="goApply(item)" >
                         <p class="fs30">{{item.missionTitle}} <span class="fr blue">+{{item.missionAddScore}}分</span></p>
                         <p class=" fs28">{{item.missionContext}}</p>
-                        <p class=" gray">{{item.missionEndTime}}2017-9-26  13:30 前完成</p>
+                        <p class=" gray lh40" v-if="active==3">{{item.missionEndTime}} 前完成</p>
                     </div>
 
                     <p class=" fs26 gray">
@@ -189,10 +189,6 @@
                 })
                     .then(function (response) {
 
-                        that.$toast({
-                            message: '成功获取任务',
-                            duration: 2000
-                        });
                         that.reset();
                     })
                     .catch(function (error) {
@@ -213,9 +209,10 @@
             },
             getList(){
                 let that = this;
-                console.log(that.pageNumber)
+                let url = '';
+                this.$route.params.type==2?url='/mission/userGetList':url='/missionRecord/userGetMissionList';
                 if(!that.lastPage){
-                    this.$http.post('/missionRecord/userGetMissionList',{
+                    this.$http.post(url,{
                         missionType:this.active,
                         pageNumber: this.pageNumber,
                         pageSize: this.pageSize,

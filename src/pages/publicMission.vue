@@ -93,10 +93,10 @@
                     missionContext: this.inputData[1].content,
                     missionTitle: this.inputData[0].content,
                     missionType: 2,
-                    token:this.userMessage.token ,
+                    token:this.baseInf.token ,
                     type: this.jfType,
                     userCount: this.inputData[3].content,
-                    userId: this.userMessage.userId
+                    userId: this.baseInf.userId
                 })
                     .then(function (response) {
                         console.log(response)

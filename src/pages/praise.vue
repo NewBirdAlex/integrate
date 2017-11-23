@@ -47,7 +47,8 @@
 
             <div class="marginTop"></div>
 
-            <subTitle :content="$route.params.type==1?'表扬员工':'奖扣员工'" :subWord="''" :need="true"></subTitle>
+            <subTitle :content="$route.params.type==1?'表扬员工':'奖扣员工'" v-if="$route.params.type==1" :subWord="'（可用积分'+baseInf.flowScore+')'" :need="true"></subTitle>
+            <subTitle :content="$route.params.type==1?'表扬员工':'奖扣员工'" v-else :subWord="''" :need="true"></subTitle>
 
             <choosePeople v-for="(item,index) in peopleList" :name="item.userName"
                           :key="index" :point="item.selectAddScore" :range="scoreRange"
@@ -115,6 +116,8 @@
     import choosePeople from '../components/choosePeople.vue'
     import chooseStaff from '../components/chooseStaff.vue'
     import jifenType from '../components/jifenType.vue'
+    import { mapGetters } from 'vuex';
+
     export default {
         data() {
             return {
@@ -272,6 +275,11 @@
                     }
                 ]
             }
+        },
+        computed: {
+            ...mapGetters([
+                'baseInf',
+            ])
         },
         components: {
             subTitle,
