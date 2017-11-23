@@ -273,8 +273,12 @@
                     localStorage.removeItem('shenpiren')
                 }else{
                     let that =this;
-                    this.peopleList = data;
-                    this.peopleList.forEach(item=>item.selectAddScore=that.scoreRange[0])
+                    data.forEach(item=>{
+                        item.selectAddScore=that.scoreRange[0];
+                        this.peopleList.push(item);
+                    });
+//                    this.peopleList = data;
+//                    this.peopleList.forEach(item=>item.selectAddScore=that.scoreRange[0])
                 }
 
             },
@@ -291,8 +295,8 @@
                 }else{
                     //select one
                     this.peopleList[msg.index].selectAddScore=msg.value;
-                    let newObj=
-                    this.$set(this.peopleList,msg.index,)
+                    let newObj=this.peopleList[msg.index];
+                    this.$set(this.peopleList,msg.index,newObj)
                 }
             },
             handleRemove(file, fileList) {
@@ -330,6 +334,14 @@
                         // get score select range
 
                         that.peopleList = [];
+                        //默认添加自己
+                         that.selfInf={
+                            userAvatar:that.userMessage.userAvatar,
+                            userName:that.userMessage.userName,
+                            selectAddScore:that.scoreRange[0],
+                             id:that.userMessage.userId
+                        }
+                        that.peopleList.push(that.selfInf)
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -337,7 +349,10 @@
             },
             subData(){
                 let that = this;
-
+                if(that.peopleList.length==0){
+                    this.$toast('请选择至少一名申请人');
+                    return
+                }
                 let score = [];
                 if(this.$route.params.mission=='true'){
                     score.push(this.detail.score);
@@ -346,8 +361,6 @@
                         score.push(item.selectAddScore)
                     })
                 }
-
-
                 //审批人
                 let approveUserId = null;
                 if(this.approveUserList){
@@ -372,7 +385,8 @@
                 if(this.chaosongren) {
                     copyUserId = this.chaosongren.split(',')
                 }
-                console.log(score.join(','))
+                //没有选择任何人的时候默认自己
+                console.log(beApproveUserId)
                 this.$http.post('/missionApprove/submitMissionApprove', {
                     addScore: score.join(','),
                     aimId: this.$route.params.id,
@@ -388,7 +402,10 @@
                 })
                     .then(function (response) {
                         if(response.data.code=='200000'){
-                            that.$toast('成功')
+                            that.$toast({
+                                message:'成功',
+                                duration:1000
+                            })
                             that.$router.go(-1);
                         }
                     })
