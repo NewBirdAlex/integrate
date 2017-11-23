@@ -11,7 +11,7 @@
         <!--</transition>-->
 
         <transition :name="transitionName">
-            <router-view class="child-view"></router-view>
+            <router-view :class="{'child-view':true,'no-trans':ismove}"></router-view>
         </transition>
 
         <loading v-if="showLoading"></loading>
@@ -45,6 +45,7 @@
             return {
                 transitionName: 'slide-left',
                 msg: '',
+                ismove:false,
                 navIndex: 0,
                 navList: [
                     {
@@ -89,39 +90,25 @@
             }
         },
         watch:{
-            $route(to){
-                this.$store.commit('hideLoading');
-                document.body.scrollTop=0;
-                const noncePath = to.fullPath,
-                    format = JSON.stringify([noncePath])
-
-                const KEY = 'history'
-
-                let historyInd = -1, exist;
-
-                if(this.isInitial) {
-                    window.sessionStorage.setItem(KEY, '')
-                }
-                this.isInitial = false
-
-                exist = window.sessionStorage.getItem(KEY) ?
-                    JSON.parse(window.sessionStorage.getItem(KEY)) :
-                    window.sessionStorage.getItem(KEY);
-                if(!exist) {
-                    this.transitionName = 'slide-left'
-                    window.sessionStorage.setItem(KEY, format)
-                } else {
-                    if((historyInd = exist.indexOf(noncePath)) == -1) {
-                        exist.push(noncePath)
-                        this.transitionName = 'slide-left'
-                    } else {
-                        exist.splice(historyInd)
-                        this.transitionName = 'slide-right'
+            '$route'(to, from) {
+                let navs = ['/index','/meWatch','/shopingMall','/aboutMe'];
+                let toInd = navs.indexOf(to.path);
+                let foInd = navs.indexOf(from.path);
+                if(toInd!=-1 && foInd!=-1){
+                    if(toInd > foInd){
+                        this.transitionName = 'slide-left';
+                    }else{
+                        this.transitionName = 'slide-right';
                     }
-                    window.sessionStorage.setItem(KEY, JSON.stringify(exist))
+                    return;
                 }
-
             }
+        },
+        created(){
+            window.addEventListener('touchmove',()=>{this.ismove = true;},false);
+            window.addEventListener('touchend',()=>{
+                setTimeout(()=>{this.ismove = false},250);
+            },false);
         },
         beforeRouteUpdate  (to, from, next) {
 
@@ -134,23 +121,34 @@
     /*animation    */
     .child-view {
         position: absolute;
+        left: 0;
+        top: 0;
         width: 100%;
-        padding-bottom: 1rem;
-        transition: all .8s cubic-bezier(.55, 0, .1, 1) ;
+        height: 100%;
+        transition: all .5s cubic-bezier(.55,0,.1,1);
     }
-
+    .no-trans{
+       transition: all 0s!important;
+    }
     .slide-left-enter, .slide-right-leave-active {
         opacity: 0;
-        /*-webkit-transform: translate(50px, 0);*/
-        /*transform: translate(50px, 0);*/
+        -webkit-transform: translate(100%, 0);
+        transform: translate(100%, 0);
     }
-    .slide-left-enter,.slide-right-enter{
-
-    }
-    .slide-left-leave-active, .slide-right-enter {
+    .slide-left-leave-active,.slide-right-enter {
         opacity: 0;
-        /*-webkit-transform: translate(-50px, 0);*/
-        /*transform: translate(-50px, 0);*/
+        -webkit-transform: translate(-60%, 0);
+        transform: translate(-60%, 0);
+    }
+    .no-trans{
+        transition-duration:0s;
+    }
+    /*控制器*/
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active in below version 2.1.8 */ {
+        opacity: 0;
     }
 
     .nav {

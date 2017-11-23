@@ -19,9 +19,9 @@
                 </div>
                 <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom">
                     <strong class="fs30">积分类型 <span class="red">*</span></strong>
-                    <span class="rightPart fs30 lh40 " v-if="detail.type==1">A</span>
-                    <span class="rightPart fs30 lh40 " v-if="detail.type==2">B</span>
-                    <span class="rightPart fs30 lh40 " v-if="detail.type==3">C</span>
+                    <span class="rightPart fs30 lh40 " v-if="detail.type==1">C</span>
+                    <span class="rightPart fs30 lh40 " v-if="detail.type==2">A</span>
+                    <span class="rightPart fs30 lh40 " v-if="detail.type==3">B</span>
                 </div>
             </div>
 
@@ -418,11 +418,11 @@
                     type:this.$route.params.type,
                 })
                     .then(function (response) {
-                        that.$toast({
-                            message:'提交成功',
-                            duration: 1000
-                        });
-                        that.$router.go(-1);
+                        if(response.data.code=='200000'){
+                            that.$toast('审批成功')
+                            that.$router.go(-1);
+                        }
+
                     })
                     .catch(function (error) {
                         console.log(error);

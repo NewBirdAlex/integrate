@@ -13,7 +13,6 @@
         >
 
             <div class="department" v-if="showDepartment">
-                <h3>选择部门</h3>
                 <ul class="bgWhite ">
                     <li v-for="(item,index) in list" :key="index">
                         {{item.name}}
@@ -72,10 +71,12 @@
         position: fixed;
         background: @grayBg;
         width: 100%;
-        height: 100%;
+        height: 90vh;
         z-index: 10;
         left: 0;
         top: 0;
+        overflow-y: scroll;
+        padding-bottom: 10vh;
         h3 {
             line-height: 0.88rem;
             .tac;
@@ -84,8 +85,17 @@
         }
         .confBtn {
             margin-top: 2rem;
+            position: absolute;
+            bottom: 0;
+            left:0;
+            width: 100%;
+            margin: 0;
+            padding:0;
+            z-index: 10000;
         }
         ul {
+            height: 85vh;
+            overflow-y: scroll;
             li {
                 .paddingAll;
                 .borderBottom;

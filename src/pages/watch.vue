@@ -123,11 +123,11 @@
         line-height: 0.5rem;
     }
     .left{
-        width: 20%;
+        width: 30%;
         .fs28;
     }
     .right{
-        width: 80%;
+        width: 70%;
     }
     .read{
         padding: 0.15rem 0.3rem;

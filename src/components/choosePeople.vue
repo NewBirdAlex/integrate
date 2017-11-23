@@ -55,6 +55,7 @@
             top: 0.2rem;
             width: 1.5rem;
             height: 1rem;
+            -webkit-appearance: none;
             z-index: 100;
             opacity: 0;
         }

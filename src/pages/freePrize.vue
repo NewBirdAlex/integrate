@@ -288,7 +288,6 @@
                 }else{
                     let that =this
                     data.forEach(item=>item.selectAddScore='');
-                    alert(1)
                     this.peopleList = JSON.parse(JSON.stringify(data));
                     this.peopleList.unshift(this.selfInf);
                 }

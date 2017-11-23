@@ -72,8 +72,8 @@
         width: 100%;
         height: 100%;
         .overflow;
-        background: rgba(0, 0, 0, 0.5);
-
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 100;
         .my-swipe {
             position: absolute;
             top: 50%;

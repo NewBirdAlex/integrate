@@ -87,9 +87,11 @@
             },
             //            上传图片recall
             imageuploaded(res) {
+                console.log(res)
                 let that  = this;
-
+                this.$store.commit('hideLoading')
                 if (res.code == "200000") {
+
                     if(that.imgNum>=9) return
                     that.imgNum+=1;
                     console.log(that.imgNum)
@@ -104,12 +106,11 @@
             },
             // 异常处理
             errorHandle(err) {
-                alert(1)
                 console.log(err)
 //                console.error(err);
             },
             imagechanged(data){
-
+                this.$store.commit('showLoading')
             },
         },
         mounted(){

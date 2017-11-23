@@ -176,6 +176,7 @@
                             message:'评论成功',
                             duration:2000
                         });
+                        that.getDetail();
                     })
                     .catch(function (error) {
                         console.log(error);

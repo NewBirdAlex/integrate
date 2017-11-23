@@ -51,7 +51,7 @@
             <subTitle :content="$route.params.type==1?'表扬员工':'奖扣员工'" v-else :subWord="''" :need="true"></subTitle>
 
             <choosePeople v-for="(item,index) in peopleList" :name="item.userName"
-                          :key="index" :point="item.selectAddScore" :range="scoreRange"
+                          :key="index" :showValue="item.selectAddScore" :range="scoreRange"
                           :ind="index"
                           :head="item.userAvatar"
                           ref="choosePeople"
