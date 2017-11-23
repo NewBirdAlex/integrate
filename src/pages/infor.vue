@@ -2,7 +2,8 @@
     <div>
         <div class="head bgWhite paddingAll overflow">
             <div class="left">
-                <img class="headPicture" :src="userInf.userAvatar" alt="">
+                <img class="headPicture" v-if="userInf.userAvatar" :src="userInf.userAvatar" alt="">
+                <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
             </div>
             <div class="right">
                 <p>
@@ -18,9 +19,13 @@
 
         <div class="showList bgWhite paddingAll fs30" v-for="(item,index) in itemList" :key="index" :class="{'marginTop':index==2}" @click="go(item)">
             {{item.name}}
-            <span class="fr blue" v-if="item.right">{{item.right}}</span>
-            <span class="fr rightArrow" v-if="!item.right">
-                <i class=" icon iconfont icon-xiala1"></i>
+
+            <a :href="'tel:'+item.right" class="fr blue" v-if="index==1">{{item.right}}</a>
+            <span v-else>
+                <span class="fr blue" v-if="item.right">{{item.right}}</span>
+                <span class="fr rightArrow" v-else >
+                    <i class=" icon iconfont icon-xiala1"></i>
+                </span>
             </span>
         </div>
     </div>
@@ -79,26 +84,26 @@
                         right:'',
                         router:''
                     },
-                    {
-                        name:'工作日记',
-                        right:'',
-                        router:''
-                    },
-                    {
-                        name:'积分日记',
-                        right:'',
-                        router:''
-                    },
-                    {
-                        name:'抽奖记录',
-                        right:'',
-                        router:''
-                    },
-                    {
-                        name:'积分兑换记录',
-                        right:'',
-                        router:''
-                    }
+//                    {
+//                        name:'工作日记',
+//                        right:'',
+//                        router:''
+//                    },
+//                    {
+//                        name:'积分日记',
+//                        right:'',
+//                        router:''
+//                    },
+//                    {
+//                        name:'抽奖记录',
+//                        right:'',
+//                        router:''
+//                    },
+//                    {
+//                        name:'积分兑换记录',
+//                        right:'',
+//                        router:''
+//                    }
                 ],
                 userInf:{}
             }

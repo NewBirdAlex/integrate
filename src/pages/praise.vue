@@ -2,16 +2,16 @@
     <div>
 
         <div class=" wrap">
-            <div >
-                <label for="selList">
-                    <i class="icon iconfont icon-xiala gray fs30"></i>
-                </label>
-                <select name="" id="selList" v-model="inputData[0].content">
-                    <option value="租房">租房</option>
-                    <option value="煮饭">煮饭</option>
-                    <option value="游泳">游泳</option>
-                </select>
-            </div>
+            <!--<div >-->
+                <!--<label for="selList">-->
+                    <!--<i class="icon iconfont icon-xiala gray fs30"></i>-->
+                <!--</label>-->
+                <!--<select name="" id="selList" v-model="inputData[0].content">-->
+                    <!--<option value="租房">租房</option>-->
+                    <!--<option value="煮饭">煮饭</option>-->
+                    <!--<option value="游泳">游泳</option>-->
+                <!--</select>-->
+            <!--</div>-->
 
             <myInput v-for="(item,index) in inputData" :key="index"
                      :conttitle="item.title"
@@ -34,6 +34,7 @@
                     type="date"
                     ref="picker"
                     @confirm="handleConfirm"
+                    :endDate="new Date()"
                     year-format="{value} 年"
                     month-format="{value} 月"
                     date-format="{value} 日">
@@ -46,7 +47,7 @@
 
             <div class="marginTop"></div>
 
-            <subTitle :content="'表扬员工'" :subWord="''" :need="true"></subTitle>
+            <subTitle :content="$route.params.type==1?'表扬员工':'奖扣员工'" :subWord="''" :need="true"></subTitle>
 
             <choosePeople v-for="(item,index) in peopleList" :name="item.userName"
                           :key="index" :point="item.selectAddScore" :range="scoreRange"
@@ -230,7 +231,47 @@
             }
         },
         mounted(){
+
             this.getScoreRange();
+        },
+        created(){
+            if(this.$route.params.type==1){
+                this.inputData = [
+                    {
+                        title: "表扬标题",
+                        need: true,
+                        ph: "请输入内容",
+                        content: "",
+                        type: 'input'
+                    },
+                    {
+                        title: "表扬内容",
+                        need: true,
+                        ph: "请输入内容",
+                        content: "",
+                        type: 'input',
+                        selRange:[]
+                    }
+                ]
+            }else{
+                this.inputData = [
+                    {
+                        title: "奖扣标题",
+                        need: true,
+                        ph: "请输入内容",
+                        content: "",
+                        type: 'input'
+                    },
+                    {
+                        title: "奖扣内容",
+                        need: true,
+                        ph: "请输入内容",
+                        content: "",
+                        type: 'input',
+                        selRange:[]
+                    }
+                ]
+            }
         },
         components: {
             subTitle,

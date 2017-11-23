@@ -1,11 +1,13 @@
+
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+
+
 // import vconsole from 'vconsole'
 import "./assets/font/font1/iconfont.css"
 import "./assets/font/font2/iconfont.css"
-
 
 //reset css inport
 import './assets/css/reset.css'
@@ -54,7 +56,7 @@ Object.keys(filters).forEach(key => Vue.filter(key, filters[key]));
 //ajax
 import axios from './lib/myAxios'
 Vue.prototype.$http = axios ; //其他页面在使用axios的时候直接  this.$http就可以了
-//ajax
+
 
 //no data
 import myEmpty from './components/empty'

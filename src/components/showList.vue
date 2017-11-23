@@ -1,11 +1,10 @@
 <template>
     <div class="wrap">
-        <img class="head" :src="data.userAvatar" alt="">
+        <img class="head" :src="data.userAvatar||'../assets/img/defaultHead.png'" alt="">
         <div class="right">
             <p>
                 {{data.userName}}
-                <span class="blue fr" v-if="data.addScore>0">+{{data.addScore}}分</span>
-                <span class="blue fr" v-else>-{{data.addScore}}分</span>
+                <span class="blue fr" ><span v-if="data.addScore>0">+</span>{{data.addScore}}分</span>
             </p>
             <p class="gray">{{data.jobTitle}}</p>
             <p>{{data.approveTitle}}</p>

@@ -2,7 +2,8 @@
     <div>
         <div class="content">
             <div class="head fs30">
-                <img :src="orderDetail.userAvatar" alt="">
+                <img :src="orderDetail.userAvatar" v-if="orderDetail.userAvatar" alt="">
+                <img src="../assets/img/defaultHead.png" v-else class="head" alt="">
                 <span>{{orderDetail.userName}}</span>
                 <span class="yellow fr" v-if="orderDetail.checkStatus==1">等待审批</span>
                 <span class="green fr" v-if="orderDetail.checkStatus==2">审批通过</span>
@@ -34,10 +35,11 @@
             </ul>
             
             <div class="showImg" v-if="orderDetail.missionPics">
-                <img :src="item"  v-for="item in orderDetail.missionPics.split(',')" alt="">
+                <!--<img :src="item"  v-for="item in orderDetail.missionPics.split(',')" alt="">-->
+                <scaleImg :imgList="orderDetail.missionPics.split(',')"></scaleImg>
             </div>
         </div>
-        <div class="progress">
+        <div class="progress" v-if="orderDetail.approveUserList&&orderDetail.approveUserList.length">
             <div class="prog_list" v-for="item in orderDetail.approveUserList">
                 <div class="time">
                     <i class="icon iconfont icon-gouxuan blue" v-if="item.checkStatus==0||item.checkStatus==2"></i>
@@ -45,7 +47,10 @@
                     <i class="icon iconfont icon-reject red" v-if="item.checkStatus==3"></i>
                 </div>
                 <div class="content">
-                    <div class="left"><img :src="item.userAvatar" class="headPicture" alt=""></div>
+                    <div class="left">
+                        <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture" alt="">
+                        <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
+                    </div>
                     <div class="right">
                         <p class="overflow">
                             {{item.userName}}
@@ -66,7 +71,8 @@
                             {{item.context}}
                         </p>
                         <div class="rec_img" v-if="item.pics">
-                            <img :src="item" alt="" v-for="item in item.pics.split(',')">
+                            <!--<img :src="item" alt="" v-for="item in item.pics.split(',')">-->
+                            <scaleImg :imgList="item.pics.split(',')"></scaleImg>
                         </div>
                     </div>
                 </div>
@@ -226,6 +232,7 @@
 </style>
 <script>
     import itemList from '../components/itemList.vue'
+    import scaleImg from '../components/scaleImg.vue'
     export default {
         data() {
             return {
@@ -241,8 +248,27 @@
                 this.active=true;
             },
             go(type){
-                this.$store.commit('saveSporder',this.orderDetail)
-                this.$router.push('/spDetail/'+type+'/'+this.$route.params.id+'/'+this.$route.params.spType);
+                let that = this;
+
+                if(type==4){
+                    //cancel
+                    this.$http.post('/missionApprove/copyToMeList', {
+                        id:this.$route.params.id
+                    })
+                        .then(function (response) {
+                            if(response.data.code=='200000'){
+                                this.$router.go(-1)
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }else{
+                    this.$store.commit('saveSporder',this.orderDetail)
+                    this.$router.push('/spDetail/'+type+'/'+this.$route.params.id+'/'+this.$route.params.spType);
+                }
+
+
             },
             getDetail(){
                 let that = this;
@@ -261,7 +287,8 @@
             this.getDetail();
         },
         components:{
-            itemList
+            itemList,
+            scaleImg
         }
     }
 </script>

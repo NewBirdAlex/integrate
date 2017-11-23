@@ -298,10 +298,10 @@
                 this.searchContext = '';
             },
             confirmInput(){
+                this.reset();
                 //确定输入内容
                 this.showWrap = false;
                 if(!this.searchContext) return
-                this.pageNumber=1;
                 this.getList();
 
                 //保存历史记录
@@ -328,6 +328,7 @@
             confirmSelect(){
                 this.showWrap = false;
                 this.pageNumber=1;
+                this.reset();
                 this.getList();
             },
             chooseType(item,index){
@@ -347,6 +348,7 @@
             changeStatu(msg){
                 this.spType = msg;
                 this.reset();
+                this.getList();
             },
             handlehide(msg){
                 if(msg=='search'){
@@ -359,6 +361,8 @@
             loadMore() {
                 if(!this.lastPage){
                     this.getList();
+                }else{
+                    this.$toast('已加载所有数据');
                 }
 
             },
@@ -366,7 +370,7 @@
                 this.pageNumber=1;
                 this.lastPage=false;
                 this.orderList=[];
-                this.getList();
+
             },
             getList(){
                 //different type
@@ -387,16 +391,13 @@
                     rootId:this.rootId
                 })
                     .then(function (response) {
-                        if(response.data.data.code=200000){
-                            that.pageNumber+=1;
-                            if(response.data.data.length){
-                                that.orderList = [];
-                            }
-                            that.orderList = that.orderList.concat(response.data.data.content);
-                            //last page
-                            response.data.data.last? that.lastPage=true:'';
-                            that.loading = false;
-                        }
+                        that.pageNumber+=1;
+                        that.orderList = that.orderList.concat(response.data.data.content);
+
+
+                        //last page
+                        response.data.data.last? that.lastPage=true:'';
+                        that.loading = false;
 
                     })
                     .catch(function (error) {
@@ -410,7 +411,10 @@
             this.showWrap=false;
 
             //get history
-            this.history = localStorage.getItem('spHistory').split(',');
+            if(localStorage.getItem('spHistory')){
+                this.history = localStorage.getItem('spHistory').split(',');
+
+            }
         },
         components:{
             showList

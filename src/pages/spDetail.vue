@@ -15,7 +15,7 @@
                           :ind="index" :head="item.userAvatar"
                             :checkStatus="item.checkStatus"
                           @changePoint="changePoint">
-                <span class="cl border "  @click="delPerson(index)"><i class="icon iconfont icon-gouxuan fs34"></i></span>
+                <span class="cl" :class="{'border':!item.select}"  @click="selPerson(item)"><i class="icon iconfont icon-gouxuan " v-if="item.select"></i></span>
             </selectSpPeople>
 
             <subTitle :content="'审批备注'"></subTitle>
@@ -38,9 +38,16 @@
 
         width: 0.4rem;
         height: 0.4rem;
+        display: inline-block;
         .tac;
+        vertical-align: middle;
         line-height: 0.4rem;
         border-radius: 50%;
+        .overflow;
+        i{
+            font-size: 0.4rem;
+            display: inline-block;
+        }
     }
     .wrap{
         background:@grayBg;
@@ -97,7 +104,8 @@
                 userName:this.spOrder.userName,
                 addScore:this.spOrder.missionScore,
                 id:this.$route.params.id,
-                userAvatar:this.spOrder.userAvatar
+                userAvatar:this.spOrder.userAvatar,
+                select:true
             }
             this.peopleList.unshift(selfData)
 
@@ -110,10 +118,35 @@
                 this.$http.post('/module/getModuleDetail', {
                 })
                     .then(function (response) {
-                        for(let i = 0 ; i<=(response.data.data.moduleDetail.maxScore-response.data.data.moduleDetail.minuxScore)/response.data.data.moduleDetail.level ; i++){
-                            that.scoreRange.push(response.data.data.moduleDetail.minuxScore+i*response.data.data.moduleDetail.level)
+
+                        // get score select range
+                        let minScore = response.data.data.moduleDetail.minuxScore;
+                        let maxScore = response.data.data.moduleDetail.maxScore;
+                        let level = response.data.data.moduleDetail.level;
+                        let max = null;
+                        let min = null;
+                        let numArr = [];
+                        if(maxScore==minScore){
+                            that.scoreRange=[minScore]
+                        }else{
+
+                            if(maxScore>minScore){
+                                max = maxScore;
+                                min = minScore;
+                            }else{
+                                max = minScore;
+                                min = maxScore;
+                            }
+                            console.log(min)
+                            for(let i = 0; i<=Math.ceil((max-min)/level);i++){
+                                numArr.push(min+i*level)
+                            }
+                            if(max<0&&min<0){
+                                numArr.reverse();
+                            }
                         }
-                        console.log(that.scoreRange)
+                        that.scoreRange = numArr;
+                        // get score select range
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -127,14 +160,15 @@
                     pageSize: this.pageSize
                 })
                     .then(function (response) {
+                        response.data.data.content.forEach(item=>item.select=false);
                         that.peopleList = that.peopleList.concat(response.data.data.content) ;
+
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
             },
             getData(data) {
-                console.log(data);
                 this.inputData[data.index].content = data.content;
             },
             confirmHandle(){
@@ -144,18 +178,11 @@
                 let otherScores = [];
 
                 this.peopleList.forEach(item=>{
-                    if(item.id == this.$route.params.id){
-
-                        if(bol){
-                            otherIds.push(item.id);
-                            otherScores.push(item.addScore)
-                        }
-                        bol = false;
-                    }else{
+                    if(item.select){
                         otherIds.push(item.id);
                         otherScores.push(item.addScore)
                     }
-                })
+                });
                 this.$http.post('/missionApprove/approveById', {
                     approveRemark: this.noteContent,
                     checkedStatus: this.$route.params.type,
@@ -165,13 +192,15 @@
                     pics: this.imgList
                 })
                     .then(function (response) {
-//                        that.$router.push('/spList/'+that.$route.params.spType);
-                        that.$router.go(-2);
+
+                        if(response.data.code=='200000'){
+                            that.$toast('审批成功');
+                            that.$router.go(-2);
+                        }
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
-
             },
 //            上传图片recall
             imageuploaded(res) {
@@ -179,12 +208,11 @@
                     this.src = res.data.src;
                 }
             },
-            delPerson(index){
-                this.peopleList.splice(index, 1)
+            selPerson(item){
+                item.select=!item.select;
             },
             changePoint(msg){
-                console.log(msg)
-                this.peopleList[msg.index].point=msg.value;
+                this.peopleList[msg.index].addScore=msg.value;
             }
         },
         components: {

@@ -30,7 +30,8 @@
                 <div class="list marginBottom" v-if="chooseNum">
                     <span class="left fl sg tac"></span>
                     <div class="right fl">
-                        <img :src="selfInfo.userAvatar" class="headPicture fl marginRight"  alt="">
+                        <img :src="selfInfo.userAvatar" v-if="selfInfo.userAvatar" class="headPicture fl marginRight"  alt="">
+                        <img src="../assets/img/defaultHead.png" v-else  class="headPicture fl marginRight" alt="">
                         <div class="fl md">
                             <p class="fs30">{{selfInfo.userName}}</p>
                             <div class="gray fs28">

@@ -3,7 +3,8 @@
         <div class="inner">
 
             <slot></slot>
-            <img :src="head" class="headPicture" alt="">
+            <img :src="head" v-if="head" class="headPicture" alt="">
+            <img src="../assets/img/defaultHead.png" class="headPicture" v-else alt="">
             <div style="display: inline-block; line-height: 0.4rem;vertical-align: middle; text-align: left">
                 {{name}} <br>
                 <span class="yellow " v-if="checkStatus==0">提交审批</span>
@@ -12,8 +13,11 @@
                 <span class="red " v-if="checkStatus==3">审批不通过</span>
             </div>
             <div class="fr">
-                {{point}}分
-                <label :for="selId" ><i class="icon iconfont icon-xialakuangtishitubiao"></i></label>
+
+                <label :for="selId" >
+                    {{point}}分
+                    <i class="icon iconfont icon-xialakuangtishitubiao"></i>
+                </label>
             </div>
         </div>
 
@@ -80,9 +84,7 @@
         },
         methods:{
             handleSelect(){
-                console.log(this.selValue)
-                this.point = this.selValue;
-                this.$emit('changePoint',{index:this.ind,value:this.point});
+                this.$emit('changePoint',{index:this.ind,value:this.selValue});
             }
         },
         mounted(){

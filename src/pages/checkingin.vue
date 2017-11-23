@@ -1,7 +1,7 @@
 <template>
     <div>
         <router-view></router-view>
-        <ul class=" bgWhite tac">
+        <ul class=" bgWhite tac" v-if="this.show">
             <router-link to="/checkingIn/clockIn" tag="li" active-class="blue"> <i class="icon iconfont icon-dingwei"></i> <p>打卡</p></router-link>
             <router-link to="/checkingIn/checkingRec" tag="li" active-class="blue"> <i class="icon iconfont icon-tongji1"></i> <p>打卡记录</p></router-link>
         </ul>
@@ -30,8 +30,11 @@
     export default {
         data() {
             return {
-
+                show:false
             }
+        },
+        mounted(){
+            this.show=true;
         }
     }
 </script>

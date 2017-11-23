@@ -1,7 +1,10 @@
 <template>
     <div>
         <div class="head  tac bgWhite paddingAll borderBottom">
-            <div><img :src="userInf.userAvatar" alt=""></div>
+            <div>
+                <img :src="userInf.userAvatar" v-if="userInf.userAvatar" alt="">
+                <img src="../assets/img/defaultHead.png" v-else  alt="">
+            </div>
             <p>{{userInf.userName}}的基础信息</p>
             <p><span class="blue">基础积分：{{userInf.baseScore}}</span></p>
         </div>
@@ -9,15 +12,15 @@
             <i class="icon iconfont icon-job fs36"></i>
             <span>职位：{{userInf.jobMap.jobTitle}}</span>
             <span class="fr">
-                +{{userInf.jobMap.jobScore}}
+                +{{userInf.jobMap.jobScore}}分
             </span>
         </div>
-        <div class="paddingAll bgWhite fs30 borderBottom">
+        <div class="paddingAll bgWhite fs30 borderBottom" v-if="userInf.jobLevelMap.jobLevel">
             <i class="icon iconfont icon-wujiaoxing fs36"></i>
             <span>职位星级</span>
-            <span class="fs36">
-                <i class="icon iconfont icon-mg-star fs36" style="font-size: 0.5rem" v-for="i in userInf.jobLevelMap.jobLevel"></i>
-                <i class="icon iconfont icon-wujiaoxing fs36" v-for="i in 5-userInf.jobLevelMap.jobLevel"></i>
+            <span class="fs36" >
+                <i class="icon iconfont icon-mg-star fs36" style="font-size: 0.5rem"  v-for="(item,index) in userInf.jobLevelMap.jobLevel" :key="index"></i>
+                <i class="icon iconfont icon-wujiaoxing fs36" v-for="(item,index) in 5-userInf.jobLevelMap.jobLevel" :key="index"></i>
 
             </span>
             <span class="fr">
@@ -29,9 +32,11 @@
             <span>工龄奖励</span>
             <span class="gray fs26">（{{userInf.entryTime}}）</span>
         </div>
-        <ul class="praise">
+        <ul class="praise" v-if="userInf.jobYearList">
             <li v-for="(item,index) in userInf.jobYearList" :key="index"><i></i>{{item.jobYearTitle}}</li>
+            <p v-if="!userInf.jobYearList.length" class="gray "> 暂无</p>
         </ul>
+
         <div class="paddingAll bgWhite fs30 borderBottom marginTop">
             <i class="icon iconfont icon-education fs36"></i>
             <span>学历：{{userInf.eduMap.eduTitle}}</span>
@@ -39,7 +44,7 @@
                 +{{userInf.eduMap.eduScore}}
             </span>
         </div>
-        <div class="paddingLeft  borderBottom bgWhite overflow mulItem fs30">
+        <div class="paddingLeft  borderBottom bgWhite overflow mulItem fs30" v-if="userInf.techList">
             <div class="left paddingTop paddingBottom">
                 <i class="icon iconfont icon-zhicheng fs36"></i>
                 <span>职称：</span>
@@ -49,9 +54,10 @@
                     {{item.techTitle}}
                     <span class="fr">+{{item.techScore}}分</span>
                 </div>
+                <div  v-if="!userInf.techList.length" class="gray lh50 marginTop"> 暂无</div>
             </div>
         </div>
-        <div class="paddingLeft  borderBottom bgWhite overflow mulItem fs30">
+        <div class="paddingLeft  borderBottom bgWhite overflow mulItem fs30" v-if="userInf.honorList">
             <div class="left paddingTop paddingBottom">
                 <i class="icon iconfont icon-renwu1 fs36"></i>
                 <span>荣誉：</span>
@@ -63,7 +69,7 @@
                 </div>
             </div>
         </div>
-        <div class="paddingLeft  borderBottom bgWhite overflow mulItem fs30">
+        <div class="paddingLeft  borderBottom bgWhite overflow mulItem fs30" v-if="userInf.skillList">
             <div class="left paddingTop paddingBottom">
                 <i class="icon iconfont icon-techang fs36"></i>
                 <span>特长：</span>
@@ -73,6 +79,7 @@
                     {{item.skillTitle}}
                     <span class="fr">+{{item.skillScore}}分</span>
                 </div>
+                <div  v-if="!userInf.skillList.length" class="gray lh50 marginTop"> 暂无</div>
             </div>
         </div>
     </div>
@@ -146,7 +153,26 @@
     export default {
         data() {
             return {
-                userInf:{}
+                jobLevel:[],
+                userInf:{
+                    baseScore:'',
+                    code:'',
+                    eduMap:'',
+                    entryTime:"",
+                    honorList:[],
+                    jobLevelMap:{},
+                    jobMap:{
+                        jobScore: 1800,
+                        jobTitle: "职位积分"
+                    },
+                    jobYearList:[],
+                    skillList:[],
+                    techList:[],
+                    userAvatar:"",
+                    userId:'',
+                    userName:"",
+                    userScore:''
+                }
             }
         },
         methods:{
@@ -157,7 +183,10 @@
                 })
                     .then(function (response) {
                         if(response.data.data.code=200000){
-                            that.userInf = response.data.data
+                            that.$nextTick(()=>{
+                                that.userInf = response.data.data;
+                            })
+
                         }
                     })
                     .catch(function (error) {

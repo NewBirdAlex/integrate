@@ -1,30 +1,23 @@
 <template>
     <div>
 
-        <div class="wrap">
-            <div class="loader">
-                <div class="loader-inner ball-triangle-path">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
+        <div class="loader">
+            <div class="loader-inner ball-triangle-path">
+                <div></div>
+                <div></div>
+                <div></div>
             </div>
         </div>
     </div>
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-    .wrap{
-        position: fixed;
-        top: 0;
-        left:0;
-        width: 100%;
-        height: 100%;
-        /*background: rgba(0,0,0,0.7);*/
-        z-index: 1000;
-        .tac;
-    }
+
     .loader {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
         box-sizing: border-box;
         display: flex;
         flex: 0 1 auto;
@@ -36,8 +29,6 @@
         height: 200px;
         align-items: center;
         justify-content: center;
-        margin:0 auto;
-        margin-top: 45%;
     }
 
     @keyframes ball-triangle-path-1 {

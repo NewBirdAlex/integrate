@@ -30,9 +30,10 @@
 
             <subTitle :content="''" :subWord="'(如果对审批项目积分有异议，请修改提交二次审批)'" :need="false"></subTitle>
             <div class="bgWhite paddingAll" v-if="!getRange">
-                <img :src="detail.userAvatar" class="headPicture marginRight" alt="">
+                <img :src="detail.userAvatar" v-if="detail.userAvatar" class="headPicture marginRight" alt="">
+                <img src="../assets/img/defaultHead.png" v-else class="headPicture marginRight" alt="">
                 <span class="fs36">{{detail.userName}}</span>
-                <input type="text" class="fr fs36 marginTop" placeholder="输入积分" value="80" style="border: none;width:3rem;background: none;text-align: right;outline: none">
+                <input type="text" class="fr fs36" placeholder="输入积分" value="80" style="border: none;width:3rem;background: none;text-align: right;outline: none">
             </div>
             <choosePeople v-if="getRange" v-for="(item,index) in peopleList" :name="item.userName"
                           :key="index" :point="item.selectAddScore" :range="scoreRange"
@@ -77,7 +78,8 @@
                                 {{item.context}}
                             </p>
                             <div class="rec_img" v-if="item.pics">
-                                <img :src="item" alt="" v-for="item in item.pics.split(',')">
+                                <!--<img :src="item" alt="" v-for="item in item.pics.split(',')">-->
+                                <scaleImg :imgList="item.pics.split(',')"></scaleImg>
                             </div>
                         </div>
                     </div>
@@ -288,6 +290,8 @@
     import chooseStaff from '../components/chooseStaff.vue'
     import uploadImg from '../components/uploadImg.vue'
     import jifenType from '../components/jifenType.vue'
+    import scaleImg from '../components/scaleImg.vue'
+
     import { mapGetters } from 'vuex';
     export default {
         data() {
@@ -441,7 +445,7 @@
                 }
                 this.$http.post('/missionApprove/submitMissionApprove', {
                     addScore: score.join(','),
-                    aimId: this.$route.params.id,
+                    aimId: this.detail.aimId,
                     approveContext: this.detail.approveContext,
                     approveRemark: this.detail.approveRemark,
                     approveTitle: this.detail.approveTitle,
@@ -487,6 +491,7 @@
             uploadImg,
             choosePeople,
             jifenType,
+            scaleImg,
             chooseStaff
         }
     }

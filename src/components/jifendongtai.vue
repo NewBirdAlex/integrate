@@ -18,17 +18,18 @@
                     <div class="paddingAll borderBottom">
                         <div class="showdt">
                             <div class="left">
-                                <img :src="item.userAvatar" alt="">
+                                <img :src="item.userAvatar" v-if="item.userAvatar" alt="">
+                                <img src="../assets/img/defaultHead.png" alt="" v-else >
                             </div>
                             <div class="right">
                                 <h4 class="lh40">
                                     <strong>{{item.userName}}</strong>
                                     <span class="fr blue">
                                         <span class="marginAll"><span v-if="item.addScore>0">+</span>{{item.addScore}}</span>
-                                        <span v-if="item.scoreType==1">品德分</span>
-                                        <span v-if="item.scoreType==2">业绩分</span>
-                                        <span v-if="item.scoreType==3">行为分</span>
-                                        <span v-if="item.scoreType==4">基础积分分</span>
+                                        <span v-if="item.scoreType==1">A分</span>
+                                        <span v-if="item.scoreType==2">B分</span>
+                                        <span v-if="item.scoreType==3">C分</span>
+                                        <span v-if="item.scoreType==4">基础分</span>
                                     </span>
                                 </h4>
                                 <p class="gray lh50">{{item.jobTitle}}</p>
@@ -37,7 +38,8 @@
                                     {{item.approveContext}}
                                 </p>
                                 <div class="cp" v-if="item.approvePics">
-                                    <img :src="item.approvePics.split(',')"  alt="">
+                                    <!--<img :src="item.approvePics.split(',')"  alt="">-->
+                                    <scaleImg :imgList="item.approvePics.split(',')"></scaleImg>
                                 </div>
                                 <p class="gray">
                                     <i class="icon iconfont icon-shijian"></i>
@@ -126,6 +128,7 @@
 </style>
 <script>
     import { mapGetters } from 'vuex';
+    import scaleImg from '../components/scaleImg.vue'
     export default {
         data() {
             return {
@@ -141,6 +144,9 @@
             ...mapGetters([
                 'userMessage',
             ])
+        },
+        components:{
+            scaleImg
         },
         mounted(){
             this.getList();

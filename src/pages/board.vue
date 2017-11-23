@@ -12,38 +12,60 @@
         </div>
         <myEmpty v-if="!list.length"></myEmpty>
         <!--loadmore-->
-        <div style="height: 9rem;overflow: scroll;" class="marginTop">
-            <mt-loadmore
-                    :bottom-all-loaded="allLoaded "
-                         :bottom-method="loadBottom"
-                         ref="loadmore"
-            >
-                <ul class="">
-                    <router-link tag="li" :to="'/infor/'+item.id" v-for="(item,index) in list" :key="index">
-                        <div class="bgWhite listWrap" >
-                            <span>
-                                <i v-if="index>=4||index==0">{{index+1}}</i>
-                                    <i class="icon iconfont " :class="{'icon-jin':index==1,'icon-jin icon-tong':index==2,'icon-yin':index==3}"
-                                       v-if="index<4"></i>
-                            </span>
-                            <span><img :src="item.userAvatar" class="headPicture" alt=""></span>
-                            <span>{{item.userName}}</span>
-                            <span>{{item.addScore}}</span>
-                            <span>{{item.minusScore}}</span>
-                            <span class="blue ">{{item.plusScore}}</span>
-                        </div>
-                    </router-link>
-                </ul>
-                <div slot="top" class="mint-loadmore-top">
-                    <span v-show="topStatus !== 'loading'" :class="{ 'rotate': topStatus === 'drop' }">↓</span>
-                    <span v-show="topStatus === 'loading'">Loading...</span>
-                </div>
-            </mt-loadmore>
+        <!--<div style="height: 9rem;overflow: scroll;" class="marginTop">-->
+            <!--<mt-loadmore-->
+                    <!--:bottom-all-loaded="allLoaded "-->
+                         <!--:bottom-method="loadBottom"-->
+                         <!--ref="loadmore"-->
+            <!--&gt;-->
+                <!--<ul class="">-->
+                    <!--<router-link tag="li" :to="'/infor/'+item.appUserId" v-for="(item,index) in list" :key="index">-->
+                        <!--<div class="bgWhite listWrap tal" >-->
+                            <!--<span>-->
+                                <!--<i v-if="index>=3">{{index+1}}</i>-->
+                                    <!--<i class="icon iconfont " :class="{'icon-jin':index==0,'icon-jin icon-tong':index==1,'icon-yin':index==2}"-->
+                                       <!--v-if="index<3"></i>-->
+                            <!--</span>-->
+                            <!--<span>-->
+                                <!--<img :src="item.userAvatar||'../assets/img/defaultHead.png'"  class="headPicture" alt="">-->
+                            <!--</span>-->
+                            <!--<span>{{item.userName}}</span>-->
+                            <!--<span>{{item.addScore}}</span>-->
+                            <!--<span>{{item.minusScore}}</span>-->
+                            <!--<span class="blue ">{{item.plusScore}}</span>-->
+                        <!--</div>-->
+                    <!--</router-link>-->
+                <!--</ul>-->
+                <!--<div slot="top" class="mint-loadmore-top">-->
+                    <!--<span v-show="topStatus !== 'loading'" :class="{ 'rotate': topStatus === 'drop' }">↓</span>-->
+                    <!--<span v-show="topStatus === 'loading'">Loading...</span>-->
+                <!--</div>-->
+            <!--</mt-loadmore>-->
 
-        </div>
+        <!--</div>-->
 
         <!--loadmore-->
-
+        <ul
+                v-infinite-scroll="loadBottom"
+                infinite-scroll-disabled="loading"
+                infinite-scroll-distance="10">
+            <router-link tag="li" :to="'/infor/'+item.appUserId" v-for="(item,index) in list" :key="index">
+                <div class="bgWhite listWrap tal" >
+                            <span>
+                                <i v-if="index>=3">{{index+1}}</i>
+                                    <i class="icon iconfont " :class="{'icon-jin':index==0,'icon-jin icon-tong':index==1,'icon-yin':index==2}"
+                                       v-if="index<3"></i>
+                            </span>
+                    <span>
+                                <img :src="item.userAvatar||'../assets/img/defaultHead.png'"  class="headPicture" alt="">
+                            </span>
+                    <span>{{item.userName}}</span>
+                    <span>{{item.addScore}}</span>
+                    <span>{{item.minusScore}}</span>
+                    <span class="blue ">{{item.plusScore}}</span>
+                </div>
+            </router-link>
+        </ul>
     </div>
 </template>
 <style scoped lang="less">
@@ -107,7 +129,7 @@
                 endTime:'',
                 allLoaded:false,
                 pageNumber:1,
-                pageSize:10,
+                pageSize:20,
                 lastPage:false,
                 loading:false,
                 list: [],
@@ -122,10 +144,16 @@
         },
         watch:{
             selUserName(val){
-                this.getList();
+
+                this.searchByName();
             }
         },
         methods: {
+            searchByName(){
+//                if(!this.selUserName) return;
+                this.pageNumber=1;
+                this.getList();
+            },
             collectData(msg){
                 //获取搜索栏的数据
                 console.log(msg)
@@ -141,7 +169,6 @@
                  // 加载更多数据
                 //this.allLoaded = true;// 若数据已全部获取完毕
                 //this.$refs.loadmore.onBottomLoaded();
-                console.log(3)
                 if(!this.lastPage){
                     this.getList();
                     this.pageNumber+=1;
@@ -155,7 +182,7 @@
                     departmentId: this.departmentId,
                     jobId:this.jobId,
                     endTime:this.endTime,
-                    type:this.type,
+                    scoreType:this.type,
                     startTime:this.startTime,
                     userName:this.selUserName,
                     pageNumber: this.pageNumber,

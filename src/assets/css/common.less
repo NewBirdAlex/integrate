@@ -23,7 +23,7 @@
 
 bordy{color:@black;}
 //border
-@border:1px solid #e1e1e1;
+@border:0.5px solid #e1e1e1;
 
 
 //common class
@@ -34,9 +34,11 @@ bordy{color:@black;}
 .red{color:@red;}
 .green{color:@green;}
 .grayBg{background:@grayBg}
+.blueBg{background: @blue;color: white;}
 .fr{float:right;}
 .fl{float:left}
 .tac{text-align: center}
+.tal{text-align: left}
 .tar{text-align: right}
 .paddingAll{padding:0.3rem 0.2rem}
 .paddingLeft{padding-left: 0.2rem}
@@ -53,6 +55,7 @@ bordy{color:@black;}
 .marginLeft{margin-left: 0.2rem;}
 .marginHor{margin:0 0.2rem}
 .noMargin{margin: 0;}
+.vam{vertical-align: middle}
 .bgWhite{background: white}
 .overflow{overflow: hidden}
 .borderRadius{border-radius: 0.08rem}
@@ -116,5 +119,13 @@ i{vertical-align: middle;}
   .paddingAll;
 }
 
+.timepicker{
+  position: absolute;
+  let:0;
+  top:0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
 
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="bgWhite">
+    <div class="bgWhite"style="min-height: 100vh">
 
         <ul
                 v-infinite-scroll="loadMore"
@@ -9,7 +9,8 @@
                 <div class="overflow ">
                     <span class="blue fl left">{{index+1}}</span>
                     <div class="right">
-                        <img :src="item.addUserAvatar" class="headPicture marginRight" alt="">
+                        <img :src="item.addUserAvatar" v-if="item.addUserAvatar" class="headPicture marginRight" alt="">
+                        <img src="../assets/img/defaultHead.png" v-else class="headPicture marginRight" alt="">
                         <span class="fs36">{{item.addUserName}}</span>
                         <span class="fr blue">
                             <i class="icon iconfont icon-aixin-copy red marginRight"></i>

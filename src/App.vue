@@ -80,6 +80,7 @@
         },
         mounted(){
             this.$store.commit('getLocalUserMessage')
+            this.$store.commit('getWorkStation')
         },
         methods: {
             handleClick(item, index) {
@@ -90,6 +91,7 @@
         watch:{
             $route(to){
                 this.$store.commit('hideLoading');
+                document.body.scrollTop=0;
                 const noncePath = to.fullPath,
                     format = JSON.stringify([noncePath])
 
@@ -139,16 +141,16 @@
 
     .slide-left-enter, .slide-right-leave-active {
         opacity: 0;
-        -webkit-transform: translate(50px, 0);
-        transform: translate(50px, 0);
+        /*-webkit-transform: translate(50px, 0);*/
+        /*transform: translate(50px, 0);*/
     }
     .slide-left-enter,.slide-right-enter{
 
     }
     .slide-left-leave-active, .slide-right-enter {
         opacity: 0;
-        -webkit-transform: translate(-50px, 0);
-        transform: translate(-50px, 0);
+        /*-webkit-transform: translate(-50px, 0);*/
+        /*transform: translate(-50px, 0);*/
     }
 
     .nav {

@@ -3,11 +3,15 @@
         <div class="inner">
 
             <slot></slot>
-            <img :src="head" class="headPicture" alt="">
+            <img :src="head" v-if="head" class="headPicture" alt="">
+            <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
             <span>{{name}}</span>
             <div class="fr">
-                {{point}}分
-                <label :for="selId" ><i class="icon iconfont icon-xialakuangtishitubiao"></i></label>
+
+                <label :for="selId" >
+                    {{showValue}}分
+                    <i class="icon iconfont icon-xialakuangtishitubiao"></i>
+                </label>
             </div>
         </div>
 
@@ -64,6 +68,7 @@
     export default {
         data() {
             return {
+                showPoint:'',
                 selValue:""
             }
         },
@@ -75,18 +80,18 @@
         methods:{
             handleSelect(){
                 console.log(this.selValue)
-                this.point = this.selValue;
-                this.$emit('changePoint',{index:this.ind,value:this.point});
+                this.showPoint = this.selValue;
+                this.$emit('changePoint',{index:this.ind,value:this.selValue});
             }
         },
         mounted(){
-//            this.showValue = this.point;
+            this.showPoint = this.range[0];
         },
         props:[
             "name",
-            'point',
             'range',
             'ind',
+            'showValue',
             'head'
         ]
     }

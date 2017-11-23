@@ -2,11 +2,9 @@
     <div>
         <div class="slide">
             <mt-swipe :auto="4000">
-                <mt-swipe-item>
-                    <img src="../assets/img/1.jpg" alt="">
+                <mt-swipe-item v-for="(item,index) in swipeList" :key='index'>
+                    <img :src="item.cover" alt="">
                 </mt-swipe-item>
-                <mt-swipe-item><img src="../assets/img/2.jpg" alt=""></mt-swipe-item>
-                <mt-swipe-item><img src="../assets/img/3.jpg" alt=""></mt-swipe-item>
             </mt-swipe>
         </div>
         <div class="normalTille">审批日记</div>
@@ -20,20 +18,22 @@
                 <p>{{item.name}}</p>
             </router-link>
         </ul>
-        <div class="normalTille">管理应用（仅管理员可见）</div>
-        <ul class="itemList ">
-            <router-link :to="item.router" tag="li" v-for="(item,index) in subList" :key="index" class="vpadding">
-                <!--<span class="hline"></span>-->
-                <span class="vline"></span>
-                <p > <i class="icon iconfont " :class="item.icon" :style="{color:item.color}"></i></p>
-                <p>{{item.name}}</p>
-            </router-link>
-        </ul>
+        <div v-if="userMessage.isAdmin!=0">
+            <div class="normalTille">管理应用（仅管理员可见）</div>
+            <ul class="itemList ">
+                <router-link :to="item.router" tag="li" v-for="(item,index) in subList" :key="index" class="vpadding">
+                    <!--<span class="hline"></span>-->
+                    <span class="vline"></span>
+                    <p > <i class="icon iconfont " :class="item.icon" :style="{color:item.color}"></i></p>
+                    <p>{{item.name}}</p>
+                </router-link>
+            </ul>
+        </div>
+
         <div class="normalTille">日常积分</div>
         <ul class="itemList ">
             <router-link :to="item.router" tag="li" v-for="(item,index) in thirList" :key="index" class="vpadding" v-if="item.show">
-            <!--<router-link :to="item.router" tag="li" v-for="(item,index) in thirList" :key="index" class="vpadding" >-->
-                <!--<span class="new" v-if="index%3==0">New</span>-->
+                <span class="new" v-if="false">New</span>
                 <span class="hline"></span>
                 <span class="vline" ></span>
                 <p > <i class="icon iconfont " :class="item.icon" :style="{color:item.color}"></i></p>
@@ -70,7 +70,7 @@
             position: relative;
             overflow: hidden;
             /*width: 1.875rem;*/
-            /*height: 1.875rem;*/
+            /*min-height: 1.875rem;*/
             .vline{
                 position: absolute;
                 right: 0;
@@ -124,24 +124,25 @@
     export default {
         data() {
             return {
+                swipeList:[],
                 msg:"2sdfsdf",
                 shenpiNumber:{},
                 aboutMe:[
                     {
                         name:"审批日志",
-                        num:"0",
+                        num:" ",
                         router:'/record'
                     },{
                         name:"待我审批",
-                        num:"0",
+                        num:" ",
                         router:'/spList/1'
                     },{
                         name:"我发起的",
-                        num:"0",
+                        num:" ",
                         router:'/spList/2'
                     },{
                         name:"抄送我的",
-                        num:"0",
+                        num:" ",
                         router:'/spList/3'
                     }
                 ],
@@ -171,100 +172,125 @@
                         router:'/announcement'
                     }
                 ],
-                thirList:[
-                    {
-                        name:"考勤",
-                        icon:'icon-dingweikaoqin',
-                        color:'#3da5d0',
-                        moduleCover:'http://image.vshi5.com/img_jfb/2017/10/13/e4550a4ba9814c519601e2b3c525fb90.png',
-                        router:'/checkingin'
-                    },
-                    {
-                        name:"工作日志",
-                        icon:'icon-rizhi',
-                        color:'#84d76f',
-                        router:'/workDiary'
-                    },
-                    {
-                        name:"悬赏任务",
-                        icon:'icon-renwuxuanshang',
-                        color:'#feaa3b',
-                        router:'/missionList'
-                    },
-                    {
-                        name:"申报积分",
-                        icon:'icon-daiban',
-                        color:'#fe6973',
-                        router:'jfSelect'
-                    },
-                    {
-                        name:"公告",
-                        icon:'icon-gonggao1',
-                        color:'#feaa3b',
-                        router:'/announcementList'
-                    },
-                    {
-                        name:"爱心点赞",
-                        icon:'icon-hongxin',
-                        color:'#fb3333',
-                        router:'love'
-                    },
-                    {
-                        name:"积分申诉",
-                        icon:'icon-tanhao1',
-                        color:'#cbefd5',
-                        router:'/shensuList'
-                    },
-                    {
-                        name:"自由奖扣",
-                        icon:'icon-moneychange',
-                        color:'#5bb3d3',
-                        router:'/freePrize'
-                    },
-                    {
-                        name:"经营哲学",
-                        icon:'icon-kaohe',
-                        color:'#8ddfb9',
-                        router:'/philosophy'
-                    },
-                    {
-                        name:"水平考核",
-                        icon:'icon-kaohe',
-                        color:'#78c7e3',
-                        router:'/kpi'
-                    },
-                    {
-                        name:"积分商城",
-                        icon:'icon-lianmengkeyongjifen',
-                        color:'#fa6e77',
-                        router:'/shop'
-                    },
-                    {
-                        name:"积分抽奖",
-                        icon:'icon-choujiang',
-                        color:'#feaa3b',
-                        router:'/lottery'
-                    }
-                ]
+//                thirList:[
+//                    {
+//                        name:"考勤",
+//                        icon:'icon-dingweikaoqin',
+//                        color:'#3da5d0',
+//                        moduleCover:'http://image.vshi5.com/img_jfb/2017/10/13/e4550a4ba9814c519601e2b3c525fb90.png',
+//                        router:'/checkingin',
+//                        show:false
+//                    },
+//                    {
+//                        name:"工作日志",
+//                        icon:'icon-rizhi',
+//                        color:'#84d76f',
+//                        router:'/workDiary',
+//                        show:false
+//                    },
+//                    {
+//                        name:"悬赏任务",
+//                        icon:'icon-renwuxuanshang',
+//                        color:'#feaa3b',
+//                        router:'/missionList',
+//                        show:false
+//                    },
+//                    {
+//                        name:"申报积分",
+//                        icon:'icon-daiban',
+//                        color:'#fe6973',
+//                        router:'jfSelect',
+//                        show:false
+//                    },
+//                    {
+//                        name:"公告",
+//                        icon:'icon-gonggao1',
+//                        color:'#feaa3b',
+//                        router:'/announcementList',
+//                        show:false
+//                    },
+//                    {
+//                        name:"爱心点赞",
+//                        icon:'icon-hongxin',
+//                        color:'#fb3333',
+//                        router:'love',
+//                        show:false
+//                    },
+//                    {
+//                        name:"积分申诉",
+//                        icon:'icon-tanhao1',
+//                        color:'#cbefd5',
+//                        router:'/shensuList',
+//                        show:false
+//                    },
+//                    {
+//                        name:"自由奖扣",
+//                        icon:'icon-moneychange',
+//                        color:'#5bb3d3',
+//                        router:'/freePrize',
+//                        show:false
+//                    },
+//                    {
+//                        name:"经营哲学",
+//                        icon:'icon-kaohe',
+//                        color:'#8ddfb9',
+//                        router:'/philosophy',
+//                        show:false
+//                    },
+//                    {
+//                        name:"水平考核",
+//                        icon:'icon-kaohe',
+//                        color:'#78c7e3',
+//                        router:'/kpi',
+//                        show:false
+//                    },
+//                    {
+//                        name:"积分商城",
+//                        icon:'icon-lianmengkeyongjifen',
+//                        color:'#fa6e77',
+//                        router:'/shop',
+//                        show:false
+//                    },
+//                    {
+//                        name:"积分抽奖",
+//                        icon:'icon-choujiang',
+//                        color:'#feaa3b',
+//                        router:'/lottery',
+//                        show:false
+//                    }
+//                ]
             }
         },
         computed: {
             ...mapGetters([
                 'userMessage',
+                'thirList'
             ])
         },
         methods:{
             getNumber(){
                 let that = this;
-                this.$http.post('/approveLogs/listJson',{
-                    token:this.userMessage.token,
-                    userId:this.userMessage.userId
+                this.$http.post('/approveLogs/getCount',{
                 })
                     .then(function (response) {
-                        that.aboutMe[0].num= response.data.data.approveLog;
-                        that.aboutMe[1].num= response.data.data.waitApprove;
-                        that.aboutMe[2].num= response.data.data.sendApprove;
-                        that.aboutMe[3].num= response.data.data.copy;
+                        that.aboutMe[0].num= response.data.data[0].approveLog;
+                        that.aboutMe[1].num= response.data.data[0].waitApprove;
+                        that.aboutMe[2].num= response.data.data[0].sendApprove;
+                        that.aboutMe[3].num= response.data.data[0].copy;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            getSwipe(){
+                //swiper
+                let that = this;
+                this.$http.post('/advert/listByCom',{
+                    companyId:this.userMessage.companyId,
+                    locationType:2
+                })
+                    .then(function (response) {
+                        that.swipeList = response.data.data.content;
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -279,16 +305,19 @@
                 })
                     .then(function (response) {
                         console.log(response)
-                        that.thirList.forEach(item=>{
-                            for(let i = 0 ; i<response.data.data.length;i++){
-                                if(response.data.data[i].moduleTitle==item.name){
-                                    item.show=response.data.data[i].status==1?true:false;
-                                    item.moduleCover=response.data.data[i].moduleCover;
-                                    break;
-                                }
-                            }
+                        that.$nextTick(()=>{
+                            that.thirList.forEach(item=>{
+                                for(let i = 0 ; i<response.data.data.length;i++){
+                                    if(response.data.data[i].moduleTitle==item.name){
 
+                                        item.show=response.data.data[i].status==1?true:false;
+                                        item.moduleCover=response.data.data[i].moduleCover;
+                                        break;
+                                    }
+                                }
+                            })
                         })
+
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -297,8 +326,10 @@
         },
         mounted(){
             //work stage
+            this.getSwipe();
+            this.$store.commit('getWorkStation')
             this.getNumber();
-            setTimeout(this.getModule,500)
+//            setTimeout(t  his.getModule,500)
         }
     }
 </script>

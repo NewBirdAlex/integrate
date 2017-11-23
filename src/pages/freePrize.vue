@@ -17,15 +17,21 @@
 
             <subTitle :content="'申请人'" :subWord="'(默认申请自己的，可帮其他同事申请)'" :need="true"></subTitle>
 
-            <choosePeople v-for="(item,index) in peopleList" :name="item.userName"
-                          :key="index" :point="item.selectAddScore" :range="scoreRange"
-                          :ind="index"
-                          :head="item.userAvatar"
-                          ref="choosePeople"
-                          @changePoint="changePoint">
-                <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
-            </choosePeople>
+            <!--<choosePeople v-for="(item,index) in peopleList" :name="item.userName"-->
+                          <!--:key="index" :point="item.selectAddScore" :range="scoreRange"-->
+                          <!--:ind="index"-->
+                          <!--:head="item.userAvatar"-->
+                          <!--ref="choosePeople"-->
+                          <!--@changePoint="changePoint">-->
+                <!--<span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>-->
+            <!--</choosePeople>-->
 
+            <div class="paddingAll borderBottom fs30 newList" v-for="(item,index) in peopleList" :key="index">
+                <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
+                <img :src="item.userAvatar" class="headPicture marginRight" alt="">
+                <span>{{item.userName}}</span>
+                <input type="text" class="fr tar vam marginTop " v-model="item.selectAddScore" placeholder="输入奖扣分数">
+            </div>
 
             <div class="bgWhite paddingAll lh40 fs28">
                 <strong>全选积分</strong>
@@ -89,7 +95,12 @@
     @import "../assets/css/common.less";
     /*@import "../assets/font/font1/iconfont.css";*/
 
-
+    .newList{
+        input{
+            border: none;
+            outline: none;
+        }
+    }
     .wrap2{
         position: relative;
         padding:0 0.2rem;
@@ -231,7 +242,7 @@
                         type: 'textarea'
                     }
                 ],
-                peopleList:null,
+                peopleList:[],
                 chaosongList:null,
                 shenpiList:null,
                 approveUserList:null,
@@ -253,8 +264,9 @@
                     id:this.userMessage.userId,
                     userName:this.userMessage.userName,
                     userAvatar:this.userMessage.userAvatar,
-                    selectAddScore:this.scoreRange[0]
+                    selectAddScore:''
                 }
+                this.peopleList.push(this.selfInf);
             },
             shenpi(){
                 localStorage.setItem('shenpiren',true)
@@ -275,9 +287,10 @@
                     localStorage.removeItem('shenpiren')
                 }else{
                     let that =this
-                    this.peopleList = data;
+                    data.forEach(item=>item.selectAddScore='');
+                    alert(1)
+                    this.peopleList = JSON.parse(JSON.stringify(data));
                     this.peopleList.unshift(this.selfInf);
-                    this.peopleList.forEach(item=>item.selectAddScore=that.scoreRange[0])
                 }
 
             },
@@ -360,7 +373,7 @@
                     score.push(item.selectAddScore)
                 })
                 let approveUserId = [];
-                if(this.approveUserList.length){
+                if(this.approveUserList){
                     this.approveUserList.forEach(item=>{
                         approveUserId.push(item.id);
                     })
@@ -409,9 +422,9 @@
             }
         },
         mounted(){
-            this.getLeader();
-            this.getScoreRange();
+            this.getSelfInf();
 
+            this.getLeader();
         },
         components: {
             myInput,

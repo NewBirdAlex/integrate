@@ -1,6 +1,6 @@
 <template>
     <div>
-        <boardSearch @getData="getData" v-model="selUserName"></boardSearch>
+        <boardSearch @getData="getData" v-model="selUserName" :type="2"></boardSearch>
 
         <!--爱心排行榜-->
         <div class="paddingAll borderBottom">
@@ -22,7 +22,10 @@
                     <div class="overflow  fs36  ">
                         <div class="fl left  ">{{index+1}}</div>
                         <div class="fl right">
-                            <router-link :to="'/loveRank/'+item.id" tag="div" class="fl marginRight"><img :src="item.userAvatar" class="headPicture" alt=""></router-link>
+                            <router-link :to="'/loveRank/'+item.id" tag="div" class="fl marginRight">
+                                <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture" alt="">
+                                <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
+                            </router-link>
                             <div class="fl">
                                 <p><strong>{{item.userName}}</strong></p>
                                 <p class="gray fs30">本月 {{item.userScore}}分</p>
@@ -55,7 +58,7 @@
 <style scoped lang="less">
     @import "../assets/css/common.less";
     .specilIcon{
-        position: absolute;
+        position: fixed;
         left:50%;
         top:50%;
         transform: translate(-50%,-50%);
@@ -120,15 +123,20 @@
                 type:'',
                 startTime:'',
                 endTime:'',
+                needReset:false
             }
         },
         watch:{
             selUserName(){
+                this.needReset=true;
                 this.getList();
             }
         },
         methods:{
-
+            reset(){
+                this.pageNumber=1;
+                this.list=[];
+            },
             kissU(somebody,type){
                 let that = this;
                 if(this.canUseScore<=0){
@@ -208,7 +216,12 @@
                 })
                     .then(function (response) {
                         if(response.data.data.code=200000){
-                            that.list = response.data.data.content;
+                            if(that.needReset){
+                                that.reset();
+                                that.needReset = false;
+                            }
+
+                            that.list = that.list.concat(response.data.data.content);
                             if(response.data.data.last) that.lastPage = true;
                             that.loading = false;
                         }
@@ -225,7 +238,7 @@
                 msg.type?this.type=msg.type.value:this.type='';
                 msg.startTime?this.startTime=msg.startTime:this.startTime='';
                 msg.endTime?this.endTime=msg.endTime:this.endTime='';
-                this.pageNumber=1;
+                this.needReset = true;
                 this.getList();
             }
         },

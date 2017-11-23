@@ -59,7 +59,8 @@
                             <ul>
                                 <li v-for="(item,index) in staffList" :key="index">
                                     <div class="list overflow paddingAll borderBottom">
-                                        <img :src="item.userAvatar" class="marginRight headPicture fl" alt="">
+                                        <img :src="item.userAvatar" v-if="item.userAvatar" class="marginRight headPicture fl" alt="">
+                                        <img src="../assets/img/defaultHead.png" v-else  class="marginRight headPicture fl" alt="">
                                         <div class="fl">
                                             <p class="fs36 ">{{item.userName}}</p>
                                             <p class="gray marginTop">{{item.departmentName}}</p>
@@ -311,7 +312,6 @@
                         message: '已加载全部员工',
                         duration: 2000
                     });
-                    //this.allLoaded = true;// 若数据已全部获取完毕
                 }else{
                     this.getStaff();
                     this.$refs.loadmore.onBottomLoaded();
