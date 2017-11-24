@@ -185,7 +185,6 @@
                 });
                 console.log(otherIds.join(','))
                 console.log(otherScores.join(','))
-                return
                 this.$http.post('/missionApprove/approveById', {
                     approveRemark: this.noteContent,
                     checkedStatus: this.$route.params.type,
