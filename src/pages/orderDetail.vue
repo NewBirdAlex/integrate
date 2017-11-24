@@ -32,7 +32,10 @@
                 </li>
                 <li>
                     <span class="gray">积分类型</span>
-                    <span class="fr">{{orderDetail.type}}</span>
+                    <span class="fr" v-if="orderDetail.type==3">行为积分</span>
+                    <span class="fr" v-if="orderDetail.type==1">品德积分</span>
+                    <span class="fr" v-if="orderDetail.type==2">业绩积分</span>
+                    <span class="fr" v-if="orderDetail.type==4">基础积分</span>
                 </li>
                 <li>
                     <span class="gray">申请积分</span>

@@ -287,21 +287,17 @@
                     localStorage.removeItem('shenpiren')
                 }else{
                     let that =this
-                    data.forEach(item=>item.selectAddScore='');
-                    this.peopleList = JSON.parse(JSON.stringify(data));
-                    this.peopleList.unshift(this.selfInf);
+                    data.forEach(item=>{
+                        item.selectAddScore='';
+                        this.peopleList.push(item)
+                    });
+
                 }
 
             },
 
             delPerson(index){
-                if(this.peopleList[index].userName==this.userMessage.userName){
-                    this.$toast({
-                        message: '不能删除自己哦',
-                        duration: 2000
-                    });
-                    return;
-                }
+
                 this.peopleList.splice(index, 1)
             },
             changePoint(msg){
@@ -368,6 +364,10 @@
             subData(){
                 let score = [];
                 let that = this;
+                if(this.peopleList.length==0){
+                    this.$toast('至少选择一名员工');
+                    return
+                }
                 this.peopleList.forEach(item=>{
                     score.push(item.selectAddScore)
                 })

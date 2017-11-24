@@ -27,7 +27,6 @@
         line-height: 0.3rem;
         position: relative;
         width: 100%;
-        overflow: hidden;
         background: white;
         .inner{
             border-bottom: @border;
@@ -50,12 +49,14 @@
             }
         }
         select{
-            width: 0;
-            height: 0;
+            width: 1rem;
+            height: 0.7rem;
             position: absolute;
-            left:2rem;
+            right:0.2rem;
             top:0.1rem;
-            -webkit-appearance: none;
+            opacity: 0;
+            z-index: 10;
+            /*-webkit-appearance: none;*/
             background: white;
         }
     }

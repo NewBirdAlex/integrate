@@ -55,7 +55,7 @@
             top: 0.2rem;
             width: 1.5rem;
             height: 1rem;
-            z-index: 100;
+            z-index: 10;
             opacity: 0;
         }
     }

@@ -2,16 +2,6 @@
     <div>
 
         <div class=" wrap">
-            <!--<div >-->
-                <!--<label for="selList">-->
-                    <!--<i class="icon iconfont icon-xiala gray fs30"></i>-->
-                <!--</label>-->
-                <!--<select name="" id="selList" v-model="inputData[0].content">-->
-                    <!--<option value="租房">租房</option>-->
-                    <!--<option value="煮饭">煮饭</option>-->
-                    <!--<option value="游泳">游泳</option>-->
-                <!--</select>-->
-            <!--</div>-->
 
             <myInput v-for="(item,index) in inputData" :key="index"
                      :conttitle="item.title"
@@ -155,9 +145,22 @@
         },
         methods: {
             accept(data){
+                let that = this;
                 // accpet  staff person
-                this.peopleList = data;
-                this.peopleList.forEach(item=>item.selectAddScore=this.scoreRange[0])
+                data.forEach(item=>{
+                    console.log(item)
+                    if(this.peopleList.length){
+                        this.peopleList.forEach(obj=>{
+                            if(item.id!=obj.id){
+                                item.selectAddScore=that.scoreRange[0];
+                                that.peopleList.push(item);
+                            }
+                        })
+                    }else{
+                        item.selectAddScore=that.scoreRange[0];
+                        that.peopleList.push(item);
+                    }
+                });
             },
             getScoreRange(){
                 let that = this;
@@ -228,7 +231,11 @@
                 }
                 this.$http.post(url, params)
                     .then(function (response) {
-                        that.$router.push('/work');
+                        if(response.data.code=='200000'){
+                            that.$toast('成功')
+                            that.$router.go(-1);
+                        }
+
                     })
                     .catch(function (error) {
                         console.log(error);

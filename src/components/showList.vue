@@ -9,9 +9,10 @@
             <p class="gray">{{data.jobTitle}}</p>
             <p>{{data.approveTitle}}</p>
             <p>积分类型：
-                <span v-if="data.type==1">行为积分</span>
-                <span v-if="data.type==2">品德积分</span>
-                <span v-if="data.type==3">业绩积分</span>
+                <span  v-if="data.type==3">行为积分</span>
+                <span  v-if="data.type==1">品德积分</span>
+                <span  v-if="data.type==2">业绩积分</span>
+                <span  v-if="data.type==4">基础积分</span>
             </p>
             <p>
                 <span class="yellow" v-if="data.status==1">待审批</span>

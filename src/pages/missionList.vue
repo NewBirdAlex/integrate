@@ -169,7 +169,7 @@
         methods: {
             goApply(item){
                 console.log(item);
-                if(item.getStatus==0){
+                if(item.getStatus==0&&this.active!=1){
                     this.$toast('请先领取任务');
                 }else{
                     this.$router.push('/apply/'+item.missionId+'/'+item.type+'/true');

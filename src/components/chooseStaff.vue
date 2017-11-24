@@ -1,5 +1,5 @@
 <template>
-    <div :class="{'hidelogo':hide}">
+    <div :class="{'hidelogo':hide}" >
         <div >
             <div class="marginTop paddingAll bgWhite fs30 borderBottom" id="selectPeople" @click="showStaff=!showStaff">
                 <strong>选择员工</strong>
@@ -87,6 +87,10 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
+    .wrap{
+        position: relative;
+        z-index: 1000;
+    }
     .hidelogo{
         height: 1px;
         position: relative;
@@ -141,7 +145,7 @@
         width: 100%;
         /*padding-top: 1rem;*/
         background: rgba(0,0,0,0.4);
-        z-index: 10;
+        z-index: 100;
 //        .bgWhite;
         overflow: hidden;
         .ol {
