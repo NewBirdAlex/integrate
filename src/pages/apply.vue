@@ -387,6 +387,15 @@
                 }
                 //没有选择任何人的时候默认自己
                 console.log(beApproveUserId)
+                let type = '';
+                if(this.$route.params.mission!='true'){
+
+                    if(this.detail.rootId==11) type = 1;
+                    if(this.detail.rootId==12) type = 3;
+                    if(this.detail.rootId==13) type = 2;
+                }else{
+                    type=this.$route.params.type;
+                }
                 this.$http.post('/missionApprove/submitMissionApprove', {
                     addScore: score.join(','),
                     aimId: this.$route.params.id,
@@ -398,7 +407,7 @@
                     copyUserId: copyUserId.join(','),
                     missionPics: this.imgList,
                     rootId:this.detail.rootId,
-                    type:this.$route.params.type,
+                    type:type,
                 })
                     .then(function (response) {
                         if(response.data.code=='200000'){

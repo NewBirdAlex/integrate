@@ -72,7 +72,11 @@
                     modelId: this.detail.id,
                 })
                     .then(function (response) {
-                        that.$router.go(-1)
+                        if(response.data.code=='200000'){
+                            that.$toast('发布日志成功');
+                            that.$router.go(-1)
+                        }
+
                     })
                     .catch(function (error) {
                         console.log(error);

@@ -347,6 +347,7 @@
             },
             changeStatu(msg){
                 this.spType = msg;
+                localStorage.setItem('spListType',msg)
                 this.reset();
                 this.getList();
             },
@@ -406,6 +407,12 @@
             }
         },
         mounted(){
+            //get last click
+            if(localStorage.getItem('spListType')){
+                this.spType=localStorage.getItem('spListType');
+                //localStorage.removeItem('spListType')
+            }
+
             this.init();
             this.getList();
             this.showWrap=false;

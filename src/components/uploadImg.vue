@@ -18,8 +18,10 @@
                     @imageuploaded="imageuploaded"
                     @imagechanged="imagechanged"
                     compress="60"
-                    :maxFileSize="5242880"
+                    :max-file-size="5242880"
                     inputOfFile="file"
+                    :max-width='maxW'
+                    :max-weight='maxH'
                     :url="url+'/imageUpload/imgUploadFile'" >
                 <i class="icon iconfont icon-upload"></i>
             </vue-core-image-upload>
@@ -75,6 +77,8 @@
     export default {
         data() {
             return {
+                maxW:4000,
+                maxH:4000,
                 imgNum:0,
                 url:'',
                 imgList:[]

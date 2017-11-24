@@ -20,8 +20,16 @@
                 <jifenType v-model="jfType"></jifenType>
                 <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom">
                     <strong class="fs30 lh40">审批备注 <span class="red">*</span></strong>
-                    <span class="rightPart fs30 lh40 ">{{detail.approveRemark}}</span>
+                    <span class="rightPart fs30 lh40 ">{{detail.approveRemark||'无'}}</span>
                 </div>
+                <myInput
+                         conttitle="申诉理由"
+                         need="true"
+                         note="输入申诉理由"
+                         v-model="shensuReason"
+                         inpType="textarea"
+                         inputType="text"
+                ></myInput>
             </div>
             <div class="marginTop"></div>
             <!--上传图片-->
@@ -296,6 +304,7 @@
     export default {
         data() {
             return {
+                shensuReason:'',
                 showStaff:false,
                 getRange:false,
                 jfType:0,

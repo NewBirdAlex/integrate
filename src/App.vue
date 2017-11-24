@@ -9,11 +9,11 @@
         <!--&gt;-->
             <!--<router-view></router-view>-->
         <!--</transition>-->
-
-        <transition :name="transitionName">
-            <router-view :class="{'child-view':true,'no-trans':ismove}"></router-view>
-        </transition>
-
+        <!--动画版-->
+        <!--<transition :name="transitionName">-->
+            <!--<router-view :class="{'child-view':true,'no-trans':ismove}"></router-view>-->
+        <!--</transition>-->
+        <router-view></router-view>
         <loading v-if="showLoading"></loading>
         <transition
                 name="custom-classes-transition"
@@ -120,7 +120,7 @@
     @import "assets/css/common.less";
     /*animation    */
     .child-view {
-        position: absolute;
+        /*position: absolute;*/
         left: 0;
         top: 0;
         width: 100%;

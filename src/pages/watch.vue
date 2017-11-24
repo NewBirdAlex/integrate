@@ -337,7 +337,9 @@
                     id:item.id,
                 })
                     .then(function (response) {
-                        item.likeCount+=1;
+                        if(response.data.code=='200000'){
+                            item.likeCount+=1;
+                        }
                     })
                     .catch(function (error) {
                         console.log(error);

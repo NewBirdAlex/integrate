@@ -27,7 +27,7 @@
         <!--<div ">-->
         <div class="list " v-if="myCheck.length&&chooseNum" v-for="(item,index) in myCheck" :key="index">
             <span class="left fl sg tac">{{index + 1}}</span>
-            <div class="right fl">111
+            <div class="right fl">
                 <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture fl marginRight" alt="">
                 <img src="../assets/img/defaultHead.png" v-else alt="" class="headPicture fl marginRight">
                 <div class="fl md lh40">
@@ -36,7 +36,7 @@
                 </div>
                 <div class="fr paddingRight tac marginLeft">
                     <p>{{item.score || 0}}</p>
-                    <i class="icon iconfont icon-dianzanmw gray" :class="{'blue':item.score>0}"></i>
+                    <i class="icon iconfont icon-dianzanmw gray" :class="{'blue':item.score>0}" @click="makeAwsome(item)"></i>
                 </div>
                 <div class="fr blue sg">
                     {{item.checkTime.split(" ")[1]}}
@@ -55,7 +55,7 @@
                 <div class="list" v-if="chooseNum">
                     <!--本日考勤-->
                     <span class="left fl sg tac">{{index + 1}}</span>
-                    <div class="right fl">22
+                    <div class="right fl">
                         <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture fl marginRight" alt="">
                         <img src="../assets/img/defaultHead.png" v-else class="headPicture fl marginRight" alt="">
                         <div class="fl md lh40">
@@ -262,12 +262,15 @@
                 })
                     .then(function (response) {
                         //animation going
-                        that.clickHeart = true;
-                        let timer = null;
-                        clearTimeout(timer);
-                        setTimeout(() => that.clickHeart = false, 1000)
-                        //add awsome
-                        item.score += 1;
+                        if(response.data.code=='200000'){
+                            that.clickHeart = true;
+                            let timer = null;
+                            clearTimeout(timer);
+                            setTimeout(() => that.clickHeart = false, 1000)
+                            //add awsome
+                            item.score += 1;
+                        }
+
 
                     })
                     .catch(function (error) {

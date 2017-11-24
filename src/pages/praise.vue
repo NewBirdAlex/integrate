@@ -41,6 +41,7 @@
             <subTitle :content="$route.params.type==1?'表扬员工':'奖扣员工'" v-else :subWord="''" :need="true"></subTitle>
 
             <choosePeople v-for="(item,index) in peopleList"
+                          v-if="$route.params.type==1"
                           :name="item.userName"
                           :key="index"
                           :showValue="item.selectAddScore"
@@ -51,8 +52,16 @@
                           @changePoint="changePoint">
                 <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
             </choosePeople>
+            <div v-else>
+                <div class="paddingAll borderBottom fs30 newList bgWhite" v-for="(item,index) in peopleList" :key="index">
+                    <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
+                    <img :src="item.userAvatar" class="headPicture marginRight" alt="">
+                    <span>{{item.userName}}</span>
+                    <input type="text" class="fr tar vam marginTop myInput" v-model="item.selectAddScore" placeholder="输入奖扣分数" style="padding-right: 0.2rem">
+                </div>
+            </div>
 
-            <div class="bgWhite paddingAll lh40 fs28">
+            <div class="bgWhite paddingAll lh40 fs28" v-if="$route.params.type==1">
                 <strong>全选积分</strong>
                 <span class="gray">(选择可批量修改申请的积分)</span>
                 <span class="fr marginRight cl" :class="{'border':!selAll}" @click="selAll=!selAll"><i class="icon iconfont icon-gouxuan blue fs36" v-if="selAll"></i></span>

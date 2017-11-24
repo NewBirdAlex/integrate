@@ -15,7 +15,10 @@
             <label :for="selId" class="fr"><i class="icon iconfont icon-xiala1"></i></label>
         </div>
         <select  name="" :id="selId"  v-model="selValue">
-            <option :value="index+1" v-for="(item,index) in selectRange">{{item}}</option>
+            <option :value="3" >行为积分</option>
+            <option :value="1" >品德积分</option>
+            <option :value="2" >业绩积分</option>
+            <option :value="4" >基础积分</option>
         </select>
     </div>
 </template>

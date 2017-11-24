@@ -183,6 +183,9 @@
                         otherScores.push(item.addScore)
                     }
                 });
+                console.log(otherIds.join(','))
+                console.log(otherScores.join(','))
+                return
                 this.$http.post('/missionApprove/approveById', {
                     approveRemark: this.noteContent,
                     checkedStatus: this.$route.params.type,
@@ -194,7 +197,7 @@
                     .then(function (response) {
 
                         if(response.data.code=='200000'){
-                            that.$toast('审批成功');
+                            that.$toast('成功');
                             that.$router.go(-2);
                         }
                     })
