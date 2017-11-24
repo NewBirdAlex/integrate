@@ -110,21 +110,21 @@
                 searchKeyword:'',
                 idList: [
                     {
-                        type:1,
+                        type:3,
                         name: '行为积分',
                         sel: false,
                         showNav:false,
                         subList:[]
                     },
                     {
-                        type:2,
+                        type:1,
                         name: '品德积分',
                         sel: false,
                         showNav:false,
                         subList:[]
                     },
                     {
-                        type:3,
+                        type:2,
                         name: '业绩积分',
                         sel: false,
                         showNav:false,

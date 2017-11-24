@@ -126,7 +126,7 @@
         width: 100%;
         height: 100%;
         transition: all .5s cubic-bezier(.55,0,.1,1);
-        padding-bottom: 1.5rem;
+        padding-bottom: 3rem;
     }
     .no-trans{
        transition: all 0s!important;
