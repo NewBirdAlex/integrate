@@ -250,10 +250,10 @@
                                     that.idList[0].subList.push(item);
                                     break;
                                 case 2:
-                                    that.idList[2].subList.push(item);
+                                    that.idList[1].subList.push(item);
                                     break;
                                 case 3:
-                                    that.idList[3].subList.push(item);
+                                    that.idList[2].subList.push(item);
                                     break;
                             }
                         });
