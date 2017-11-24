@@ -416,7 +416,6 @@
         },
         mounted(){
             this.getDetail();
-            this.$store.commit('getMissionValue');
         },
         components: {
             myInput,
