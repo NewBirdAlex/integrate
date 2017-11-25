@@ -84,6 +84,10 @@
                 data.forEach(item => that.apartMentId.push(item.id))
             },
             subMission() {
+                if(!this.inputData[0].content||!this.inputData[1].content||!this.inputData[2].content||!this.inputData[3].content){
+                    this.$toast('请填写完整资料')
+                    return
+                }
                 let that =this;
 
                 this.$http.post('/mission/userCreateMission', {

@@ -364,6 +364,10 @@
             subData(){
                 let score = [];
                 let that = this;
+                if(!this.inputData[0].content||!this.inputData[1].contnt){
+                    this.$toast('请填写完整资料');
+                    return
+                }
                 if(this.peopleList.length==0){
                     this.$toast('至少选择一名员工');
                     return

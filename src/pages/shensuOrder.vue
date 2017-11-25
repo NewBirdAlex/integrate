@@ -24,7 +24,7 @@
                 </div>
                 <myInput
                          conttitle="申诉理由"
-                         need="true"
+                         :need=true
                          note="输入申诉理由"
                          v-model="shensuReason"
                          inpType="textarea"
@@ -433,6 +433,10 @@
                     });
             },
             subData(){
+                if(!this.shensuReason){
+                    this.$toast('请输入申诉理由')
+                    return
+                }
                 let score = [];
                 let that = this;
                 this.peopleList.forEach(item=>{

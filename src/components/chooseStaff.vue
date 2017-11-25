@@ -89,7 +89,8 @@
     @import "../assets/css/common.less";
     .wrap{
         position: relative;
-        z-index: 1000;
+        z-index: 100;
+        /*pointer-events: none;*/
     }
     .hidelogo{
         height: 1px;

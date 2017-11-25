@@ -216,6 +216,14 @@
                 }
             },
             subData(){
+                if(!this.inputData[0].content||!this.inputData[1].content){
+                    this.$toast('请填写完整资料');
+                    return
+                }
+                if(!this.peopleList.length){
+                    this.$toast('请选择员工');
+                    return
+                }
                 let score = [];
                 let that = this;
                 this.peopleList.forEach(item=>{

@@ -60,6 +60,7 @@
             opacity: 0;
             z-index: 10;
             /*-webkit-appearance: none;*/
+            /*pointer-events: none;*/
             background: white;
         }
     }

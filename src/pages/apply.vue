@@ -362,14 +362,16 @@
                     })
                 }
                 //审批人
-                let approveUserId = null;
+                let approveUserId = [];
                 if(this.approveUserList){
-                    approveUserId=[];
                     this.approveUserList.forEach(item=>{
                         approveUserId.push(item.id);
                     })
                 }else{
                     approveUserId = this.shenpiren.split(',');
+                }
+                if(approveUserId.length==0){
+                    this.$toast('请选择审批人')
                 }
                 //被审批人
                 let beApproveUserId = [];

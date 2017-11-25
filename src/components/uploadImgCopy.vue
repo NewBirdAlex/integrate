@@ -1,14 +1,30 @@
 <template>
     <div class="bgWhite">
         <subTitle :content="'附加图片'" :subWord="'（'+imgNum+'/9）'"></subTitle>
-
+        <!--<div class="imgwrap overflow" v-if="imgList.length">-->
+            <!--<div class="imgItem" v-for="(item ,index) in imgList">-->
+                <!--<img  :src='item' alt="">-->
+                <!--<i class="icon iconfont icon-shanchu" @click="delImg(index)"></i>-->
+            <!--</div>-->
+        <!--</div>-->
         <div class="imgItem" v-for="(item ,index) in imgList">
             <img  :src='item' alt="">
             <i class="icon iconfont icon-shanchu" @click="delImg(index)"></i>
         </div>
         <div class="paddingAll setFrame" v-if="imgNum<9">
-            <i class="icon iconfont icon-upload"></i>
-            <input type="file" @change="imagechanged">
+            <vue-core-image-upload
+                    class="btn btn-primary"
+                    :crop="false"
+                    @imageuploaded="imageuploaded"
+                    @imagechanged="imagechanged"
+                    compress="60"
+                    :max-file-size="5242880"
+                    inputOfFile="file"
+                    :max-width='maxW'
+                    :max-weight='maxH'
+                    :url="url+'/imageUpload/imgUploadFile'" >
+                <i class="icon iconfont icon-upload"></i>
+            </vue-core-image-upload>
         </div>
     </div>
 </template>
@@ -24,16 +40,6 @@
         width: 2rem;
         height: 2rem;
         display: inline-block;
-        position: relative;
-        input{
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            left:0;
-            top:0;
-            opacity: 0;
-            z-index: 10;
-        }
     }
     .imgItem{
         position: relative;
@@ -65,11 +71,14 @@
     }
 </style>
 <script>
+    import VueCoreImageUpload from 'vue-core-image-upload'
     import subTitle from '../components/subTitle.vue'
 
     export default {
         data() {
             return {
+                maxW:4000,
+                maxH:4000,
                 imgNum:0,
                 url:'',
                 imgList:[]
@@ -85,43 +94,31 @@
                     this.imgList.splice(index,1)
                 }
             },
-            imagechanged(event){
+            //            上传图片recall
+            imageuploaded(res) {
+                let that  = this;
 
-                let that = this;
-
-                let ImageObj = event.target.files[0]
-                if (!(/^image/.test(ImageObj.type))) {
-                    this.$toast('请选取图片文件');
-                    return
-                }
-                console.log(ImageObj.size)
-                if(ImageObj.size>5242880){
-                    this.$toast('图片尺寸超过5M，请重新选择图片');
-                    return
-                }
-                let param = new FormData(); //创建form对象
-                param.append('file',ImageObj,ImageObj.name);
-                let config = {
-                    headers:{'Content-Type':'multipart/form-data'}
-                };
-                this.$http.post(this.url+'/imageUpload/imgUploadFile',param,config)
-                    .then(function (response) {
-                        if(response.data.code=='200000'){
-                            that.$toast({
-                                message:'成功',
-                                duration:1000
-                            });
-                            if(that.imgNum>=9) return
-                            that.imgNum+=1;
-                            that.imgList.push(response.data.data.url)
-                            that.$emit('getData',that.imgList)
-                        }else{
-                            that.$toast('上传图片失败')
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
+                if (res.code == "200000") {
+                    this.$store.commit('hideLoading')
+                    if(that.imgNum>=9) return
+                    that.imgNum+=1;
+                    that.imgList .push(res.data.url)
+                    that.$emit('getData',this.imgList)
+                }else{
+                    that.$toast({
+                        message: res.data.message,
+                        duration: 2000
                     });
+                }
+            },
+            // 异常处理
+            errorHandle(err) {
+                console.log(err)
+            },
+            imagechanged(data){
+                console.log(data)
+                if(data.size>5242880) this.$toast('图片大小超出限制')
+                this.$store.commit('showLoading')
             },
         },
         mounted(){
@@ -144,7 +141,7 @@
             value:String
         },
         components: {
-
+            VueCoreImageUpload,
             subTitle
         }
     }

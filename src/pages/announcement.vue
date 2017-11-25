@@ -59,7 +59,10 @@
 
             },
             subData(){
-                console.log(this.userMessage.token);
+                if(!this.inputData.content){
+                    this.$toast('请填写公告内容')
+                    return
+                }
                 let that = this;
                 this.$http.post('/notes/save', {
                     context: this.inputData.content,
