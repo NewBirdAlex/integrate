@@ -1,14 +1,14 @@
 <template>
     <div>
         <div class="bgWhite">
-            <div class="bgWhite " id="main">
+            <div class="bgWhite " id="main" v-if="false">
 
             </div>
         </div>
         <div>
             <!--积分动态-->
 
-            <jfdt></jfdt>
+            <jfRecord des="个人积分明细" ></jfRecord>
         </div>
     </div>
 </template>
@@ -21,7 +21,8 @@
 
 </style>
 <script>
-    import jfdt from '../components/jifendongtai.vue'
+    import jfRecord from '../components/jfRecord.vue'
+
     export default {
         data() {
             return {
@@ -29,7 +30,7 @@
             }
         },
         components:{
-            jfdt
+            jfRecord
         },
         mounted(){
             var echarts = require('echarts');

@@ -6,6 +6,7 @@ import store from './store'
 
 
 // import vconsole from 'vconsole'
+// var vConsole = new vconsole();
 import "./assets/font/font1/iconfont.css"
 // import "./assets/font/font2/iconfont.css"
 

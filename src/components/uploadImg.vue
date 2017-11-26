@@ -94,34 +94,49 @@
                     this.$toast('请选取图片文件');
                     return
                 }
-                console.log(ImageObj.size)
+
                 if(ImageObj.size>5242880){
                     this.$toast('图片尺寸超过5M，请重新选择图片');
                     return
                 }
-                let param = new FormData(); //创建form对象
-                param.append('file',ImageObj,ImageObj.name);
-                let config = {
-                    headers:{'Content-Type':'multipart/form-data'}
-                };
-                this.$http.post(this.url+'/imageUpload/imgUploadFile',param,config)
-                    .then(function (response) {
-                        if(response.data.code=='200000'){
-                            that.$toast({
-                                message:'成功',
-                                duration:1000
-                            });
-                            if(that.imgNum>=9) return
-                            that.imgNum+=1;
-                            that.imgList.push(response.data.data.url)
-                            that.$emit('getData',that.imgList)
-                        }else{
-                            that.$toast('上传图片失败')
-                        }
+                let reader = new FileReader();
+                reader.readAsDataURL(ImageObj);
+                let Base64 = null;
+                reader.onload=function(){
+                    Base64 = this.result;
+                    let param = new FormData(); //创建form对象
+                    param.append('content',Base64);
+                    let config = {
+                        headers:{'Content-Type':'application/json; charset=utf-8'}
+                     };
+                    that.$http.post(that.url+'/imageUpload/imgBase64',{
+                        content:Base64
                     })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+                        .then(function (response) {
+                            if(response.data.code=='200000'){
+                                that.$toast({
+                                    message:'成功',
+                                    duration:1000
+                                });
+                                if(that.imgNum>=9) return
+                                that.imgNum+=1;
+                                that.imgList.push(response.data.data.url)
+                                that.$emit('getData',that.imgList)
+                            }else{
+                                that.$toast('上传图片失败')
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }
+//                let param = new FormData(); //创建form对象
+//                param.append('file',ImageObj,ImageObj.name);
+//                let config = {
+//                    headers:{'Content-Type':'multipart/form-data'}
+//                };
+//                this.$http.post(this.url+'/imageUpload/imgUploadFile',param,config)
+
             },
         },
         mounted(){

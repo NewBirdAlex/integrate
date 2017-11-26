@@ -49,7 +49,7 @@
                 v-infinite-scroll="loadBottom"
                 infinite-scroll-disabled="loading"
                 infinite-scroll-distance="10">
-            <router-link tag="li" :to="'/infor/'+item.appUserId" v-for="(item,index) in list" :key="index">
+            <router-link tag="li" :to="'/manageDiary/'+item.appUserId" v-for="(item,index) in list" :key="index">
                 <div class="bgWhite listWrap tal" >
                             <span>
                                 <i v-if="index>=3">{{index+1}}</i>
@@ -150,8 +150,7 @@
         },
         methods: {
             searchByName(){
-//                if(!this.selUserName) return;
-                this.pageNumber=1;
+                this.reset();
                 this.getList();
             },
             collectData(msg){
@@ -167,14 +166,20 @@
             },
             loadBottom(){
                  // 加载更多数据
-                //this.allLoaded = true;// 若数据已全部获取完毕
-                //this.$refs.loadmore.onBottomLoaded();
                 if(!this.lastPage){
+                    this.loading = true;
                     this.getList();
-                    this.pageNumber+=1;
                 }else{
-                    this.allLoaded = true;
+                    this.$toast({
+                        message: '已加载全部数据',
+                        duration: 2000
+                    });
                 }
+            },
+            reset(){
+                this.pageNumber=1;
+                this.lastPage=false;
+                this.list=[];
             },
             getList(){
                 let that = this;
@@ -189,8 +194,11 @@
                     pageSize:this.pageSize
                 })
                     .then(function (response) {
-                        if(response.data.data.code=200000){
-                            that.list = response.data.data.content;
+                        if(response.data.code==200000){
+                            if(that.lastPage) return
+                            that.pageNumber+=1;
+
+                            that.list=that.list.concat(response.data.data.content) ;
                             if(response.data.data.last) that.lastPage = true;
                         }
                     })

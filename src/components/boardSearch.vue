@@ -57,6 +57,7 @@
                 v-model="pickerVisible"
                 type="date"
                 ref="picker"
+                :startDate="new Date(new Date().getFullYear() - 3, 0, 1)"
                 :endDate="new Date()"
                 @confirm="handleConfirm"
                 year-format="{value} 年"

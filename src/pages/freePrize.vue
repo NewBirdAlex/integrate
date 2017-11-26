@@ -10,6 +10,7 @@
                      :inpType="item.type"
                      :inputType="item.inputType?item.inputType:'text'"
             ></myInput>
+            <jifenType v-model="jifenType"></jifenType>
             <div class="marginTop"></div>
             <!--上传图片-->
             <uploadImg v-model="imgList"></uploadImg>
@@ -33,7 +34,7 @@
                 <input type="text" class="fr tar vam marginTop " v-model="item.selectAddScore" placeholder="输入奖扣分数">
             </div>
 
-            <div class="bgWhite paddingAll lh40 fs28">
+            <div class="bgWhite paddingAll lh40 fs28" v-if="false   ">
                 <strong>全选积分</strong>
                 <span class="gray">(选择可批量修改申请的积分)</span>
                 <span class="fr marginRight cl" :class="{'border':!selAll}" @click="selAll=!selAll"><i class="icon iconfont icon-gouxuan blue fs36" v-if="selAll"></i></span>
@@ -41,7 +42,7 @@
 
             <!--选择员工-->
             <chooseStaff  @getData="accept"></chooseStaff>
-            <jifenType v-model="jifenType"></jifenType>
+
             <!--审批人-->
             <div class="marginTop">
                 <subTitle :content="'审批人'" :subWord="''" :need="true"></subTitle>
@@ -364,8 +365,13 @@
             subData(){
                 let score = [];
                 let that = this;
-                if(!this.inputData[0].content||!this.inputData[1].contnt){
+                if(!this.inputData[0].content||!this.inputData[1].content){
                     this.$toast('请填写完整资料');
+                    return
+                }
+                if(!this.jifenType){
+
+                    this.$toast('请选择积分类型');
                     return
                 }
                 if(this.peopleList.length==0){
@@ -375,6 +381,16 @@
                 this.peopleList.forEach(item=>{
                     score.push(item.selectAddScore)
                 })
+                let haveScore =true;
+                score.forEach(item=>{
+                    if(!item){
+                        haveScore=false;
+                    }
+                });
+                if(!haveScore){
+                    that.$toast('请输入相应分数');
+                    return
+                }
                 let approveUserId = [];
                 if(this.approveUserList){
                     this.approveUserList.forEach(item=>{

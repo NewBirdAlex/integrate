@@ -81,7 +81,7 @@
         </div>
         <!--积分动态-->
 
-        <jfdt></jfdt>
+        <jfdt ></jfdt>
     </div>
 </template>
 <style scoped lang="less">

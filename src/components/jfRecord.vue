@@ -1,14 +1,39 @@
 <template>
     <div>
+        <!--//pick time-->
+        <mt-datetime-picker
+                v-model="pickerVisible"
+                type="date"
+                ref="picker"
+                @confirm="handleConfirm"
+                :startDate="new Date(new Date().getFullYear() - 3, 0, 1)"
+                :endDate="new Date()"
+                year-format="{value} 年"
+                month-format="{value} 月"
+                date-format="{value} 日">
+        </mt-datetime-picker>
+
         <div class="marginAll marginTop border borderRadius bgWhite">
             <div class="subt">
                 <i class="icon iconfont icon-jifen1 blue"></i>
                 <span class="gray">{{des}}</span>
-                <!--<span class="fr" @click="openPicker"> 9月</span>-->
-                <span class="rightArrow fr gray">
-                    <i class="icon iconfont icon-xiala"></i>
+                <span class="fr gray" @click="openPicker"> {{selTime||'选择时间'}}
                 </span>
+
             </div>
+            <div class=" rbtn marginTop">
+                <span class="fr">
+                    扣分
+                    <mt-switch v-model="koufen" class="fr"></mt-switch>
+                </span>
+                <span class="fr marginRight">
+                    奖分
+                    <mt-switch v-model="jiangli" class="fr"></mt-switch>
+                </span>
+
+
+            </div>
+            <myEmpty v-if="!list.length" value="搜索不到积分动态"></myEmpty>
             <ul
                     v-infinite-scroll="loadMore"
                     infinite-scroll-disabled="loading"
@@ -63,18 +88,17 @@
 
         </div>
 
-        <!--<mt-datetime-picker-->
-                <!--v-model="pickerVisible"-->
-                <!--type="date"-->
-                <!--ref="picker"-->
-                <!--year-format="{value} 年"-->
-                <!--month-format="{value} 月"-->
-                <!--date-format="{value} 日">-->
-        <!--</mt-datetime-picker>-->
     </div>
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
+    .rbtn{
+        line-height: 0.6rem;
+        /*position: absolute;*/
+        right: 0.2rem;
+        top:0.2rem;
+        overflow: hidden;
+    }
     .loadmore{
         width: 10%;
         margin: 0 auto;
@@ -84,6 +108,7 @@
         font-size: @fs28;
         padding:0.3rem 0;
         margin: 0 0.2rem;
+        position: relative;
         .borderBottom;
         &:nth-child(1){
             margin: 0;
@@ -132,12 +157,33 @@
     export default {
         data() {
             return {
+                selTime:'',
+                pickerVisible:'',
+                jiangli:false,
+                koufen:false,
                 pickerVisible:'',
                 list:[],
                 num:3,
                 pageNumber:1,
                 lastPage:false,
                 loading:false
+            }
+        },
+        watch:{
+            selTime(){
+                this.reset();
+                let that = this;
+                setTimeout(()=>{that.getList()},100)
+            },
+            jiangli(val){
+                val?this.koufen=false:'';
+                this.reset();
+                this.getList();
+            },
+            koufen(val){
+                val?this.jiangli=false:'';
+                this.reset();
+                this.getList();
             }
         },
         computed: {
@@ -161,26 +207,41 @@
             this.getList();
         },
         methods:{
+            reset(){
+                this.pageNumber=1;
+                this.lastPage=false;
+                this.list=[];
+            },
+            handleConfirm(data){
+                this.selTime = data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate();
+
+            },
             loadMore() {
                 if(!this.lastPage){
                     this.loading = true;
                     this.getList();
                 }else{
                     this.$toast({
-                        message: '没有更多数据了',
+                        message: '已加载全部数据',
                         duration: 2000
                     });
                 }
             },
             getList(){
                 let that = this;
-                this.$http.post('/approveRecord/scoreChange',{
+                let type ='';
+                if(this.jiangli) type=1;
+                if(this.koufen) type=2;
+                if( !this.jiangli&&!this.koufen) type=0;
+                this.$http.post('/approveRecord/userRecordList',{
                     pageNumber: this.pageNumber,
                     pageSize: 10,
-                    sortOrder: "desc",
-                    userId:this.userMessage.userId
+                    type:type,
+                    selectDate:this.selTime,
+                    userId:this.$route.params.id
                 })
                     .then(function (response) {
+                        if(that.lastPage) return
                         that.pageNumber+=1;
                         if(response.data.data.last){
                             that.lastPage=true;

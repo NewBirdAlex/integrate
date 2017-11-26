@@ -19,6 +19,7 @@
                 type="date"
                 ref="picker"
                 @confirm="handleConfirm"
+                :startDate="new Date(new Date().getFullYear() - 3, 0, 1)"
                 :endDate="new Date()"
                 year-format="{value} 年"
                 month-format="{value} 月"

@@ -10,7 +10,7 @@ axios.interceptors.request.use(function (config){
     store.dispatch('showLoading');
     if(store.state.userMessage){
         config.data.token=store.state.userMessage.token;
-        config.data.userId=store.state.userMessage.userId;
+        if(!config.data.userId) config.data.userId=store.state.userMessage.userId;
     }
 
     return config;

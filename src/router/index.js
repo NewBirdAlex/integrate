@@ -349,7 +349,7 @@ const router = new Router({
             }
         },
         {
-            path: '/manageDiary',
+            path: '/manageDiary/:id',
             name: 'ManageDiary',
             component: ManageDiary,
             meta:{

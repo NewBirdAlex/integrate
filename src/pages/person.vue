@@ -151,7 +151,6 @@
     // 引入提示框和标题组件
     require('echarts/lib/component/tooltip');
     require('echarts/lib/component/title');
-//    import IEcharts from 'vue-echarts-v3/src/full.js';
     import { mapGetters } from 'vuex';
     export default {
         data() {
@@ -225,12 +224,6 @@
                                 data: [0, 0, 0, 0, 0, 0,0]
                             }]
                         };
-//                        that.$set( that.bar.series[0].data,0,response.data.data.baseScore||0);
-//                        that.$set( that.bar.series[0].data,1,response.data.data.achivment||0);
-//                        that.$set( that.bar.series[0].data,2,response.data.data.behavior||0);
-//                        that.$set( that.bar.series[0].data,3,response.data.data.monthsAdd||0);
-//                        that.$set( that.bar.series[0].data,4,response.data.data.seasonsSdd||0);
-//                        that.$set( that.bar.series[0].data,5,response.data.data.userScore||0);
                         bar.series[0].data[0]=response.data.data.baseScore||0;
                         bar.series[0].data[1]=response.data.data.achivment||0;
                         bar.series[0].data[2]=response.data.data.behavior||0;
