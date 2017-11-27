@@ -155,21 +155,11 @@
         },
         methods: {
             accept(data){
-                let that = this;
                 // accpet  staff person
+                let that =this;
                 data.forEach(item=>{
-                    console.log(item)
-                    if(this.peopleList.length){
-                        this.peopleList.forEach(obj=>{
-                            if(item.id!=obj.id){
-                                item.selectAddScore=that.scoreRange[0];
-                                that.peopleList.push(item);
-                            }
-                        })
-                    }else{
-                        item.selectAddScore=that.scoreRange[0];
-                        that.peopleList.push(item);
-                    }
+                    item.selectAddScore=that.scoreRange[0];
+                    this.peopleList.push(item);
                 });
             },
             getScoreRange(){

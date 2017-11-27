@@ -95,10 +95,10 @@
                     return
                 }
 
-                if(ImageObj.size>5242880){
+                /*if(ImageObj.size>5242880){
                     this.$toast('图片尺寸超过5M，请重新选择图片');
                     return
-                }
+                }*/
                 let reader = new FileReader();
                 reader.readAsDataURL(ImageObj);
                 let Base64 = null;

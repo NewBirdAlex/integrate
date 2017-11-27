@@ -16,7 +16,9 @@
             </p>
             <p>
                 <span class="yellow" v-if="data.status==1">待审批</span>
-                <span class="blue" v-if="data.status==2">已经审批</span>
+                <span class="green" v-if="data.status==2">审批通过</span>
+                <span class="red" v-if="data.status==3">拒绝</span>
+                <span class="blue" v-if="data.status==4">撤销</span>
                 <span class="fr gray">{{data.createDate}}</span>
             </p>
         </div>

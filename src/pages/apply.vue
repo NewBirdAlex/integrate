@@ -19,9 +19,17 @@
                 </div>
                 <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom">
                     <strong class="fs30">积分类型 <span class="red">*</span></strong>
-                    <span class="rightPart fs30 lh40 " v-if="detail.type==1">C</span>
-                    <span class="rightPart fs30 lh40 " v-if="detail.type==2">A</span>
-                    <span class="rightPart fs30 lh40 " v-if="detail.type==3">B</span>
+                    <span v-if="$route.params.mission=='true'">
+                         <span class="rightPart fs30 lh40 " v-if="detail.type==3">C</span>
+                        <span class="rightPart fs30 lh40 " v-if="detail.type==1">A</span>
+                        <span class="rightPart fs30 lh40 " v-if="detail.type==2">B</span>
+                    </span>
+                    <span v-else>
+                        <span class="rightPart fs30 lh40 " v-if="detail.rootId==11">A</span>
+                        <span class="rightPart fs30 lh40 " v-if="detail.rootId==12">C</span>
+                        <span class="rightPart fs30 lh40 " v-if="detail.rootId==13">B</span>
+                    </span>
+
                 </div>
             </div>
 
@@ -277,8 +285,6 @@
                         item.selectAddScore=that.scoreRange[0];
                         this.peopleList.push(item);
                     });
-//                    this.peopleList = data;
-//                    this.peopleList.forEach(item=>item.selectAddScore=that.scoreRange[0])
                 }
 
             },

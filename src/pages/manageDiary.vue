@@ -1,7 +1,10 @@
 <template>
     <div>
         <div class="bgWhite">
-            <div class="bgWhite " id="main" v-if="false">
+            <div class="topBtn">
+                <span v-for="(item,index) in  sumType" :key="index" :class="{'active':item.active}" @click="reDraw(item)">{{item.name}}</span>
+            </div>
+            <div class="bgWhite " id="main" >
 
             </div>
         </div>
@@ -17,65 +20,125 @@
     #main{
         height: 7rem;
     }
+    .topBtn{
+        margin:0.2rem;
+        .overflow;
+        .border;
+        .borderRadius;
+        span{
+            width: 25%;
+            .fl;
+            .tac;
+            padding:0.15rem 0;
+            .fs30;
+            border-right: @border;
 
+            box-sizing: border-box;
+            &:last-child{border:none}
+        }
+        .active{
+            background: @blue;
+            color: white;
+        }
+    }
 
 </style>
 <script>
+    // 引入 ECharts 主模块
+    var echarts = require('echarts/lib/echarts');
+    // 引入柱状图
+    require('echarts/lib/chart/bar');
+    // 引入提示框和标题组件
+    require('echarts/lib/component/tooltip');
+    require('echarts/lib/component/title');
     import jfRecord from '../components/jfRecord.vue'
 
     export default {
         data() {
             return {
-
+                sumType:[
+                    {
+                        type:1,
+                        active:true,
+                        name:'当天'
+                    },{
+                        type:2,
+                        active:false,
+                        name:'本月'
+                    },{
+                        type:3,
+                        active:false,
+                        name:'本季度'
+                    },{
+                        type:4,
+                        active:false,
+                        name:'本年度'
+                    }
+                ]
             }
         },
         components:{
             jfRecord
         },
-        mounted(){
-            var echarts = require('echarts');
+        methods:{
+            reDraw(item){
+                this.sumType.forEach(item=>{
+                    item.active=false;
+                })
+                item.active=true;
+                this.getSumData();
+            },
+            getSumData(){
+                let that = this;
+                let type='';
+                this.sumType.forEach(item=>{
+                    if(item.active) type = item.type;
+                })
+                this.$http.post('/approveRecord/getLeftPieData',{
+                    type:type,
+                    getUserId:this.$route.params.id
+                })
+                    .then(function (response) {
+                        that.getDraw(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            getDraw(response){
+                let bar = {
+                    title: {
+                        text: ''
+                    },
+                    tooltip: {},
+                    xAxis: {
+                        data: ['A分', 'B分', 'C分', '基础', '加分', '减分','总分']
+                    },
+                    yAxis: {
 
-            // 基于准备好的dom，初始化echarts实例
-            var myChart = echarts.init(document.getElementById('main'));
-            // 绘制图表
-            myChart.setOption({
-                title : {
-                    text: '某站点用户访问来源',
-                    subtext: '纯属虚构',
-                    x:'center'
-                },
-                tooltip : {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
-                },
-                legend: {
-                    orient: 'vertical',
-                    left: 'left',
-                    data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
-                },
-                series : [
-                    {
-                        name: '访问来源',
-                        type: 'pie',
-                        radius : '55%',
-                        center: ['50%', '60%'],
-                        data:[
-                            {value:335, name:'直接访问'},
-                            {value:310, name:'邮件营销'},
-                            {value:234, name:'联盟广告'},
-                            {value:135, name:'视频广告'},
-                            {value:1548, name:'搜索引擎'}
-                        ],
-                        itemStyle: {
-                            emphasis: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
-                            }
-                        }
-                    }
-                ]
-            });
+                    },
+                    series: [{
+                        name: '分数',
+                        type: 'bar',
+                        data: [0, 0, 0, 0, 0, 0,0]
+                    }]
+                };
+                bar.series[0].data[0]=response.data.data.morally||0;
+                bar.series[0].data[1]=response.data.data.achivment||0;
+                bar.series[0].data[2]=response.data.data.behavior||0;
+                bar.series[0].data[3]=response.data.data.baseScore||0;
+                bar.series[0].data[4]=response.data.data.plusScore||0;
+                bar.series[0].data[5]=response.data.data.minusScore||0;
+                bar.series[0].data[6]=response.data.data.sumScore||0;
+                var myChart = echarts.init(document.getElementById('main'));
+                // 绘制图表
+                console.log(bar)
+                //myChart.setOption(this.bar);
+                myChart.setOption(bar);
+            }
+        },
+        mounted(){
+            this.getSumData();
         }
     }
 </script>

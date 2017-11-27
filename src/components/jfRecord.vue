@@ -238,7 +238,7 @@
                     pageSize: 10,
                     type:type,
                     selectDate:this.selTime,
-                    userId:this.$route.params.id
+                    getUserId:this.$route.params.id
                 })
                     .then(function (response) {
                         if(that.lastPage) return

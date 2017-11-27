@@ -354,7 +354,7 @@ const router = new Router({
             component: ManageDiary,
             meta:{
                 navShow: false,
-                title:'管理日志'
+                title:'积分日志'
             }
         },
         {
