@@ -216,7 +216,6 @@
                     this.endTime = data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate();
 
                 }
-
             },
             subData(){
                 //submit the search data

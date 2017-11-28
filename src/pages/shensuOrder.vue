@@ -6,18 +6,19 @@
                 <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom firstItem chooseList" >
                     <strong class="fs30 lh40">审批标题 <span class="red">*</span></strong>
                     <span class="rightPart fs30 lh40 ">{{detail.approveTitle}}</span>
-                    <!--<label for="selList">-->
-                    <!--<i class="icon iconfont icon-xiala gray fs30"></i>-->
-                    <!--</label>-->
-                    <!--<select name="" id="selList">-->
-                    <!--<option value="1" v-for="i in 5">1</option>-->
-                    <!--</select>-->
                 </div>
                 <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom">
                     <strong class="fs30 lh40">审批内容 <span class="red">*</span></strong>
                     <span class="rightPart fs30 lh40 ">{{detail.approveContext}}</span>
                 </div>
-                <jifenType v-model="jfType"></jifenType>
+                <!--<jifenType v-model="jfType"></jifenType>-->
+                <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom">
+                    <strong class="fs30 lh40">积分类型 <span class="red">*</span></strong>
+                    <span class="rightPart fs30 lh40 " v-if="detail.type==1">A </span>
+                    <span class="rightPart fs30 lh40 " v-if="detail.type==2">B </span>
+                    <span class="rightPart fs30 lh40 " v-if="detail.type==3">C </span>
+                    <span class="rightPart fs30 lh40 " v-if="detail.type==4">基础积分</span>
+                </div>
                 <div class="inner paddingBottom paddingTop marginLeft marginRight bgWhite borderBottom">
                     <strong class="fs30 lh40">审批备注 <span class="red">*</span></strong>
                     <span class="rightPart fs30 lh40 ">{{detail.approveRemark||'无'}}</span>
@@ -41,21 +42,16 @@
                 <img :src="detail.userAvatar" v-if="detail.userAvatar" class="headPicture marginRight" alt="">
                 <img src="../assets/img/defaultHead.png" v-else class="headPicture marginRight" alt="">
                 <span class="fs36">{{detail.userName}}</span>
-                <input type="text" class="fr fs36" placeholder="输入积分" value="80" style="border: none;width:3rem;background: none;text-align: right;outline: none">
+                <input type="text" class="fr fs36 myInput tar marginTop" placeholder="输入积分" v-model="detail.missionScore">
             </div>
             <choosePeople v-if="getRange" v-for="(item,index) in peopleList" :name="item.userName"
-                          :key="index" :point="item.selectAddScore" :range="scoreRange"
+                          :key="index" :showValue="item.selectAddScore" :range="scoreRange"
                           :ind="index"
                           :head="item.userAvatar"
                           ref="choosePeople"
                           @changePoint="changePoint">
-                <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
+                <!--<span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>-->
             </choosePeople>
-
-            <!--选择员工-->
-            <chooseStaff  @getData="accept" :hide=true></chooseStaff>
-
-
             <!--审批人-->
             <div class="marginTop"></div>
             <subTitle :content="'审批人'" :subWord="''" :need="false"></subTitle>
@@ -94,22 +90,9 @@
                 </div>
             </div>
             <!--抄送-->
-            <div class="">
+            <div class="marginTop">
                 <subTitle :content="'抄送'" :subWord="''" :need="false"></subTitle>
-                <div class="paddingAll overflow bgWhite tac fs28">
-                    <div class="spr overflow fl marginBottom"  v-for="(item,index) in chaosongList" :key="index" v-if="item">
-                        <div class="ps fl" >
-                            <img :src="item.userAvatar" class="headPicture" alt="">
-                            <p class="marginTop" v-html="item.userName"></p>
-                        </div>
-                        <div class="pt fl marginTop gray marginLeft marginRight">
-                            .......
-                        </div>
-                    </div>
-                    <div class="add fl" @click="markPerson('chaosong')">
-                        <i class="icon iconfont icon-jia gray"></i>
-                    </div>
-                </div>
+                <selectStaff v-model="chaosongren"></selectStaff>
             </div>
         </div>
         <div class="confBtn" @click="subData">确定</div>
@@ -295,12 +278,12 @@
     import myInput from '../components/myInput.vue'
     import subTitle from '../components/subTitle.vue'
     import choosePeople from '../components/choosePeople.vue'
-    import chooseStaff from '../components/chooseStaff.vue'
     import uploadImg from '../components/uploadImg.vue'
     import jifenType from '../components/jifenType.vue'
     import scaleImg from '../components/scaleImg.vue'
-
+    import selectStaff from '../components/selectStaff.vue'
     import { mapGetters } from 'vuex';
+    import {myTool} from '../lib/myTool'
     export default {
         data() {
             return {
@@ -310,19 +293,10 @@
                 jfType:0,
                 dialogImageUrl: '',
                 dialogVisible: false,
+                chaosongren:'',
                 selAll:false,
                 detail:{},
                 scoreRange:[],
-                selectType:{
-                    name: '积分类型',
-                    need: true,
-                    selValue: '',
-                    selectRange: [
-                        '品德',
-                        '行为',
-                        '业绩'
-                    ]
-                },
                 peopleList:[],
                 chaosongList:null,
                 shenpiList:null,
@@ -340,57 +314,9 @@
             ])
         },
         methods: {
-            shenpi(){
-                localStorage.setItem('shenpiren',true)
-                document.getElementById('selectPeople').click();
-            },
-            markPerson(msg){
-                localStorage.setItem('chaosong',true)
-                document.getElementById('selectPeople').click();
-            },
-            accept(data){
-                // accpet  staff person
-                if(localStorage.getItem('chaosong')){
-                    this.chaosongList = data;
-                    localStorage.removeItem('chaosong')
-                }else if(localStorage.getItem('shenpiren')){
-                    this.shenpiList = data;
-                    localStorage.removeItem('shenpiren')
-                }else{
-                    let that =this
-                    this.peopleList = data;
-                    this.peopleList.unshift(this.selfInf);
-                    this.peopleList.forEach(item=>item.selectAddScore=that.scoreRange[0])
-                }
-
-            },
-
-            delPerson(index){
-                if(this.peopleList[index].userName==this.userMessage.userName){
-                    this.$toast({
-                        message: '不能删除自己哦',
-                        duration: 2000
-                    });
-                    return;
-                }
-                this.peopleList.splice(index, 1)
-            },
             changePoint(msg){
-                //选择分数
-                if(this.selAll){//select all
-                    for(let i = 0 ; i<this.peopleList.length;i++){
-
-                        var obj =  this.peopleList[i];
-                        obj.selectAddScore=msg.value;
-                        this.$set(this.peopleList,i,obj);
-                    }
-
-                }else{
-                    //select one
-                    this.peopleList[msg.index].selectAddScore=msg.value;
-
-
-                }
+                //select one
+                this.peopleList[msg.index].selectAddScore=msg.value;
             },
             getSelfInf(){
                 //获取自己分数
@@ -408,10 +334,15 @@
                     id:this.$route.params.aimId
                 })
                     .then(function (response) {
-                        for(let i = 0 ; i<=(response.data.data.detail.maxScore-response.data.data.detail.minuxScore)/response.data.data.detail.scoreLevel ; i++){
+                        /*for(let i = 0 ; i<=(response.data.data.detail.maxScore-response.data.data.detail.minuxScore)/response.data.data.detail.scoreLevel ; i++){
                             that.scoreRange.push(response.data.data.detail.minuxScore+i*response.data.data.detail.scoreLevel)
-                        }
-
+                        }*/
+                        // get score select range
+                        let minScore = response.data.data.detail.minuxScore;
+                        let maxScore = response.data.data.detail.maxScore;
+                        let level = response.data.data.detail.scoreLevel;
+                        that.scoreRange = myTool.getScoreRange(minScore,maxScore,level);
+                        // get score select range
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -424,7 +355,6 @@
                 })
                     .then(function (response) {
                         that.detail = response.data.data;
-                        that.jfType = that.detail.type;
                         that.imgList = that.detail.imgList;
                         that.getSelfInf();//get self score
                     })
@@ -452,10 +382,10 @@
                 this.peopleList.forEach(item=>{
                     beApproveUserId.push(item.id);
                 });
-                let copyUserId = [];
+                /*let copyUserId = [];
                 if(this.chaosongList) {
                     this.chaosongList.forEach(item=> copyUserId.push(item.id));
-                }
+                }*/
                 this.$http.post('/missionApprove/submitMissionApprove', {
                     addScore: score.join(','),
                     aimId: this.detail.aimId,
@@ -464,10 +394,11 @@
                     approveTitle: this.detail.approveTitle,
                     approveUserId: approveUserId.join(','),
                     beApproveUserId: beApproveUserId.join(','),
-                    copyUserId: copyUserId.join(','),
+                    copyUserId: this.chaosongren,
                     missionPics: this.imgList,
                     rootId:this.detail.rootId,
                     type:this.detail.type,
+                    submitType:1
                 })
                     .then(function (response) {
                         if(response.data.code==200000){
@@ -493,7 +424,7 @@
             //                11 品德积分12 行为积分13 业绩积分
             if(this.$route.params.rootId==11||this.$route.params.rootId==12||this.$route.params.rootId==13){
                 this.getRange=true;
-                this.getScoreRange();
+                this.getScoreRange();// get score range
             }else{
 
             }
@@ -505,7 +436,7 @@
             choosePeople,
             jifenType,
             scaleImg,
-            chooseStaff
+            selectStaff
         }
     }
 </script>

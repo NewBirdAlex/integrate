@@ -59,11 +59,11 @@
                 sumType:[
                     {
                         type:1,
-                        active:true,
+                        active:false,
                         name:'当天'
                     },{
                         type:2,
-                        active:false,
+                        active:true,
                         name:'本月'
                     },{
                         type:3,

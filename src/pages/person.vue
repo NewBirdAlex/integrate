@@ -1,5 +1,5 @@
 <template>
-    <div class="" style="padding-bottom: 3rem">
+    <div class="" style="padding-bottom: 1rem">
         <!--<h3 class="tac paddingAll ">个人中心</h3>-->
         <div class="paddingAll">
             <div class="pt">
@@ -13,11 +13,9 @@
                     </div>
                 </router-link>
                 <!--echarts-->
-                <div id="main" class="bgWhite marginTop"></div>
-                <!--<div id="main" class="bgWhite marginTop">-->
-                    <!--&lt;!&ndash;<IEcharts :option="bar" :loading="loading" @ready="onReady" @click="onClick"></IEcharts>&ndash;&gt;-->
-                    <!--<IEcharts :option="bar"/>-->
-                <!--</div>-->
+                <router-link :to="'/manageDiary/'+userMessage.userId">
+                    <div id="main" class="bgWhite marginTop"></div>
+                </router-link>
 
             </div>
             <div class="pt marginTop opItem fs28">

@@ -141,7 +141,6 @@ const mutations = {
         state.showLoading = false;
     },
     saveSporder(state,data){
-        console.log(data)
         state.spOrder=data
     },
     getuserBaseInf(state){

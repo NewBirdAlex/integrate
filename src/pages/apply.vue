@@ -416,6 +416,7 @@
                     missionPics: this.imgList,
                     rootId:this.detail.rootId,
                     type:type,
+                    submitType:2
                 })
                     .then(function (response) {
                         if(response.data.code=='200000'){

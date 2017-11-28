@@ -37,6 +37,7 @@
     "mint-ui": "^2.2.9",
     "postcss": "^6.0.11",
     "postcss-loader": "^2.0.6",
+    "scrolling-element": "^1.0.2",
     "style-loader": "^0.18.2",
     "url-loader": "^0.5.9",
     "vconsole": "^3.0.0",
