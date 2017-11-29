@@ -71,6 +71,7 @@
                             <span class="yellow fr" v-if="item.checkStatus==1">审批中</span>
                             <span class="green fr" v-if="item.checkStatus==2">审批通过</span>
                             <span class="red fr" v-if="item.checkStatus==3">审批不通过</span>
+                            <span class="red fr" v-if="item.checkStatus==4">等待审批</span>
 
                         </p>
                         <p class="overflow">

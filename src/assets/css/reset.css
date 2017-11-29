@@ -68,3 +68,8 @@ a{text-decoration: none}
     url('//at.alicdn.com/t/font_445541_7v45tukd81dfs9k9.ttf') format('truetype'),
     url('//at.alicdn.com/t/font_445541_7v45tukd81dfs9k9.svg#iconfont') format('svg');
 }
+/*forbit scroll*/
+.modal-open {
+    position: fixed;
+    width: 100%;
+}

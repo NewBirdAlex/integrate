@@ -26,7 +26,7 @@
                                 enter-active-class="animated bounceInDown"
                                 leave-active-class="animated bounceOutUp"
                         >
-                            <div class="option" v-show="showOption" @click="showOption=!showOption">
+                            <div class="option" v-show="showOption" @click="clickWrapHideOption">
                                 <div class="overflow bgWhite">
                                     <div class="ol">
                                         <div class="" @click="showApartment=true"><i class="icon iconfont icon-renwu"></i>部门</div>
@@ -121,19 +121,18 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 1rem;
         .tac;
         div {
-            margin-top: 0.3rem;
             width: 40%;
-            margin: 0.1rem 0.3rem;
-            line-height: 0.6rem;
-            display: inline-block;
-            .border;
-            .borderRadius;
-            &.active {
-                background: @blue;
-                color: white;
+            line-height: 0.8rem;
+            color:@blue;
+            .fl;
+            .tac;
+            .fs36;
+            background-color: #e5f5ff;
+            &:nth-child(2){
+                width: 60%;
+                .activeBtn;
             }
         }
     }
@@ -228,6 +227,22 @@
     }
 </style>
 <script>
+    import 'scrolling-element'
+    var ModalHelper = (function(bodyCls) {
+        var scrollTop;
+        return {
+            afterOpen: function() {
+                scrollTop = document.scrollingElement.scrollTop;
+                document.body.classList.add(bodyCls);
+                document.body.style.top = -scrollTop + 'px';
+            },
+            beforeClose: function() {
+                document.body.classList.remove(bodyCls);
+                // scrollTop lost after set position:fixed, restore it back.
+                document.scrollingElement.scrollTop = scrollTop;
+            }
+        };
+    })('modal-open');
     export default {
         data() {
             return {
@@ -255,6 +270,15 @@
         computed: {
 
         },
+        watch:{
+            showStaff(val){
+                if(val){
+                    ModalHelper.afterOpen('modal-open');
+                }else{
+                    ModalHelper.beforeClose('modal-open');
+                }
+            }
+        },
         props: {
             hide:{
                 type:Boolean,
@@ -262,6 +286,9 @@
             }
         },
         methods: {
+            clickWrapHideOption(event){
+                if(event.target.className=='option') this.showOption=false;
+            },
             keywordSearch(){
                 if(!this.keyWord) return
                 this.needReset=true;

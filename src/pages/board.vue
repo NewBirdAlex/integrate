@@ -89,6 +89,7 @@
                 departmentId:'',
                 jobId:'',
                 type:'',
+                jfType:'',
                 searchType:1,
                 startTime:'',
                 endTime:'',
@@ -98,7 +99,6 @@
                 lastPage:false,
                 loading:false,
                 list: [],
-//                list: [1, 2, 4, 5, 3, 3, 3, 33, 3, 3, 2, 3, 3, 2, 3, 23,3]
             }
         },
         components:{
@@ -111,14 +111,19 @@
         watch:{
             selUserName(val){
 
-//                this.searchByName();
             }
         },
         methods: {
             getFilterData(msg){
                 console.log(msg)
-                if(msg.keyWord) this.keyWord=msg.keyWord;
-                if(msg.type) this.searchType=msg.type;
+                //获取搜索栏的数据
+                msg.apartment?this.departmentId=msg.apartment.id:this.departmentId='';
+                msg.job?this.jobId=msg.job.id:this.jobId='';
+                msg.jfType?this.jfType=msg.jfType.value:this.jfType='';
+                msg.startTime?this.startTime=msg.startTime:this.startTime='';
+                msg.endTime?this.endTime=msg.endTime:this.endTime='';
+                msg.keyWord?this.keyWord=msg.keyWord:this.keyWord='';
+                msg.type?this.searchType=msg.type:this.searchType=1;
                 this.reset();
                 this.getList();
             },
@@ -128,7 +133,6 @@
             },
             collectData(msg){
                 //获取搜索栏的数据
-                console.log(msg)
                 msg.apartment?this.departmentId=msg.apartment.id:this.departmentId='';
                 msg.job?this.jobId=msg.job.id:this.jobId='';
                 msg.type?this.type=msg.type.value:this.type='';
@@ -160,7 +164,7 @@
                     departmentId: this.departmentId,
                     jobId:this.jobId,
                     endTime:this.endTime,
-                    scoreType:this.type,
+                    scoreType:this.jfType,
                     startTime:this.startTime,
                     userName:this.selUserName,
                     pageNumber: this.pageNumber,

@@ -11,7 +11,6 @@
                 enter-active-class="animated bounceInLeft"
                 leave-active-class="animated bounceOutRight"
         >
-
             <div class="department" v-if="showDepartment">
                 <ul class="bgWhite ">
                     <li v-for="(item,index) in list" :key="index">
@@ -121,7 +120,22 @@
 </style>
 <script>
     import { mapGetters } from 'vuex';
-
+    import 'scrolling-element'
+    var ModalHelper = (function(bodyCls) {
+        var scrollTop;
+        return {
+            afterOpen: function() {
+                scrollTop = document.scrollingElement.scrollTop;
+                document.body.classList.add(bodyCls);
+                document.body.style.top = -scrollTop + 'px';
+            },
+            beforeClose: function() {
+                document.body.classList.remove(bodyCls);
+                // scrollTop lost after set position:fixed, restore it back.
+                document.scrollingElement.scrollTop = scrollTop;
+            }
+        };
+    })('modal-open');
     export default {
         data() {
             return {
@@ -138,6 +152,15 @@
             ...mapGetters([
                 'userMessage',
             ])
+        },
+        watch:{
+            showDepartment(val){
+                if(val){
+                    ModalHelper.afterOpen('modal-open');
+                }else{
+                    ModalHelper.beforeClose('modal-open');
+                }
+            }
         },
         mounted(){
             this.getList();

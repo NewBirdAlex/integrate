@@ -1,7 +1,7 @@
 <template>
     <div class="searchWrap bgWhite">
-        <!--<span @click="showOptions=!showOptions">筛选 <i class="icon iconfont icon-arrLeft-fill gray"></i></span>-->
-        <span>选择条件</span>
+        <span @click="showOptions=!showOptions">筛选 <i class="icon iconfont icon-arrLeft-fill gray"></i></span>
+        <!--<span>选择条件</span>-->
         <span v-for="(item,index) in searchType" :key="index" :class="{'blue':item.active}" @click="changeType(item)">{{item.name}}</span>
         <span class="fr lastSpan" @click="showSearch=!showSearch"> <i class="icon iconfont icon-sousuo fs36 gray"></i></span>
 
@@ -18,30 +18,30 @@
         </transition>
         <transition
                 name="custom-classes-transition"
-                enter-active-class="animated slideInLeft"
-                leave-active-class="animated  slideOutLeft"
+                enter-active-class="animated zoomInDown"
+                leave-active-class="animated  zoomOutDown"
         >
-            <div class="options" v-if="showOptions">
+            <div class="options" v-if="showOptions" @click="clickOption">
                 <div class="inner">
                     <div class="topBtn">
-                        <span v-for="(item,index) in shaixuan" :class="{'blue':item.active}">{{item.name}} <i class="icon iconfont icon-arrLeft-fill gray" :class="{'blue':item.active}"></i></span>
+                        <span v-for="(item,index) in shaixuan" :class="{'blue':item.active}" @click="chooseOption(item,index)">{{item.name}} <i class="icon iconfont icon-arrLeft-fill gray" :class="{'blue':item.active}"></i></span>
                     </div>
 
                     <div class="overflow marginBottom fs26" v-if="showShaiXuan==0">
                         <span class=" opBtn" @click="pickTime(true)">{{startTime}}</span> - <span class="opBtn" @click="pickTime(false)">{{endTime}}</span>
                     </div>
-                    <div class="overflow marginBottom fs26" v-if="showShaiXuan==1">
+                    <div class="overflow marginBottom fs26 scrollFrame" v-if="showShaiXuan==1">
                         <span class=" opBtn " :class="{'activeBtn':item.active}" v-for="(item,index) in apartMentList" :key="index" @click="selectApartment(item,index)">{{item.name}}</span>
                     </div>
-                    <div class="overflow marginBottom fs26" v-if="showShaiXuan==2">
+                    <div class="overflow marginBottom fs26 scrollFrame" v-if="showShaiXuan==2">
                         <span class=" opBtn " :class="{'activeBtn':item.active}" v-for="(item,index) in jobList" :key="index" @click="selectJob(item,index)">{{item.jobTitle}}</span>
                     </div>
                     <div class="overflow marginBottom fs26" v-if="showShaiXuan==3">
                         <span class=" opBtn " :class="{'activeBtn':item.active}" v-for="(item,index) in jfType" @click="selectType(item)">{{item.name}}</span>
                     </div>
                     <div class="confirm">
-                        <span  @click="reset">重置</span>
-                        <span class="activeBtn">确定</span>
+                        <span  @click="resetOption">重置</span>
+                        <span class="activeBtn" @click="confirmOption">确定</span>
                     </div>
                 </div>
             </div>
@@ -61,6 +61,10 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
+    .scrollFrame{
+        height: 45vh;
+        overflow: auto;
+    }
     .topBtn{
         .overflow;
         span{
@@ -167,6 +171,23 @@
     }
 </style>
 <script>
+    //scrolling
+    import 'scrolling-element'
+    var ModalHelper = (function(bodyCls) {
+        var scrollTop;
+        return {
+            afterOpen: function() {
+                scrollTop = document.scrollingElement.scrollTop;
+                document.body.classList.add(bodyCls);
+                document.body.style.top = -scrollTop + 'px';
+            },
+            beforeClose: function() {
+                document.body.classList.remove(bodyCls);
+                // scrollTop lost after set position:fixed, restore it back.
+                document.scrollingElement.scrollTop = scrollTop;
+            }
+        };
+    })('modal-open');
     export default {
         data() {
             return {
@@ -251,7 +272,9 @@
                 ],
                 jobList:[],
                 jobNum:1,
-                jobSize:20,
+                apartmentNum:1,
+                apartmentSize:1000,
+                jobSize:1000,
                 timePosition:true,
                 startTime:'选择开始时间',
                 endTime:'选择结束时间',
@@ -261,8 +284,78 @@
         computed:{
 
         },
-
+        watch:{
+            showOptions(val){
+                if(val){
+                    ModalHelper.afterOpen('modal-open');
+                }else{
+                    ModalHelper.beforeClose('modal-open');
+                }
+            }
+        },
         methods:{
+            resetOption(){
+                this.startTime='选择开始时间';
+                this.endTime='选择结束时间';
+                for(let i = 0;i<this.apartMentList.length;i++){
+                    if(this.apartMentList[i].active){
+                        let obj = this.apartMentList[i];
+                        obj.active=false;
+                        this.$set(this.apartMentList,i,obj);
+                    }
+                }
+                for(let i = 0;i<this.jobList.length;i++){
+                    if(this.jobList[i].active){
+                        let obj = this.jobList[i];
+                        obj.active=false;
+                        this.$set(this.jobList,i,obj);
+                    }
+                }
+                for(let i = 0;i<this.jfType.length;i++){
+                    if(this.jfType[i].active){
+                        let obj = this.jfType[i];
+                        obj.active=false;
+                        this.$set(this.jfType,i,obj);
+                    }
+                }
+            },
+            confirmOption(){
+                //submit the search data
+                let obj = {}
+                if(this.startTime!='选择开始时间') obj.startTime = this.startTime;
+                if(this.endTime!='选择结束时间') obj.endTime = this.endTime;
+                this.apartMentList.forEach(item=>{
+                    if(item.active){//部门
+                        obj.apartment = item;
+                    }
+                })
+                this.jobList.forEach(item=>{
+                    if(item.active){//职位
+                        obj.job = item;
+                    }
+                })
+                this.jfType.forEach(item=>{
+                    if(item.active){//积分类型
+                        obj.jfType = item;
+                    }
+                })
+                this.searchType.forEach(item=>{//年月日
+                    if(item.active) obj.type=item.type;
+                });
+                obj.keyWord=this.keyWord;
+                this.$emit('getData',obj)
+                this.showOptions=false;
+            },
+            chooseOption(item,index){
+                this.shaixuan.forEach(item=>item.active=false);
+                item.active=true;
+                this.showShaiXuan=index;
+            },
+            clickOption(event){
+                if(event.target.className=='options'){
+                    this.showOptions=!this.showOptions;
+                }
+            },
             handleConfirm(data){
                 if(this.timePosition){
                     this.startTime = data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate();

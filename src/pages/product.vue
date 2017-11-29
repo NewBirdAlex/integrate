@@ -39,7 +39,6 @@
     	position: fixed;
     	left: 0;
     	width: 100%;
-    	height: 4rem;
     	bottom: 1rem;
     	background: #fff;
     	transition: all 0.2s;
@@ -115,7 +114,7 @@
         </div>
         <div class="bgWhite paddingAll lh40">
             <div>
-                <strong class="fs30">{{ detail.luckName }}</strong>
+                <strong class="fs30">{{ detail.luckName||'商品名称'}}</strong>
                 <span class="fr gray fs26">剩余{{ detail.shopNum?detail.shopNum:'0' }}件</span>
             </div>
             <div class="marginTop">
@@ -142,7 +141,7 @@
             </div>
             <div class="show" v-html="detail.shopDetail"></div>
         </div>
-        <div class="mask" v-show="openSele"></div>
+        <div class="mask" v-show="openSele" @click="openSele=!openSele"></div>
         <div class="sele" :class="{'sele-option':openSele}">
         	<div class="part1">
         		<div class="cover">
@@ -176,7 +175,7 @@
             	swiperL:[],
             	detail:{},
             	historytotal:0,
-            	openSele:true,
+            	openSele:false,
             	spec:{
             		keys:null,
             		act:-1,

@@ -12,6 +12,13 @@
                 </div>
             </div>
         </div>
+
+        <ul
+                v-infinite-scroll="loadMore"
+                infinite-scroll-disabled="loading"
+                infinite-scroll-distance="10">
+            <li v-for="item in list">{{ item }}</li>
+        </ul>
     </div>
 </template>
 <style scoped lang="less">
@@ -39,7 +46,50 @@
 <script>
     export default {
         data() {
-            return {}
+            return {
+                list: [],
+                pageNumber: 1,
+                pageSize: 5,
+                lastPage: false,
+                loading: false
+            }
+        },
+        methods:{
+            loadMore() {
+                if (!this.lastPage) {
+                    this.getList();
+                    this.loading = true;
+                } else {
+                    this.loading = false;
+                    this.$toast({
+                        message: '已加载所有数据',
+                        duration: 2000
+                    });
+                }
+
+            },
+            getList() {
+                let that = this;
+                this.$http.post('/shopbuylist/shopBuyRecordByUser', {
+                    pageNumber: this.pageNumber,
+                    pageSize: this.pageSize,
+                })
+                    .then(function (response) {
+                        that.pageNumber += 1;
+                        if (response.data.data.last) {
+                            that.lastPage = true;
+                        }
+                        that.list = that.list.concat(response.data.data.content);
+                        that.loading = false;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+            }
+        },
+        mounted(){
+            this.getList();
         }
     }
 </script>

@@ -139,10 +139,11 @@
                             select:true
                         }
                         that.peopleList.unshift(selfData)
-                        that.getScoreRange();
+
                         //11 品德积分12 行为积分13 业绩积分
                         if(that.spOrder.rootId==11||that.spOrder.rootId==12||that.spOrder.rootId==13){
                             that.needRange=true;
+                            that.getScoreRange();
                         }else{
                             that.needRange=false;
                         }
