@@ -18,7 +18,7 @@
                         </div>
                         <div class="right bgWhite">
                             <i class="icon iconfont icon-sousuo"></i>
-                            <input type="text" placeholder="搜索" v-model="keyWord" @keyup="keywordSearch">
+                            <input type="text" placeholder="搜索" v-model="keyWord" @input="keywordSearch">
                         </div>
                         <div style="clear: both"></div>
                         <transition
@@ -26,7 +26,7 @@
                                 enter-active-class="animated bounceInDown"
                                 leave-active-class="animated bounceOutUp"
                         >
-                            <div class="option" v-show="showOption">
+                            <div class="option" v-show="showOption" @click="clickWrapHideOption">
                                 <div class="overflow bgWhite">
                                     <div class="ol">
                                         <div class="" @click="showApartment=true"><i class="icon iconfont icon-renwu"></i>部门</div>
@@ -89,7 +89,7 @@
     @import "../assets/css/common.less";
     .wrap{
         position: relative;
-        z-index: 100;
+        z-index: 1000;
         /*pointer-events: none;*/
     }
     .hidelogo{
@@ -121,19 +121,18 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 1rem;
         .tac;
         div {
-            margin-top: 0.3rem;
             width: 40%;
-            margin: 0.1rem 0.3rem;
-            line-height: 0.6rem;
-            display: inline-block;
-            .border;
-            .borderRadius;
-            &.active {
-                background: @blue;
-                color: white;
+            line-height: 0.8rem;
+            color:@blue;
+            .fl;
+            .tac;
+            .fs36;
+            background-color: #e5f5ff;
+            &:nth-child(2){
+                width: 60%;
+                .activeBtn;
             }
         }
     }
@@ -144,9 +143,8 @@
         top: 1rem;
         height: 100%;
         width: 100%;
-        /*padding-top: 1rem;*/
         background: rgba(0,0,0,0.4);
-        z-index: 100;
+        z-index: 1000;
 //        .bgWhite;
         overflow: hidden;
         .ol {
@@ -198,7 +196,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: 10;
+        z-index: 100;
         opacity: 1;
         .grayBg;
     }
@@ -229,6 +227,22 @@
     }
 </style>
 <script>
+    import 'scrolling-element'
+    var ModalHelper = (function(bodyCls) {
+        var scrollTop;
+        return {
+            afterOpen: function() {
+                scrollTop = document.scrollingElement.scrollTop;
+                document.body.classList.add(bodyCls);
+                document.body.style.top = -scrollTop + 'px';
+            },
+            beforeClose: function() {
+                document.body.classList.remove(bodyCls);
+                // scrollTop lost after set position:fixed, restore it back.
+                document.scrollingElement.scrollTop = scrollTop;
+            }
+        };
+    })('modal-open');
     export default {
         data() {
             return {
@@ -249,23 +263,19 @@
                 jobList:[],
                 staffList: [],
                 apartMentList:[],
-                apartmentLast:false
+                apartmentLast:false,
+                needReset:false
             }
         },
         computed: {
-            wrapStyle() {
-                if (this.showStaff) {
-                    return {
-                        "z-index": '10',
-                        'opacity': '1',
-                        'top': '0'
-                    }
-                } else {
-                    return {
-                        "z-index": '-10',
-                        'opacity': '0',
-                        'top': '100rem'
-                    }
+
+        },
+        watch:{
+            showStaff(val){
+                if(val){
+                    ModalHelper.afterOpen('modal-open');
+                }else{
+                    ModalHelper.beforeClose('modal-open');
                 }
             }
         },
@@ -276,7 +286,12 @@
             }
         },
         methods: {
+            clickWrapHideOption(event){
+                if(event.target.className=='option') this.showOption=false;
+            },
             keywordSearch(){
+                if(!this.keyWord) return
+                this.needReset=true;
                 this.reset();
                 this.getStaff();
             },
@@ -384,12 +399,16 @@
                     userName: this.keyWord
                 })
                     .then(function (response) {
-                        that.allLoaded = false;
-                        that.staffList = that.staffList.concat(response.data.data.content) ;
-                        that.staffList.forEach(item=>item.pick=false);// click or not
-                        if (response.data.data.last) {  //no more data
-                            that.lastPage = true;
+                        if(response.data.code==200000){
+                            that.allLoaded = false;
+                            that.pageNumber+=1;
+                            that.staffList = that.staffList.concat(response.data.data.content) ;
+                            that.staffList.forEach(item=>item.pick=false);// click or not
+                            if (response.data.data.last) {  //no more data
+                                that.lastPage = true;
+                            }
                         }
+
                     })
                     .catch(function (error) {
                         console.log(error);

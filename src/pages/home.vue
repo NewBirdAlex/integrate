@@ -198,11 +198,7 @@
             //swiper
            this.$http.post('/advert/listByCom',{
                companyId:this.userMessage.companyId,
-               locationType:1,
-               sortOrder:"desc",
-               sortType:'id',
-               token:this.userMessage.token,
-               userId:this.userMessage.userId
+               locationType:1
 
            })
            .then(function (response) {

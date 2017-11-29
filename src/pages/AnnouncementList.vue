@@ -1,26 +1,28 @@
 <template>
+    <div>
+        <myEmpty  v-if="list.length==0"></myEmpty>
+        <ul class=""
+            v-infinite-scroll="loadMore"
+            infinite-scroll-disabled="loading"
+            infinite-scroll-immediate-check="true"
+            v-if="list.length!=0"
+            infinite-scroll-distance="10">
+            <li v-for="(item,index) in list" :key="index" class="marginBottom bgWhite">
+                <div class="overflow bgWhite paddingAll list marginTop">
+                    <p class="fs30">{{item.context}}</p>
+                    <p class="fs28 gray overflow"><span class="fr">{{item.companyName}}</span></p>
+                    <p class="fs26 gray overflow"><span class="fr">{{item.createDate}}</span></p>
+                </div>
+            </li>
 
+            <li class="tac" v-if="loading">
+                <div class="loadmore">
+                    <mt-spinner color="#26a2ff"></mt-spinner>
+                </div>
+            </li>
+        </ul>
+    </div>
 
-    <ul class=""
-        v-infinite-scroll="loadMore"
-        infinite-scroll-disabled="loading"
-        infinite-scroll-immediate-check="true"
-        v-if="list.length!=0"
-        infinite-scroll-distance="10">
-        <li v-for="(item,index) in list" :key="index" class="marginBottom bgWhite">
-            <div class="overflow bgWhite paddingAll list marginTop">
-                <p class="fs30">{{item.context}}</p>
-                <p class="fs28 gray overflow"><span class="fr">{{item.companyName}}</span></p>
-                <p class="fs26 gray overflow"><span class="fr">{{item.createDate}}</span></p>
-            </div>
-        </li>
-
-        <li class="tac" v-if="loading">
-            <div class="loadmore">
-                <mt-spinner color="#26a2ff"></mt-spinner>
-            </div>
-        </li>
-    </ul>
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";

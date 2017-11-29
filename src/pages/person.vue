@@ -1,5 +1,5 @@
 <template>
-    <div class="" style="padding-bottom: 3rem">
+    <div class="" style="padding-bottom: 1rem">
         <!--<h3 class="tac paddingAll ">个人中心</h3>-->
         <div class="paddingAll">
             <div class="pt">
@@ -13,11 +13,9 @@
                     </div>
                 </router-link>
                 <!--echarts-->
-                <div id="main" class="bgWhite marginTop"></div>
-                <!--<div id="main" class="bgWhite marginTop">-->
-                    <!--&lt;!&ndash;<IEcharts :option="bar" :loading="loading" @ready="onReady" @click="onClick"></IEcharts>&ndash;&gt;-->
-                    <!--<IEcharts :option="bar"/>-->
-                <!--</div>-->
+                <router-link :to="'/manageDiary/'+userMessage.userId">
+                    <div id="main" class="bgWhite marginTop"></div>
+                </router-link>
 
             </div>
             <div class="pt marginTop opItem fs28">
@@ -179,6 +177,7 @@
         computed: {
             ...mapGetters([
                 'baseInf',
+                'userMessage'
             ])
         },
         methods:{
@@ -203,7 +202,9 @@
             },
             getScoreList(){
                 let that = this;
-                this.$http.post('/user/getPieData', {
+                this.$http.post('/approveRecord/getLeftPieData', {
+                    type:4,
+                    getUserId:this.userMessage.userId
                 })
                     .then(function (response) {
                         that.loading=false;
@@ -213,7 +214,7 @@
                             },
                             tooltip: {},
                             xAxis: {
-                                data: ['基础', '业绩', '行为', '月度', '季度', '总','']
+                                data: ['A分', 'B分', 'C分', '基础', '加分', '减分','总分']
                             },
                             yAxis: {
 
@@ -224,12 +225,13 @@
                                 data: [0, 0, 0, 0, 0, 0,0]
                             }]
                         };
-                        bar.series[0].data[0]=response.data.data.baseScore||0;
+                        bar.series[0].data[0]=response.data.data.morally||0;
                         bar.series[0].data[1]=response.data.data.achivment||0;
                         bar.series[0].data[2]=response.data.data.behavior||0;
-                        bar.series[0].data[3]=response.data.data.monthsAdd||0;
-                        bar.series[0].data[4]=response.data.data.seasonsSdd||0;
-                        bar.series[0].data[5]=response.data.data.userScore||0;
+                        bar.series[0].data[3]=response.data.data.baseScore||0;
+                        bar.series[0].data[4]=response.data.data.plusScore||0;
+                        bar.series[0].data[5]=response.data.data.minusScore||0;
+                        bar.series[0].data[6]=response.data.data.sumScore||0;
                         var myChart = echarts.init(document.getElementById('main'));
                         // 绘制图表
                         console.log('bar='+bar)
@@ -246,13 +248,16 @@
 //            IEcharts
         },
         mounted() {
-            this.getScoreList();
-            this.$store.commit('getuserBaseInf');
+            let that =this;
+            setTimeout(function(){ that.getScoreList();},500)
 
             this.$nextTick(()=>{
                 // 基于准备好的dom，初始化echarts实例
 
             })
+        },
+        created(){
+            this.$store.commit('getuserBaseInf');
         }
     }
 </script>

@@ -420,6 +420,7 @@
                     missionPics: this.imgList,
                     rootId:16,
                     type:this.jifenType,
+                    submitType:2
                 })
                     .then(function (response) {
                         if(response.data.code==200000){

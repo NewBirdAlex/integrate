@@ -77,7 +77,7 @@
                             <p class="lh50">
                                 {{item.approveTitle}}
                                 <span class="blue fr" v-if="item.addScore>0">+{{item.addScore}}分</span>
-                                <span class="blue fr" v-else>-{{item.addScore}}分</span>
+                                <span class="blue fr" v-else>{{item.addScore}}分</span>
                             </p>
                             <!--<p class="gray">{{item.jobTitle}}</p>-->
                             <!--<p>{{item.approveTitle}}</p>-->
@@ -457,7 +457,10 @@
             this.showWrap=false;
 
             //get history
-            this.history = localStorage.getItem('spHistory').split(',');
+            if(localStorage.getItem('spHistory')){
+                this.history = localStorage.getItem('spHistory').split(',');
+            }
+
         },
         components:{
             showList

@@ -15,15 +15,20 @@
             background: #ddd;
             overflow: hidden;
         }
+        h4{padding-top: 0.1rem}
         img{
         	width: 100%;
            	min-height: 100%;
         }
         .cj{
-            padding: 0.07rem 0.2rem;
+            padding: 0.03rem 0.2rem;
             color: white;
             background: red;
+            display: inline-block;
+            vertical-align: middle;
             border-radius: 0.3rem;
+            .fr;
+            .marginRight;
         }
         .dh{
             .bgWhite;
@@ -62,22 +67,20 @@
     <div>
         <div class="slide">
             <mt-swipe :auto="4000">
-                <mt-swipe-item>
-                    <img src="../assets/img/1.jpg" alt="">
+                <mt-swipe-item v-for="(item,index) in swipeList" :key="index">
+                    <img :src="item.cover" alt="">
                 </mt-swipe-item>
-                <mt-swipe-item><img src="../assets/img/2.jpg" alt=""></mt-swipe-item>
-                <mt-swipe-item><img src="../assets/img/3.jpg" alt=""></mt-swipe-item>
             </mt-swipe>
         </div>
         <div class="paddingAll bgWhite overflow">
             <div class="item">
                 <i class="icon iconfont icon-jifen yellow"></i>
-                可用积分：<span class="yellow">{{ $store.state.baseInf.userScore }}</span>
+                可用积分：<span class="yellow">{{ baseInf.userScore }}</span>
             </div>
-            <div class="item">
+            <router-link tag="div" to="/exchangeRec" class="item">
                 <i class="icon iconfont icon-duihuanjilu blue"></i>
                 兑换记录
-            </div>
+            </router-link>
         </div>
 
         <div class="marginTop bgWhite paddingAll tac">
@@ -95,7 +98,7 @@
                 	<img src="../assets/img/null.png" v-show="!t.shopCover" alt="">
                 </div>
                 <h4 class="paddingLeft fs30"> <strong>{{ t.shopName?t.shopName:'暂无商品名' }}</strong></h4>
-                <div class="paddingLeft fs26 marginTop">
+                <div class="paddingLeft fs26 " style="padding-top: 0.1rem">
                     <span class="yellow fs30">{{ t.saleMoney }}</span>
                     <span class="gray marginRight">积分</span>
                     <router-link tag='span' :to="'/product/' + t.id" class="cj" :class="{'dh':i==2}" v-if="t.status == 1">兑换</router-link>
@@ -110,6 +113,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     export default {
         data() {
             return {
@@ -118,10 +122,30 @@
 					"pageSize": 11,
             	},
             	list:null,
+                swipeList:[],
             	loading:false,
             }
         },
+        computed: {
+            ...mapGetters([
+                'userMessage',
+                'baseInf'
+            ])
+        },
         methods:{
+            getSwipe(){
+                //swiper
+                this.$http.post('/advert/listByCom',{
+                    companyId:this.userMessage.companyId,
+                    locationType:3
+                })
+                    .then(response=>{
+                        this.swipeList = response.data.data.content;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
             loadMore(){
             	this.loading = true;
             	this.$http.post('/shop/getShopListByUser',this.send).then(r=>{
@@ -137,6 +161,7 @@
         },
         created(){
         	this.$store.dispatch('getuserBaseInf');
+        	this.getSwipe();
         }
     }
 </script>

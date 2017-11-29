@@ -79,7 +79,7 @@
                         <img :src="item.userAvatar" v-if="item.userAvatar" class="marginRight headPicture fl" alt="">
                         <img src="../assets/img/defaultHead.png" v-else class="marginRight headPicture fl" alt="">
                         <span class="fr" v-if="spType">
-                             <span class="fr unread fs30 borderRadius" v-if="!item.isRead">未读</span>
+                             <span class="fr unread fs30 borderRadius" v-if="!item.isread">未读</span>
                             <span class="fr read fs30 borderRadius active" v-else>已读</span>
                         </span>
 
