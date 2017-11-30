@@ -28,15 +28,15 @@
                             </router-link>
                             <div class="fl">
                                 <p><strong>{{item.userName}}</strong></p>
-                                <p class="gray fs30">本月 {{item.allLove}}分</p>
+                                <p class="gray fs30">本月 {{item.allLove||0}}分</p>
                             </div>
                             <div class="fr  tac marginRight marginLeft">
-                                <p>{{item.loveAdd}}</p>
-                                <p><i class="icon iconfont icon-hongxin gray" :class="{'red':item.loveAdd!=0}" @click="kissU(item,1)"></i></p>
+                                <p>{{item.workLove||0}}</p>
+                                <p><i class="icon iconfont icon-hongxin gray" :class="{'red':item.workLove!=0}" @click="kissU(item,1)"></i></p>
                             </div>
                             <div class="fr marginRight tac">
-                                <p>{{item.loveAddAdmin}}</p>
-                                <p><i class="icon iconfont icon-sun3 gray " :class="{'yellow':item.loveAddAdmin!=0}" @click="kissU(item,2)"></i></p>
+                                <p>{{item.adminLove||0}}</p>
+                                <p><i class="icon iconfont icon-sun3 gray " :class="{'yellow':item.adminLove!=0}" @click="kissU(item,2)"></i></p>
                             </div>
                         </div>
                     </div>
