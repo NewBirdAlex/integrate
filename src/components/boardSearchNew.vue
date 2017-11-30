@@ -13,7 +13,7 @@
             <div class="inside" v-if="showSearch">
                 <i class="icon iconfont icon-sousuo fs36 gray"></i>
                 <input type="text" class="myInput" placeholder="输入搜索内容" v-model="keyWord">
-                <span class="blue" @click="confirm">确定</span>
+                <span class="blue fs30 fr marginRight" @click="confirm">确定</span>
             </div>
         </transition>
         <transition

@@ -116,7 +116,6 @@
             }
         },
         mounted(){
-            alert(1)
             this.getList();
         },
         created(){
