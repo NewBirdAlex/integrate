@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="bgWhite">
         <div class="bgWhite">
 
         </div>
@@ -10,14 +10,20 @@
                 infinite-scroll-distance="10">
             <li v-for="item in list">
                 <div class="paddingAll borderBottom exr overflow" >
-                    <img :src="item.shopCover" class=" marginRight" alt="">
+                    <img :src="item.shopCover" class="fl marginRight headPicture" alt="">
                     <div class="lh40">
-                        <p class="fs30 "> <strong>{{item.shopName}}</strong></p>
-                        <p class="fs26 gray">兑换时间：{{item.creatDate}}</p>
-                        <span class="yellow type fs30" v-if="item.checkStatus==2">审核中</span>
-                        <span class="green type fs30" v-if="item.checkStatus==1">已兑换</span>
-                        <span class="red type fs30" v-if="item.checkStatus==3">兑换失败</span>
+                        <p class="fs30">
+                            {{item.userName}}
+                            <span class="fr">{{item.price}}</span>
+                        </p>
+                        <p class="gray fs26">{{item.departmentName}}</p>
+                        <p class="gray fs28">兑换时间 {{item.creatDate}}
+                            <span class="yellow fr  fs30" v-if="item.checkStatus==2">审核中</span>
+                            <span class="green fr fs30" v-if="item.checkStatus==1">已兑换</span>
+                            <span class="red  fr fs30" v-if="item.checkStatus==3">兑换失败</span>
+                        </p>
                     </div>
+
                 </div>
             </li>
         </ul>
@@ -25,25 +31,7 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-    .exr{
-        position: relative;
-        img{
-            .fl;
-            width: 1.2rem;
-            height: 1.2rem;
-            .borderRadius;
-        }
-        p{
-            margin-top: 0.15rem;
-        }
-        .type{
-            position: absolute;
-            right: 0.2rem;
-            top:50%;
-            transform: translateY(-50%);
-        }
 
-    }
 </style>
 <script>
     export default {
@@ -72,7 +60,8 @@
             },
             getList() {
                 let that = this;
-                this.$http.post('/shopbuylist/shopBuyRecordByUser', {
+                this.$http.post('/shopbuylist/shopBuyRecordByAll', {
+                    id:this.$route.params.id,
                     pageNumber: this.pageNumber,
                     pageSize: this.pageSize,
                 })

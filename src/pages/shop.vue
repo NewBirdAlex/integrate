@@ -6,6 +6,7 @@
         .bgWhite;
         .borderRadius;
         .overflow;
+        height: 4.5rem;
         .paddingBottom;
         .lh40;
         width:calc(~"50% - 0.4rem");
@@ -14,6 +15,12 @@
             height:3.45rem;
             background: #ddd;
             overflow: hidden;
+        }
+        .shopName{
+            width: 100%;
+            height: 0.4rem;
+            .overflow;
+            display: inline-block;
         }
         h4{padding-top: 0.1rem}
         img{
@@ -35,6 +42,7 @@
             border:1px solid @red;
             color:@red;
         }
+
     }
     .item{
         .fl;
@@ -75,7 +83,7 @@
         <div class="paddingAll bgWhite overflow">
             <div class="item">
                 <i class="icon iconfont icon-jifen yellow"></i>
-                可用积分：<span class="yellow">{{ baseInf.userScore }}</span>
+                可用积分：<span class="yellow">{{ baseInf.remainScore }}</span>
             </div>
             <router-link tag="div" to="/exchangeRec" class="item">
                 <i class="icon iconfont icon-duihuanjilu blue"></i>
@@ -85,7 +93,7 @@
 
         <div class="marginTop bgWhite paddingAll tac">
             <h3 class="fs34">他们都在兑</h3>
-            <p class="blue fs30 marginTop">每个部门兑换分数不一样喔</p>
+            <p class="blue fs30 marginTop">每个职位兑换分数不一样喔</p>
         </div>
         <div 
         	v-infinite-scroll="loadMore"
@@ -97,11 +105,11 @@
                 	<img :src="t.shopCover" v-show="t.shopCover" alt="">
                 	<img src="../assets/img/null.png" v-show="!t.shopCover" alt="">
                 </div>
-                <h4 class="paddingLeft fs30"> <strong>{{ t.shopName?t.shopName:'暂无商品名' }}</strong></h4>
+                <h4 class="paddingLeft fs30"> <strong class="shopName">{{ t.shopName?t.shopName:'暂无商品名' }}</strong></h4>
                 <div class="paddingLeft fs26 " style="padding-top: 0.1rem">
-                    <span class="yellow fs30">{{ t.saleMoney }}</span>
+                    <span class="yellow fs30">{{ t.score }}</span>
                     <span class="gray marginRight">积分</span>
-                    <router-link tag='span' :to="'/product/' + t.id" class="cj" :class="{'dh':i==2}" v-if="t.status == 1">兑换</router-link>
+                    <router-link tag='span' :to="'/product/' + t.spescId" class="cj" :class="{'dh':i==2}" v-if="t.status == 1">兑换</router-link>
                     <router-link tag='span' to="/lottery" class="cj" v-if='t.status == 2'>抽奖</router-link>
                 </div>
             </div>

@@ -269,7 +269,7 @@
                 <router-link tag='div' to='/lotteryRec?type=me' class="title">中奖记录</router-link>
                 <table class="cjTable recode-a-l">
                     <tr class="fs30" v-for="(t,i) in recordAL">
-                        <td>{{ t.username?t.username:'***' }}</td>
+                        <td>{{ t.userName?t.userName:'***' }}</td>
                         <td class="tac">{{ t.luckName }}</td>
                     </tr>
                 </table>
@@ -280,9 +280,25 @@
             <div class="wp2 spc borderRadius">
                 <div class="title">抽奖规则</div>
                 <table class="cjTable">
-                    <tr class="fs30" v-for="i in 3">
-                        <td>1. 刘诗梦抽奖抽换机单，看看打开了经济订单哦多开开
-                            发护肤贷款发放货到付款开发。</td>
+                    <tr class="fs30">
+                        <td>
+                            1. 当抽奖主题活动存在并且可抽奖次数不为0，抽奖活动开始即可抽奖。
+                        </td>
+                    </tr>
+                    <tr class="fs30">
+                        <td>
+                            2. 如果存在多个抽奖主题，则会一个主题抽完再进入下一个抽奖主题，直至用光所有抽奖次数。
+                        </td>
+                    </tr>
+                    <tr class="fs30">
+                        <td>
+                            3. 每个抽奖主题的抽奖商品可能不一样，并且已经被抽完的奖品不会再次被抽中。
+                        </td>
+                    </tr>
+                    <tr class="fs30">
+                        <td>
+                            4. 当你没有抽奖主题活动时，无抽奖商品显示仅显示默认图片。
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -318,6 +334,10 @@
                 recordAL:null,
             }
         },
+        computed:{
+
+
+        },
         methods: {
             activeMask(num) {
                 this.prizeList.forEach(item => item.light = false);
@@ -331,9 +351,6 @@
             },
             start() {
                 if (this.canClick) {
-                    this.init();
-                    this.canClick = false;
-                    this.roll();
                     this.getLuckDrawRes();
                 }
             },
@@ -346,12 +363,13 @@
 					"token": "string",
 					"userId": 0,
             	}).then(r=>{
-            		if(r.data.code == "500000"){
-            			this.$toast(r.data.msg);
-            		}else{
-            			this.prize = r.data.data.luckShop;
+            		if(r.data.code == "200000"){
+            		    console.log(r,'抽奖结果');
+                        this.init();
+                        this.canClick = false;
+                        this.roll();
+                        this.prize = r.data.data.luckShop;
             		}
-            		console.log('抽奖结果',this.prize);
             	})
             },
             roll() {
@@ -359,7 +377,7 @@
                 clearTimeout(that.timer);
                 that.times++;
 				that.speed = that.speed < 60 ?60:(that.speed - (130/that.times));
-                if (that.times >= 50 && this.prize) {
+                if (that.times >= 50) {
                 	this.prizeList.forEach((v,i)=>{
 	                	if(v.id == this.prize.id){
 	                		this.prize.index = i;
@@ -369,7 +387,6 @@
 	                });
                 }
                 if(that.times >= 500){
-                	this.$toast('抽奖超时');
                 	this.$router.push('/');
                 }
 				that.maskIndex = that.maskIndex+2 > that.rollArr.length?0:that.maskIndex + 1;
@@ -396,18 +413,21 @@
 	            	sortOrder: "desc",
 	            	sortType: "id",
 	            }).then(r=>{
+	                console.log(r);
 	            	this.luckList = r.data.data.luckList;
                     r.data.data.drawShop.forEach((v,i)=>{
-                        v[light] = false;
+                        v['light'] = false;
                     })
 	            	r.data.data.drawShop.splice(4,0,[]);
 	            	this.prizeList = r.data.data.drawShop;
+	            	console.log(this.prizeList);
 	            }).catch(e=>{
 	            	if(e) console.log(e)
 	            });
             },
             continuer(){
             	Object.assign(this.$data, this.$options.data());
+            	this.recordByAll();
             	this.getLuckListByUser();
             },
             recordByAll(){
@@ -416,7 +436,6 @@
 				  "pageSize": 10,
 				}).then(r=>{
 					this.recordAL = r.data.data.content;
-					console.log(r,'？？？');
 				})
             }
         },

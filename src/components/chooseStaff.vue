@@ -35,6 +35,7 @@
                                     <div class="or tac">
                                         <mt-loadmore  :bottom-method="apartmenloadBottom" :bottom-all-loaded="apartmentallLoaded" ref="loadapartment">
                                             <ul class="apartmentList">
+                                                <li @click="selectAll">全部</li>
                                                 <li v-for="(item,index) in apartMentList" :key="index" v-if="showApartment" @click="chooseApartment(item)">
                                                     <div>{{item.name}}</div>
                                                 </li>
@@ -90,7 +91,6 @@
     .wrap{
         position: relative;
         z-index: 1000;
-        /*pointer-events: none;*/
     }
     .hidelogo{
         height: 1px;
@@ -199,6 +199,7 @@
         z-index: 100;
         opacity: 1;
         .grayBg;
+        -webkit-overflow-scrolling : touch;
     }
 
     .search {
@@ -255,6 +256,8 @@
                 pageSize: 20,
                 apartmentNum:1,
                 apartmentSize:20,
+                jobNum:1,
+                jobSize:20,
                 lastPage: false,
                 showApartment:true,//click show apartment or joblist
                 keyWord: '',
@@ -286,6 +289,11 @@
             }
         },
         methods: {
+            selectAll(){
+                this.reset();
+                this.getStaff();
+                this.showOption=false;
+            },
             clickWrapHideOption(event){
                 if(event.target.className=='option') this.showOption=false;
             },
@@ -296,27 +304,34 @@
                 this.getStaff();
             },
             apartmenloadBottom(){
-                if(!this.apartmentLast){
-                    this.apartmentNum +=1;
-                    if(this.showApartment){
+                this.reset();
+                if(this.showApartment){
+                    //部门
+                    if(!this.apartmentLast){
                         this.getApartment();
                     }else{
-                        this.getJobList();
+                        this.apartmentallLoaded = true;
                     }
-
                 }else{
-                    this.apartmentallLoaded = true;
+                    //job
+                    if(!this.jobLast){
+                        this.getJobList();
+                    }else{
+                        this.apartmentallLoaded = true;
+                    }
                 }
+
             },
             getApartment(){
                 let that = this;
                 this.$http.post('/companyUser/departmentList', {
                     pageNumber: this.apartmentNum,
-                    pageSize: this.apartmentSize,
+                    pageSize: this.apartmentSize
                 })
                     .then(function (response) {
-                        console.log(response)
+                        that.apartmentNum +=1;
                         that.apartMentList = that.apartMentList.concat(response.data.data.content) ;
+
                         if(response.data.data.last){
                             that.apartmentLast = true;
                         }
@@ -377,10 +392,11 @@
             getJobList(){
                 let that = this;
                 this.$http.post('/job/listJob', {
-                    pageNumber: this.apartmentNum,
-                    pageSize: this.apartmentSize,
+                    pageNumber: this.jobNum,
+                    pageSize: this.jobSize,
                 })
                     .then(function (response) {
+                        that.jobNum+=1;
                         that.jobList = that.jobList.concat(response.data.data.content)
                     })
                     .catch(function (error) {

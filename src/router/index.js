@@ -51,6 +51,7 @@ const UploadUserPic = () => import('../pages/uploadUserPic.vue');//上传用户�
 const ApplyMissionPerson = () => import('../pages/applyMissionPerson.vue');//抢单任务人物列表
 const ShensuList = () => import('../pages/shensuList.vue');//申诉列表
 const shensuOrder = () => import('../pages/shensuOrder.vue');//申诉订单
+const ProductExchangeRec = () => import('../pages/productExchangeRec.vue');//商品兑换记录
 
 
 
@@ -93,6 +94,15 @@ const router = new Router({
             meta:{
                 navShow: false,
                 title:'登录'
+            }
+        },
+        {
+            path: '/productExchangeRec/:id',
+            name: 'ProductExchangeRec',
+            component: ProductExchangeRec,
+            meta:{
+                navShow: false,
+                title:'商品兑换记录'
             }
         },
         {

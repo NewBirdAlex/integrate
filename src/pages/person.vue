@@ -1,5 +1,5 @@
 <template>
-    <div class="" style="padding-bottom: 1rem">
+    <div class="" style="padding-bottom: 2rem">
         <!--<h3 class="tac paddingAll ">个人中心</h3>-->
         <div class="paddingAll">
             <div class="pt">
@@ -86,7 +86,7 @@
         line-height: 0.88rem;
         .tac;
         .blue;
-        margin-top: 2rem;
+        margin-top: 1rem;
         font-size: @fs36;
         background-color: rgba(255, 255, 255, 1);
         border-radius: 8px 8px 8px 8px;

@@ -60,6 +60,10 @@
     			width: 1.5rem;
     			height: 1.5rem;
     			margin-right: 0.25rem;
+                img{
+                    width: 100%;
+                    height: 100%;
+                }
     		}
     		.cont{
     			flex: 1;
@@ -106,29 +110,29 @@
 <template>
     <div>
         <div class="slide">
-            <mt-swipe :auto="4000" style='background: red;'>
-                <mt-swipe-item v-for='t in swiperL' :key="t">
+            <mt-swipe :auto="4000">
+                <mt-swipe-item v-for='(t,i) in swiperL' :key="i">
                 	<img :src="t" alt="" />
                 </mt-swipe-item>
             </mt-swipe>
         </div>
         <div class="bgWhite paddingAll lh40">
             <div>
-                <strong class="fs30">{{ detail.luckName||'商品名称'}}</strong>
-                <span class="fr gray fs26">剩余{{ detail.shopNum?detail.shopNum:'0' }}件</span>
+                <strong class="fs30">{{ detail.shopName||'商品名称'}}</strong>
+                <span class="fr gray fs26">剩余{{ shopMoreInfo.remainCount}}件</span>
             </div>
             <div class="marginTop">
-                <span class="yellow marginRight fs36"> {{ detail.Money?detail.Money:0 }}分</span>
+                <span class="yellow marginRight fs36"> {{ shopMoreInfo.score}}分</span>
                 <span class="gray fs24" v-if="$store.state.baseInf.userScore - (detail.Money?detail.Money:0) < 0">{{ $store.state.baseInf.userScore - (detail.Money?detail.Money:0) }}</span>
-                <span class="fr fs26">已兑换{{ detail.score?detail.score:'0' }}件</span>
+                <span class="fr fs26">已兑换{{ shopMoreInfo.allCount-shopMoreInfo.remainCount }}件</span>
             </div>
         </div>
-        <div class="marginTop paddingAll bgWhite fs26 borderBottom">
-            <span>他们都兑换了 <span class="gray">({{ historytotal }})</span></span>
+        <router-link tag="div" :to="'/productExchangeRec/'+shopMoreInfo.shopId" class="marginTop paddingAll bgWhite fs26 borderBottom">
+            <span>他们都兑换了 <span class="gray">({{ shopMoreInfo.allCount-shopMoreInfo.remainCount }})</span></span>
             <span class="fr rightArrow">
                 <i class="icon iconfont icon-xiala1"></i>
             </span>
-        </div>
+        </router-link>
         <div class=" paddingAll bgWhite fs26" @click='openSele = true'>
             <span>选择兑换规格</span>
             <span class="fr rightArrow">
@@ -139,17 +143,17 @@
             <div class="marginTop fs30 paddingAll">
                 商品详情
             </div>
-            <div class="show" v-html="detail.shopDetail"></div>
+            <div class="show paddingAll lh40 fs30" v-html="detail.shopDetail"></div>
         </div>
         <div class="mask" v-show="openSele" @click="openSele=!openSele"></div>
         <div class="sele" :class="{'sele-option':openSele}">
         	<div class="part1">
         		<div class="cover">
-        			<img :src="detail.shopDetail"/>
+        			<img :src="detail.shopCover"/>
         		</div>
         		<div class="cont">
-        			<p class="branch">{{ detail.Money?detail.Money:0 }} 分</p>
-        			<p class="surplus">剩余{{ detail.shopNum?detail.shopNum:'0' }} 件</p>
+        			<p class="branch">{{ selectProduct.score}} 分</p>
+        			<p class="surplus">剩余{{ selectProduct.remainCount}} 件</p>
         			<p class="explain">请选择：按商品规格兑换</p>
         		</div>
         		<div class="close">
@@ -159,8 +163,8 @@
         	<div class="part2">
         		<p class="tit">规格：</p>
         		<div class="options">
-        			<mt-button v-for='(t,i) in spec.keys' :key="t"  @click='seleSpec(t,i)' class='btn' :type="i==spec.act?'primary':'default'" size="small">default</mt-button>
-        			<mt-button type='default' v-if='!spec.keys || !spec.keys.length' class='btn' size="small">无需选择</mt-button>
+        			<mt-button v-for='(item,i) in shopSpecs' :key="i"  @click='seleSpec(item,i)' class='btn' :type="item.active?'primary':'default'" size="small">{{item.specName}}</mt-button>
+
         		</div>
         	</div>
         </div>
@@ -180,59 +184,83 @@
             		keys:null,
             		act:-1,
             	},
+                shopMoreInfo:{},
+                shopSpecs:{},
+                selectProduct:{}
             }
         },
         methods:{
-        	seleSpec(t,i){
-        		this.spec.act = i;
+        	seleSpec(item,index){
+        	    if(!item.active){
+                    this.selectProduct=item;
+                    this.shopSpecs.forEach(item=>item.active=false);
+                    let obj = this.shopSpecs[index];
+                    obj.active=true;
+                   this.$set(this.shopSpecs,index,obj);
+                }
         	},
         	operation(){
-        		if(this.spec.keys == null){return;}
-        		if(this.spec.keys.length){
-        			if(this.spec.keys.act == -1){
-        				this.openSele = true;
-        			}else{
-        				this.exchange();
-        			}
-        		}else{
-    				this.exchange();
-    			}
+        	    if(!this.openSele){this.openSele=true;return}
+        	    let ableSubmit = false;
+        	    this.shopSpecs.forEach(item=>item.active?ableSubmit=true:'');
+        	    if(ableSubmit){
+                    this.exchange();
+                }else{
+        	        this.openSele=true;
+                }
         	},
         	exchange(){
         		this.$http.post('/shopbuylist/toGetShopByUser',{
-        			specsId:this.spec.keys[this.spec.act].id,
-        		}).then(r=>{
-        			console.log(r,'兑换结果');
+        			specsId:this.selectProduct.id,
+        		}).then(response=>{
+        			if(response.data.code==200000) {
+        			    this.$toast('兑换成功')
+                        this.$router.go(-1)
+                    }
         		}).catch(e=>{
         			
         		});
-        	}
+        	},
+            getDetail(){
+                this.$store.dispatch('getuserBaseInf');
+                this.$http.post('/shop/getShopDetailById',{
+                    id:this.$route.params.id,
+                }).then(r=>{
+                    console.log(r.data,'商品详情');
+                    this.swiperL = r.data.data.shopInfo.shopPics.split(',');//swipe
+                    this.detail = r.data.data.shopInfo;
+                    this.shopMoreInfo = r.data.data.shopMoreInfo;
+                    this.shopSpecs = r.data.data.shopSpecs;//choose size
+                    this.shopSpecs.forEach(item=>item.active=false);
+                    this.selectProduct = r.data.data.shopSpecs[0];//default select product
+                }).catch(e=>{
+
+                });
+            },
+            getRecord(){
+
+                this.$http.post('/shopbuylist/shopBuyRecordByAll',{
+                    "id": this.$route.params.id,
+                    "pageNumber": 1,
+                    "pageSize": 10,
+                }).then(r=>{
+                    console.log(r,'记录');
+                    this.historytotal = r.data.data.content.length;
+                })
+            },
+            getSize(){
+                this.$http.post('/shopSpecs/toGetSpecsByShopId',{
+                    "id": this.$route.params.id,
+                }).then(r=>{
+                    console.log('规格列表',r);
+                    this.spec.keys = r.data.data;
+                })
+            }
         },
         created(){
-        	this.$store.dispatch('getuserBaseInf');
-        	this.$http.post('/shop/getShopDetailById',{
-        		id:this.$route.params.id,
-        	}).then(r=>{
-        		console.log(r.data,'商品详情');
-        		this.swiperL = r.data.data.shopDetail[0].shopPics.split(';');
-        		this.detail = r.data.data.shopDetail[0];
-        	}).catch(e=>{
-        		
-        	});
-        	this.$http.post('/shopbuylist/shopBuyRecordByAll',{
-			  "id": this.$route.params.id,
-			  "pageNumber": 1,
-			  "pageSize": 10,
-			}).then(r=>{
-				console.log(r,'记录');
-				this.historytotal = r.data.data.content.length;
-			})
-			this.$http.post('/shopSpecs/toGetSpecsByShopId',{
-				"id": this.$route.params.id,
-			}).then(r=>{
-				console.log('规格列表',r);
-				this.spec.keys = r.data.data;
-			})
+            this.getDetail();
+//            this.getRecord();
+//            this.getSize();
         },
     }
 </script>

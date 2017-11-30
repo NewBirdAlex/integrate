@@ -76,7 +76,7 @@
             <div class="marginTop">
                 <subTitle :content="'审批人'" :subWord="''" :need="true"></subTitle>
                 <div class="paddingAll overflow bgWhite tal fs28" v-if="approveUserList">
-                    <div class="spr overflow fl marginBottom" v-for="(item,index) in approveUserList" :key="index">
+                    <div class="spr overflow fl marginBottom tac" v-for="(item,index) in approveUserList" :key="index">
                         <div class="ps fl">
                             <img :src="item.userAvatar" class="headPicture" alt="">
                             <p class="marginTop" v-html="item.userName"></p>

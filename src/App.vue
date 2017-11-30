@@ -10,10 +10,10 @@
             <!--<router-view></router-view>-->
         <!--</transition>-->
         <!--动画版-->
-        <!--<transition :name="transitionName">-->
-            <!--<router-view :class="{'child-view':true,'no-trans':ismove}"></router-view>-->
-        <!--</transition>-->
-        <router-view></router-view>
+        <transition :name="transitionName">
+            <router-view :class="{'child-view':true,'no-trans':ismove}"></router-view>
+        </transition>
+        <!--<router-view></router-view>-->
         <loading v-if="showLoading"></loading>
         <transition
                 name="custom-classes-transition"
@@ -91,6 +91,7 @@
         },
         watch:{
             '$route'(to, from) {
+                document.documentElement.scrollTop=0+'px';
                 let navs = ['/index','/meWatch','/shopingMall','/aboutMe'];
                 let toInd = navs.indexOf(to.path);
                 let foInd = navs.indexOf(from.path);
@@ -120,13 +121,13 @@
     @import "assets/css/common.less";
     /*animation    */
     .child-view {
-        /*position: absolute;*/
+        position: absolute;
         left: 0;
         top: 0;
         width: 100%;
-        height: 100%;
+        /*height: 100%;*/
         transition: all .5s cubic-bezier(.55,0,.1,1);
-        /*padding-bottom: 3.5rem;*/
+        padding-bottom: 2rem;
     }
     .no-trans{
        transition: all 0s!important;

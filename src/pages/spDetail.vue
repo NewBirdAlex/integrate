@@ -30,6 +30,7 @@
             </div>
             <div v-else>
                 <div v-if="index>0"  v-for="(item,index) in peopleList"  :key="index"  class="paddingAll bgWhite">
+                    <span class="cl" :class="{'border':!item.select}"  @click="selPerson(item)"><i class="icon iconfont icon-gouxuan " v-if="item.select"></i></span>
                     <img :src="item.userAvatar" class="headPicture marginRight" alt="">
                     {{item.userName}}
                     <input type="text" class="fr myInput tar fs30 marginTop" placeholder="输入分数" v-model="item.addScore">

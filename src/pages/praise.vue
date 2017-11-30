@@ -53,7 +53,7 @@
                           @changePoint="changePoint">
                 <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
             </choosePeople>
-            <div v-else>
+            <div v-if="$route.params.type!=1">
                 <div class="paddingAll borderBottom fs30 newList bgWhite" v-for="(item,index) in peopleList" :key="index">
                     <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
                     <img :src="item.userAvatar" class="headPicture marginRight" alt="">
@@ -157,6 +157,7 @@
             accept(data){
                 // accpet  staff person
                 let that =this;
+                console.log(data)
                 data.forEach(item=>{
                     item.selectAddScore=that.scoreRange[0];
                     this.peopleList.push(item);
