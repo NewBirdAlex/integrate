@@ -154,10 +154,10 @@
                         if(response.data.code==200000){
                             // awesome type
                             if(type==1){
-                                somebody.loveAdd+=that.loveScore;
+                                somebody.workLove+=that.loveScore;
                                 that.canUseScore-=that.loveScore;
                             }else{
-                                somebody.loveAddAdmin+=that.sunScore;
+                                somebody.adminLove+=that.sunScore;
                                 that.canUseScore-=that.sunScore;
                             }
                             that.getBaseInf();
