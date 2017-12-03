@@ -214,7 +214,7 @@
                 jfType:[
                     {
                         name:'全部',
-                        active:false,
+                        active:true,
                         value:0
                     },
                     {
@@ -396,6 +396,12 @@
                         console.log(response)
                         response.data.data.content.forEach(item=>item.active=false);
                         that.apartMentList =response.data.data.content ;
+                        let obj={
+                            active:true,
+                            id:0,
+                            name:'全部'
+                        };
+                        that.apartMentList.unshift(obj);
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -410,7 +416,13 @@
                     .then(function (response) {
                         if(response.data.code==200000){
                             that.jobList =response.data.data.content ;
+                            let obj={
+                                active:true,
+                                id:0,
+                                jobTitle:'全部'
+                            };
                             that.jobList.forEach(item=>item.active=false)
+                            that.jobList.unshift(obj);
                         }
                     })
                     .catch(function (error) {

@@ -7,8 +7,11 @@ let myTool = {
         var max = null;
         var min = null;
         var numArr = [];
-
-
+        if(level==0){
+            numArr.push(minScore);
+            numArr.push(maxScore);
+            return numArr;
+        }
         // console.log(numArr)
         if(maxScore==minScore){
             numArr=[minScore]

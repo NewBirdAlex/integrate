@@ -288,7 +288,6 @@
                 }
 
             },
-
             delPerson(index){
                 this.peopleList.splice(index, 1)
             },
@@ -323,31 +322,30 @@
                 this.$http.post(url, {
                     id:this.$route.params.id
                 })
-                    .then(function (response) {
-                        that.detail = response.data.data.detail;
+                    .then(response=>{
+                        this.detail = response.data.data.detail;
                         if(response.data.data.approveUser.length){
                             //是否有审批人
                             that.approveUserList = response.data.data.approveUser;
-
                         }else{
                             //that.approveUserList=null;
                         }
+                         //get score select range
+                        let minScore = this.detail.minuxScore;
+                        let maxScore = this.detail.maxScore;
+                        let level = this.detail.scoreLevel;
+                        this.scoreRange = myTool.getScoreRange(minScore,maxScore,level);
                         // get score select range
-                        let minScore = that.detail.minuxScore;
-                        let maxScore = that.detail.maxScore;
-                        let level = that.detail.scoreLevel;
-                        that.scoreRange = myTool.getScoreRange(minScore,maxScore,level);
-                        // get score select range
-
+//
                         that.peopleList = [];
-                        //默认添加自己
+//                        //默认添加自己
                          that.selfInf={
                             userAvatar:that.userMessage.userAvatar,
                             userName:that.userMessage.userName,
                             selectAddScore:that.scoreRange[0],
                              id:that.userMessage.userId
-                        }
-                        that.peopleList.push(that.selfInf)
+                        };
+                        that.peopleList.push(that.selfInf);
                     })
                     .catch(function (error) {
                         console.log(error);

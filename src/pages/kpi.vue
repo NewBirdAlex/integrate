@@ -1,7 +1,6 @@
 <template>
     <div>
-
-
+        <myEmpty v-if="!list.length"></myEmpty>
         <ul class=" "
             v-infinite-scroll="loadMore"
             infinite-scroll-disabled="loading"
