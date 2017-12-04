@@ -49,7 +49,8 @@ const state = {
         },
         {
             name:"爱心点赞",
-            icon:'icon-hongxin',
+            //icon:'icon-hongxin',
+            icon:'icon-zuanaixinkong',
             color:'#fb3333',
             router:'love',
             show:false

@@ -17,9 +17,6 @@
     .icon{
         font-size: 2rem;
     }
-    form{
-        /*height: 100%!important;*/
-    }
     .setFrame{
         width: 2rem;
         height: 2rem;
@@ -130,12 +127,6 @@
                             console.log(error);
                         });
                 }
-//                let param = new FormData(); //创建form对象
-//                param.append('file',ImageObj,ImageObj.name);
-//                let config = {
-//                    headers:{'Content-Type':'multipart/form-data'}
-//                };
-//                this.$http.post(this.url+'/imageUpload/imgUploadFile',param,config)
 
             },
         },

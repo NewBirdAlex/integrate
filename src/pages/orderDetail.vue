@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="content">
+        <div class="content" >
             <div class="head fs30">
                 <img :src="orderDetail.userAvatar" v-if="orderDetail.userAvatar" alt="">
                 <img src="../assets/img/defaultHead.png" v-else class="head" alt="">
@@ -9,7 +9,7 @@
                 <span class="green fr" v-if="orderDetail.checkStatus==2">审批通过</span>
                 <span class="red fr" v-if="orderDetail.checkStatus==3">审批不通过</span>
             </div>
-            <ul class="myUl">
+            <ul class="myUl lh50">
                 <li>
                     <span class="gray">审批编号</span>
                     <span class="fr">{{orderDetail.approveCode}}</span>
@@ -93,7 +93,7 @@
             </div>
         </div>
 
-        <div class="opBtn" v-if="orderDetail.btnStatus==1">
+        <div class="opBtn" :class="{'scaleIt':enter}" v-if="orderDetail.btnStatus=='1'">
             <span class="green" @click="go(2)"> 同意</span>
             <span class="yellow" @click="go(3)"> 拒绝</span>
             <span class="blue" @click="go(4)"> 撤回</span>
@@ -102,7 +102,9 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-
+    .scaleIt{
+        transform: scale(2);
+    }
     .myUl {
         padding-top: 0.2rem;
         li {
@@ -267,6 +269,7 @@
     export default {
         data() {
             return {
+                enter:true,
                 active: false,
                 orderDetail: {
                     userAvatar: '',
@@ -316,6 +319,7 @@
             }
         },
         mounted() {
+            setTimeout(()=>{this.enter=false},500);
             this.getDetail();
         },
         components: {

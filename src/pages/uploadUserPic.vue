@@ -1,43 +1,75 @@
 <template>
     <div style="height: 100vh;" class="bgWhite">
-        <subTitle :content="'选择您的图片作为头像'" :subWord="''"></subTitle>
-        <div class="imgwrap tac">
-            <img v-if="imgUrl" :src='imgUrl' alt="">
-        </div>
-        <div class="paddingAll bgWhite" >
-            <vue-core-image-upload
-                    class="btn btn-primary"
-                    :crop="false"
-                    @imageuploaded="imageuploaded"
-                    @imagechanged="imagechanged"
-                    compress="60"
-                    inputOfFile="file"
-                    :max-file-size="5242880"
-                    :url="url+'/imageUpload/imgUploadFile'" >
-                <div class="tac">
-                    <i class="icon iconfont icon-upload"></i>
 
-                </div>
-            </vue-core-image-upload>
+
+        <div class="bgWhite">
+            <subTitle :content="'选择您的图片作为头像'" :subWord="''"></subTitle>
+
+            <div class="imgwrap tac">
+                <img v-if="imgUrl" :src='imgUrl' alt="">
+            </div>
+            <div class="paddingAll setFrame" >
+                <i class="icon iconfont icon-upload"></i>
+                <input type="file" @change="imagechanged">
+            </div>
         </div>
     </div>
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
+    .imgwrap{
+        .tac;
+        .marginTop;
+        img{
+            width: 4rem;
+            height: 4rem;
+        }
+    }
     .icon{
         font-size: 2rem;
     }
-    .imgwrap{
-        .overflow;
-        .bgWhite;
-        img{
-            width: 5rem;
-            height: 5rem;
-            .marginRight;
-            .marginTop;
-            .marginLeft;
-
+    .setFrame{
+        width: 2rem;
+        height: 2rem;
+       margin:0 auto;
+        position: relative;
+        input{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left:0;
+            top:0;
+            opacity: 0;
+            z-index: 10;
         }
+    }
+    .imgItem{
+        position: relative;
+        width: 2rem;
+        height: 2rem;
+        .marginRight;
+        .marginTop;
+        .marginLeft;
+        display: inline-block;
+        .icon{
+            position: absolute;
+            display: block;
+            right: 0;
+            top:0;
+            max-width: 0.4rem;
+            .gray;
+            font-size: 0.5rem;
+            transform: translate(50%,-30%);
+        }
+        img{
+            width: 2rem;
+            height: 2rem;
+        }
+    }
+    .icon-upload{
+        vertical-align: bottom;
+        /*margin-bottom: 0.2rem;*/
+        display: inline-block;
     }
 </style>
 <script>
@@ -52,24 +84,6 @@
             }
         },
         methods:{
-
-            //            上传图片recall
-            imageuploaded(res) {
-                let that  = this;
-
-                if (res.code == "200000") {
-                    that.imgUrl=res.data.url;
-                    that.uploadImg();
-                }else{
-                    that.$toast({
-                        message: res.data.message,
-                        duration: 2000
-                    });
-                }
-            },
-            imagechanged(data){
-
-            },
             uploadImg(){
                 let that  = this;
                 this.$http.post('/user/updateUser', {
@@ -91,10 +105,55 @@
                     .catch(function (error) {
                         console.log(error);
                     });
-            }
+            },
+            imagechanged(event){
+
+                let that = this;
+
+                let ImageObj = event.target.files[0]
+                if (!(/^image/.test(ImageObj.type))) {
+                    this.$toast('请选取图片文件');
+                    return
+                }
+
+                /*if(ImageObj.size>5242880){
+                    this.$toast('图片尺寸超过5M，请重新选择图片');
+                    return
+                }*/
+                let reader = new FileReader();
+                reader.readAsDataURL(ImageObj);
+                let Base64 = null;
+                reader.onload=function(){
+                    Base64 = this.result;
+                    let param = new FormData(); //创建form对象
+                    param.append('content',Base64);
+                    let config = {
+                        headers:{'Content-Type':'application/json; charset=utf-8'}
+                    };
+                    that.$http.post('/imageUpload/imgBase64',{
+                        content:Base64
+                    })
+                        .then(function (response) {
+                            if(response.data.code=='200000'){
+                                that.$toast({
+                                    message:'成功',
+                                    duration:1000
+                                });
+
+                                that.imgUrl=response.data.data.url;
+                                that.uploadImg();
+                            }else{
+                                that.$toast('上传图片失败')
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }
+            },
         },
         mounted(){
-            this.url = this.$config.path;
+//            this.url = this.$config.path;
         },
         components: {
             VueCoreImageUpload,
