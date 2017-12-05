@@ -57,6 +57,14 @@
         },
         methods:{
             subData(){
+                let cansubmit = true;
+                this.inputList.forEach(item=>{
+                    if(!item.content) cansubmit=false;
+                })
+                if(!cansubmit) {
+                    this.$toast('请填写完整内容');
+                    return;
+                }
                 let that = this;
                 let str = '';
                 for(let i = 0;i<this.inputList.length;i++){
@@ -76,7 +84,6 @@
                             that.$toast('发布日志成功');
                             that.$router.go(-1)
                         }
-
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -86,8 +93,7 @@
         mounted(){
             this.detail = JSON.parse(localStorage.getItem('diaryInf'));
             this.inputList = JSON.parse(this.detail.modelContent);
-            console.log(this.detail);
-            localStorage.removeItem('diaryInf')
+//            localStorage.removeItem('diaryInf');
         }
     }
 </script>
