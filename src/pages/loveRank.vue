@@ -1,6 +1,6 @@
 <template>
-    <div class="bgWhite"style="min-height: 100vh">
-
+    <div class="bgWhite"style="min-height: 90vh">
+        <myEmpty v-if="!list.length"></myEmpty>
         <ul
                 v-infinite-scroll="loadMore"
                 infinite-scroll-disabled="loading"
@@ -59,18 +59,19 @@
                 pageNumber: 1,
                 pageSize: 10,
                 lastPage: false,
-                list: null
+                list: []
             }
         },
         methods: {
             loadMore() {
                 if (!this.lastPage) {
+
+                    this.loading=true;
+                    this.getList();
                     this.pageNumber += 1;
-                    this.getList(0);
                 } else {
-
+                    this.$toast('已加载所有数据')
                 }
-
             },
             getList() {
                 let that = this;
@@ -81,11 +82,10 @@
                 })
                     .then(function (response) {
                         if (response.data.data.code = 200000) {
-                            that.list = response.data.data.content;
+                            that.list =that.list.concat(response.data.data.content) ;
                             if (response.data.data.last) that.lastPage = true;
                             that.loading = false;
                         }
-
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -93,7 +93,10 @@
             }
         },
         mounted() {
-            this.getList();
+
+            setTimeout(()=>{
+                this.getList();
+            },300)
         }
     }
 </script>

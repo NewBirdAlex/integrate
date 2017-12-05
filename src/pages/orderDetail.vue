@@ -1,6 +1,8 @@
 <template>
-    <div>
+    <div style="padding-bottom: 0;">
+
         <div class="content" >
+
             <div class="head fs30">
                 <img :src="orderDetail.userAvatar" v-if="orderDetail.userAvatar" alt="">
                 <img src="../assets/img/defaultHead.png" v-else class="head" alt="">
@@ -92,8 +94,7 @@
                 </div>
             </div>
         </div>
-
-        <div class="opBtn" :class="{'scaleIt':enter}" v-if="orderDetail.btnStatus=='1'">
+        <div class="opBtn"  v-show="orderDetail.btnStatus=='1'" :class="{'positionFixed':isIos}">
             <span class="green" @click="go(2)"> 同意</span>
             <span class="yellow" @click="go(3)"> 拒绝</span>
             <span class="blue" @click="go(4)"> 撤回</span>
@@ -102,9 +103,6 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-    .scaleIt{
-        transform: scale(2);
-    }
     .myUl {
         padding-top: 0.2rem;
         li {
@@ -125,18 +123,22 @@
         color: #323232;
         background: #fafafa;
     }
-
+    .positionFixed{
+        position: fixed!important;
+    }
     .opBtn {
         font-size: @fs30;
         text-align: center;
-        padding: 0.3rem 0;
+        /*padding: 0.3rem 0;*/
         background: white;
-        position: fixed;
+        position: relative;
         bottom: 0;
         left: 0;
         width: 100%;
+        z-index: 10000;
         span {
             display: inline-block;
+            line-height: 0.8rem;
             width: 32%;
             border-right: @border;
             &:last-child {
@@ -155,7 +157,7 @@
         line-height: 0.9rem;
         padding: 0.2rem 0;
         .fr{
-//            .marginTop;
+            //            .marginTop;
         }
         img {
             width: 0.9rem;
@@ -164,7 +166,6 @@
             vertical-align: middle;
             margin-right: 0.2rem;
             font-size: @fs30;
-            transition: all 3s;
             border: 0;
         }
     }
@@ -269,9 +270,9 @@
     export default {
         data() {
             return {
-                enter:true,
                 active: false,
                 orderDetail: {
+                    isIos:true,
                     userAvatar: '',
                     missionPics: ''
                 }
@@ -302,8 +303,30 @@
                     this.$store.commit('saveSporder', this.orderDetail)
                     this.$router.push('/spDetail/' + type + '/' + this.$route.params.id + '/' + this.$route.params.spType);
                 }
-
-
+            },
+            getSystem(){
+                var isMobile = {
+                    Android : function() {
+                        return navigator.userAgent.match(/Android/i) ? true : false;
+                    },
+                    BlackBerry : function() {
+                        return navigator.userAgent.match(/BlackBerry/i) ? true : false;
+                    },
+                    iOS : function() {
+                        return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
+                    },
+                    Windows : function() {
+                        return navigator.userAgent.match(/IEMobile/i) ? true : false;
+                    },
+                    any : function() {
+                        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows());
+                    }
+                };
+                if (isMobile.iOS()) {
+                    return true;
+                } else {
+                    return false;
+                }
             },
             getDetail() {
                 let that = this;
@@ -321,6 +344,9 @@
         mounted() {
             setTimeout(()=>{this.enter=false},500);
             this.getDetail();
+        },
+        created(){
+            this.isIos=this.getSystem();
         },
         components: {
             itemList,
