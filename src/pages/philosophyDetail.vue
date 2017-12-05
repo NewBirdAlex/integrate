@@ -4,7 +4,13 @@
             <p class="fs30">{{detail.title}}</p>
             <p class="fs24 gray marginTop">{{detail.companyName}} 布于 {{detail.createDate}}</p>
             <div class="gray">
-                每天可阅读{{detail.isOnly}}次
+                <span v-if="detail.isOnly==1">每天可阅读一次</span>
+                <span v-if="detail.isOnly==2">每周可阅读一次</span>
+                <span v-if="detail.isOnly==3">每月可阅读一次</span>
+                <span v-if="detail.isOnly==4">每季可阅读一次</span>
+                <span v-if="detail.isOnly==5">每年可阅读一次</span>
+                <span v-if="detail.isOnly==6">无限制阅读次数</span>
+                <span v-if="detail.isOnly==7">仅限一次</span>
                 <i class="icon iconfont icon-yanjing"></i>{{detail.sums}}
                 <span class="fr blue" v-if="!detail.isRead">未阅读</span>
                 <span class="fr" v-if="detail.isRead">已阅读</span>
