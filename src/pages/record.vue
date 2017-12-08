@@ -13,7 +13,7 @@
                 </div>
                 <div class="right">
                     <p>{{item.approveTitle}} <span class="blue fr">+{{item.addScore}}分</span></p>
-                    <p >
+                    <p>
                         <span class="yellow" v-if="item.status==1">审批中</span>
                         <span class="green" v-if="item.status==2">审批通过</span>
                         <span class="red" v-if="item.status==3">审批不通过</span>

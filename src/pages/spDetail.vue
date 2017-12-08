@@ -181,7 +181,6 @@
                     .then(function (response) {
                         response.data.data.content.forEach(item=>{
                             item.select=false;
-                            item.addScore=that.spOrder.missionScore;
                         });
                         that.peopleList = that.peopleList.concat(response.data.data.content) ;
 

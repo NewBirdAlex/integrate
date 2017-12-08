@@ -94,7 +94,8 @@
                 </div>
             </div>
         </div>
-        <div class="opBtn"  v-show="orderDetail.btnStatus=='1'" :class="{'positionFixed':isIos}">
+        <!--<div class="opBtn"  v-show="orderDetail.btnStatus=='1'" :class="{'positionFixed':isIos}">-->
+        <div class="opBtn"  v-show="orderDetail.btnStatus=='1'">
             <span class="green" @click="go(2)"> 同意</span>
             <span class="yellow" @click="go(3)"> 拒绝</span>
             <span class="blue" @click="go(4)"> 撤回</span>
@@ -131,7 +132,7 @@
         text-align: center;
         /*padding: 0.3rem 0;*/
         background: white;
-        position: relative;
+        position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;

@@ -10,6 +10,32 @@ const state = {
     userMessage:{},
     baseInf:{},
     spOrder:{},
+    subList:[
+        {
+            name:"发布任务",
+            icon:'icon-faburenwu',
+            color:'#fa6e77',
+            router:'/publicMission'
+        },
+        {
+            name:"领导表扬",
+            icon:'icon-zhicheng',
+            color:'#fec170',
+            router:'/praise/1'
+        },
+        {
+            name:"管理奖扣",
+            icon:'icon-guanli',
+            color:'#50bee6',
+            router:'/praise/2'
+        },
+        {
+            name:"发布公告",
+            icon:'icon-gonggao',
+            color:'#fd8f64',
+            router:'/announcement'
+        }
+    ],
     thirList:[
         {
             name:"考勤",
@@ -57,8 +83,8 @@ const state = {
         },
         {
             name:"积分申诉",
-            icon:'icon-tanhao1',
-            color:'#cbefd5',
+            icon:'icon-shensuzhongxin',
+            color:'black',
             router:'/shensuList',
             show:false
         },
@@ -112,7 +138,6 @@ const mutations = {
             state.initPage=false;
             return
         }
-
         axios.post('/module/listModuleByUser',{})
             .then(function (response) {
                 state.thirList.forEach(item=>{
@@ -125,7 +150,16 @@ const mutations = {
                         }
                     }
                 })
+                state.subList.forEach(item=>{
+                    for(let i = 0 ; i<response.data.data.length;i++){
+                        if(response.data.data[i].moduleTitle==item.name){
 
+                            item.show=response.data.data[i].status==1?true:false;
+                            item.moduleCover=response.data.data[i].moduleCover;
+                            break;
+                        }
+                    }
+                })
             })
             .catch(function (error) {
                 console.log(error);
@@ -183,7 +217,8 @@ const getters = {
     spOrder:state => state.spOrder,
     thirList:state => state.thirList,
     mission:state => state.mission,
-    baseInf:state=>state.baseInf
+    baseInf:state=>state.baseInf,
+    subList:state=>state.subList,
 }
 
 

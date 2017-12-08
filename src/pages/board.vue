@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="padding-bottom: 1.1rem">
         <boardSearchNew @getData="getFilterData"></boardSearchNew>
         <!--<boardSearch  @getData="collectData" v-model="selUserName"></boardSearch>-->
         <div class="gray listWrap firstList" style="font-weight: bold">
