@@ -14,7 +14,7 @@
                         <span class="fs36">{{item.addUserName}}</span>
                         <span class="fr blue">
                             <i class="icon iconfont icon-aixin-copy red marginRight"></i>
-                            <span class="marginRight fs30" style="display: inline-block;width: 0.5rem">{{item.loveCount}}</span>
+                            <span class="marginRight fs30" style="display: inline-block;width: 0.5rem">{{item.sumCount}}</span>
                         </span>
                     </div>
                 </div>

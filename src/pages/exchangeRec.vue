@@ -51,7 +51,7 @@
             return {
                 list: [],
                 pageNumber: 1,
-                pageSize: 5,
+                pageSize: 20,
                 lastPage: false,
                 loading: false
             }

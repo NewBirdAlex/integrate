@@ -24,7 +24,8 @@
                                        v-if="index<3"></i>
                             </span>
                     <span>
-                                <img :src="item.userAvatar||'../assets/img/defaultHead.png'"  class="headPicture" alt="">
+                                <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture" alt="">
+                                <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
                             </span>
                     <span>{{item.userName}}</span>
                     <span>{{item.addScore}}</span>
