@@ -180,7 +180,7 @@
 
             },
             loadMore() {
-                if(!this.lastPage){
+                if(!this.lastPage&&!this.loading){
                     this.loading = true;
                     this.pageNumber+=1;
                     this.getList();
@@ -220,7 +220,6 @@
                                 that.reset();
                                 that.needReset = false;
                             }
-
                             that.list = that.list.concat(response.data.data.content);
                             if(response.data.data.last) that.lastPage = true;
                             that.loading = false;

@@ -279,14 +279,14 @@
                     });
             },
             loadMore() {
-                if (!this.lastPage) {
+                if (!this.lastPage&&!this.loading) {
                     this.getList();
                     this.loading = true;
-                } else {
+                } else if(this.lastPage){
                     this.loading = false;
                     this.$toast({
                         message: '没有更多数据了',
-                        duration: 2000
+                        duration: 1000
                     });
                 }
             },
@@ -314,7 +314,6 @@
                                 that.needMycheck=false;
                                 that.myCheck = response.data.data.myCheck;
                             }
-
                             that.loading = false;
                         })
                         .catch(function (error) {

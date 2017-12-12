@@ -418,10 +418,16 @@
                 }
             },
             loadMore() {
-                if(!this.lastPage){
+                if(!this.lastPage&&!this.loading){
                     this.getList();
+                    this.loading = true;
+                }else if(this.lastPage){
+                    this.loading = false;
+                    this.$toast({
+                        message: '没有更多数据了',
+                        duration: 1000
+                    });
                 }
-
             },
             getList(){
                 //different type

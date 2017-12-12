@@ -360,10 +360,11 @@
                 }
             },
             loadMore() {
-                if(!this.lastPage){
+                if(!this.lastPage&&!this.loading){
+                    this.loading = true;
                     this.getList();
-                }else{
-//                    this.$toast('已加载所有数据');
+                }else if(this.lastPage){
+                    this.$toast('已加载所有数据');
                 }
 
             },
@@ -392,10 +393,9 @@
                     rootId:this.rootId
                 })
                     .then(function (response) {
+                        if(response.data.code!='200000') return
                         that.pageNumber+=1;
                         that.orderList = that.orderList.concat(response.data.data.content);
-
-
                         //last page
                         response.data.data.last? that.lastPage=true:'';
                         that.loading = false;

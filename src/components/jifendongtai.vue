@@ -162,7 +162,7 @@
         },
         methods:{
             loadMore() {
-                if(!this.lastPage){
+                if(!this.lastPage&&!this.loading){
                     this.loading = true;
                     this.getList();
                 }else{
@@ -181,6 +181,7 @@
                     userId:this.userMessage.userId
                 })
                     .then(function (response) {
+                        if(response.data.code!='200000') return
                         that.pageNumber+=1;
                         if(response.data.data.last){
                             that.lastPage=true;

@@ -39,9 +39,15 @@
                 <div class="marginTop paddingAll bgWhite lh40" @click="go(item)">
                     <div class="fs30" v-html="item.title"></div>
                     <div class="gray fs26 marginTop">
-                        每天可阅读 {{item.isOnly}}次
+                        <span v-if="item.isOnly==1" class=" gray">每天一次</span>
+                        <span v-if="item.isOnly==2" class=" gray">每周一次</span>
+                        <span v-if="item.isOnly==3" class=" gray"> 每月一次</span>
+                        <span v-if="item.isOnly==4" class=" gray">每季一次</span>
+                        <span v-if="item.isOnly==5" class=" gray">每年一次</span>
+                        <span v-if="item.isOnly==6" class=" gray"> 无限制 </span>
+                        <span v-if="item.isOnly==7" class=" gray">仅限一次</span>
                         <i class="icon iconfont icon-yanjing"></i>
-                        1111
+                        {{item.sums}}
                         <span class="fr blue" v-if="!item.isRead">未阅读</span>
                         <span class="fr" v-if="item.isRead">已阅读</span>
                     </div>

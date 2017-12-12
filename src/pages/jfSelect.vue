@@ -209,13 +209,12 @@
                     title:this.searchKeyword
                 })
                     .then(function (response) {
-
+                        if(response.data.code!='200000') return
                         that.pageNumber+=1;
-                        that.list2=that.list2.concat(response.data.data.content)
+                        that.list2=that.list2.concat(response.data.data.content);
                         if(response.data.data.last){
                             that.lastPage=true;
                         }
-
                         that.loading = false;
 
                     })
@@ -228,14 +227,14 @@
                 this.$router.push('/apply/'+item.id+'/'+this.type+'/fasle');
             },
             loadMore() {
-                if(!this.lastPage){
+                if(!this.lastPage&&!this.loading){
                     this.chooseMissionType();
                     this.loading = true;
-                }else{
+                }else if(this.lastPage){
                     this.loading = false;
                     this.$toast({
                         message: '没有更多数据了',
-                        duration: 2000
+                        duration: 1000
                     });
                 }
             },
