@@ -17,10 +17,10 @@
                 <li v-for="(item,index) in list" :key="index">
                     <div class="paddingAll borderBottom">
                         <div class="showdt">
-                            <div class="left">
+                            <router-link tag="div" :to="'/manageDiary/'+item.appUserId" class="left">
                                 <img :src="item.userAvatar" v-if="item.userAvatar" alt="">
                                 <img src="../assets/img/defaultHead.png" alt="" v-else >
-                            </div>
+                            </router-link>
                             <div class="right">
                                 <h4 class="lh40">
                                     <strong>{{item.userName}}</strong>

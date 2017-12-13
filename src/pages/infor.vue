@@ -73,27 +73,33 @@
     export default {
         data() {
             return {
-                itemList:[
+
+                userInf:{}
+            }
+        },
+        computed:{
+            itemList(){
+                return [
                     {
                         name:'基础信息',
                         right:'',
-                        router:'/baseInfor'
+                        router:'/baseInfor/'+this.userInf.userId
                     },
                     {
                         name:'电话号码',
-                        right:'',
+                        right:this.userInf.userPhone,
                         router:''
                     },
 //                    {
-//                        name:'工作日记',
+//                        name:'工作日志',
 //                        right:'',
 //                        router:''
 //                    },
-//                    {
-//                        name:'积分日记',
-//                        right:'',
-//                        router:''
-//                    },
+                    {
+                        name:'积分日志',
+                        right:'',
+                        router:'/manageDiary/'+this.userInf.userId
+                    },
 //                    {
 //                        name:'抽奖记录',
 //                        right:'',
@@ -104,8 +110,7 @@
 //                        right:'',
 //                        router:''
 //                    }
-                ],
-                userInf:{}
+                ]
             }
         },
         methods:{
@@ -122,8 +127,6 @@
                     .then(function (response) {
                         if(response.data.code=200000){
                             that.userInf = response.data.data;
-                            that.itemList[0].router = '/baseInfor/'+ response.data.data.userId
-                            that.itemList[1].right = response.data.data.userPhone
                         }
                     })
                     .catch(function (error) {

@@ -27,7 +27,7 @@
             	record:[],
             	send:{
             		"pageNumber": 1,
-					"pageSize": 12,
+					"pageSize": 10,
             	},
             	loading:false,
             	requrl:'',

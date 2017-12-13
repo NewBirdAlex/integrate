@@ -12,10 +12,11 @@
             </div>
         </div>
         <uploadImg v-model="imgList" class="marginTop"></uploadImg>
-        <div class="paddingAll bgWhite fs30 marginTop borderBottom"><strong>抄送人</strong></div>
+        <div class="paddingAll bgWhite fs30 marginTop borderBottom"><strong>抄送人</strong><span class="gray">不选默认全部可见，选择后部分人员可见</span></div>
         <selectStaff v-model="chaosongId"></selectStaff>
 
         <div class="confBtn" style="margin-top: 1rem" @click="subData">提交</div>
+
     </div>
 </template>
 <style scoped lang="less">

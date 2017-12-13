@@ -1,12 +1,12 @@
 <template>
     <div>
-        <ul class=" "
+        <ul class=" paddingAll"
             v-infinite-scroll="loadMore"
             infinite-scroll-disabled="loading"
             infinite-scroll-immediate-check="true"
             v-if="list.length!=0"
             infinite-scroll-distance="10">
-            <router-link tag="li" :to="'/orderDetail/'+item.id+'/1'" v-for="(item,index) in list" :key="index" class="marginBottom bgWhite">
+            <router-link tag="li" :to="'/orderDetail/'+item.id+'/1'" v-for="(item,index) in list" :key="index" class="marginBottom bgWhite borderRadius">
                 <div class="left">
                     <img :src="item.userAvatar" v-if="item.userAvatar"  class="headPicture" alt="">
                     <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
@@ -59,7 +59,7 @@
             }
             .right{
                 display: inline-block;
-                width: 6.1rem;
+                width: 5.7rem;
                 vertical-align: top;
                 text-indent: 0.2rem;
                 line-height: 0.4rem;

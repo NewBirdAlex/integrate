@@ -43,7 +43,7 @@
                         </router-link>
 
                         <div class="fl">
-                            <p> <span style="display: inline-block;width: 2rem">{{item.userName}}</span> <span class="rp" v-if="item.isAdmin">管理员</span></p>
+                            <p> <span style="display: inline-block;width: 1rem">{{item.userName}}</span> <span class="rp" v-if="item.isAdmin">管理员</span></p>
                             <p class="gray">{{item.jobTitle}}</p>
                         </div>
                         <a class="blue fr" :href="'tel:'+item.userPhone">{{item.userPhone}}</a>
@@ -64,10 +64,11 @@
     .people{
         line-height: 0.5rem;
         .rp{
-            padding: 0.1rem 0.2rem;
+            padding: 0.05rem 0.1rem;
             color: white;
             background: @red;
             border-radius: 0.3rem;
+            vertical-align: middle;
         }
         .blue{
             margin-top: 0.2rem;

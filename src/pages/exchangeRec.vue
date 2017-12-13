@@ -58,14 +58,14 @@
         },
         methods:{
             loadMore() {
-                if (!this.lastPage) {
+                if (!this.lastPage&&!this.loading) {
                     this.getList();
                     this.loading = true;
-                } else {
+                } else if(this.lastPage){
                     this.loading = false;
                     this.$toast({
                         message: '已加载所有数据',
-                        duration: 2000
+                        duration: 1000
                     });
                 }
 

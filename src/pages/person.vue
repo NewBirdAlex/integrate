@@ -78,6 +78,7 @@
         height: 5rem;
         width: 120%;
         position: relative;
+        z-index: 10;
         left:-3%;
     }
     .logout {
