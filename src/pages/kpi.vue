@@ -11,9 +11,16 @@
                 <div class=" bgWhite paddingAll lh40" @click="go(item)">
                     <p class="fs30">{{item.title}}</p>
                     <div class="fs24 marginTop gray">
-                        <span class="marginRight">仅可考核 {{item.ifOnly    }} 次</span>
+                        <span class="marginRight"v-if="item.ifOnly==1">每天一次</span>
+                        <span class="marginRight"v-if="item.ifOnly==2">每周一次</span>
+                        <span class="marginRight"v-if="item.ifOnly==3"> 每月一次</span>
+                        <span class="marginRight"v-if="item.ifOnly==4">每季一次</span>
+                        <span class="marginRight"v-if="item.ifOnly==5">每年一次</span>
+                        <span class="marginRight"v-if="item.ifOnly==6"> 无限制 </span>
+                        <span class="marginRight"v-if="item.ifOnly==7">仅限一次</span>
                         <i class="icon iconfont icon-yanjing marginRight"></i>{{item.sums}}
-                        <span class="blue fr">未考核</span>
+                        <span class="blue fr" v-if="item.isRead">已考核</span>
+                        <span class="red fr" v-else>未考核</span>
                     </div>
                 </div>
             </li>

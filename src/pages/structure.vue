@@ -11,11 +11,12 @@
             <span class="blue">联系人</span>
             <span @click="getAllApartment">
                 <span class="rightArrow"><i class="icon iconfont icon-xiala1 gray"></i></span>
-                <span class="gray">{{userMessage.companyName}}</span>
+                <span class="gray" :class="{'blue':showApartment.length}">{{userMessage.companyName}}</span>
             </span>
-            <span v-for="(item,index) in showApartment" @click="searchFromTitle(item,index)">
+            <span v-for="(item,index) in showApartment" @click="searchFromTitle(item,index)" >
                 <span class="rightArrow"><i class="icon iconfont icon-xiala1 gray"></i></span>
-                <span class="gray">{{item.name}}</span>
+                <span class="gray" v-if="index==showApartment.length-1">{{item.name}}</span>
+                <span class="blue" v-else>{{item.name}}</span>
             </span>
 
         </div>
@@ -37,9 +38,9 @@
             <li v-for="(item,index) in staffList" :key="index" class=" bgWhite">
                 <div class="borderBottom bgWhite">
                     <div class="overflow paddingAll people fs30 ">
-                        <router-link :to="'/infor/'+item.id">
-                            <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture fl marginRight" alt="">
-                            <img src="../assets/img/defaultHead.png" v-else class="headPicture fl marginRight" alt="">
+                        <router-link :to="'/infor/'+item.id" >
+                            <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture fl marginRight" alt="" style="padding-top: 4px;">
+                            <img src="../assets/img/defaultHead.png" v-else class="headPicture fl marginRight" alt="" style="padding-top: 4px;">
                         </router-link>
 
                         <div class="fl">

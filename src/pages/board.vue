@@ -15,7 +15,7 @@
                 v-infinite-scroll="loadMore"
                 infinite-scroll-disabled="loading"
                 infinite-scroll-immediate-check="true"
-                infinite-scroll-distance="10">
+                infinite-scroll-distance="30">
             <router-link tag="li" :to="'/manageDiary/'+item.appUserId" v-for="(item,index) in list" :key="index">
                 <div class="bgWhite listWrap tal" >
                             <span>
@@ -27,7 +27,7 @@
                                 <img :src="item.userAvatar" v-if="item.userAvatar" class="headPicture" alt="">
                                 <img src="../assets/img/defaultHead.png" v-else class="headPicture" alt="">
                             </span>
-                    <span>{{item.userName}}</span>
+                    <span class="theName">{{item.userName}}</span>
                     <span>{{item.addScore}}</span>
                     <span>{{item.minusScore}}</span>
                     <span class="blue ">{{item.plusScore}}</span>
@@ -38,6 +38,13 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
+    .theName{
+        height: 0.5rem;
+        line-height: 0.5rem!important;
+        width: 1rem;
+        .overflow;
+        vertical-align: middle;
+    }
     .listWrap{
         .overflow;
         .fs30;
@@ -96,7 +103,7 @@
                 endTime:'',
                 allLoaded:false,
                 pageNumber:1,
-                pageSize:10,
+                pageSize:20,
                 lastPage:false,
                 loading:false,
                 list: [],
@@ -144,13 +151,13 @@
             },
             loadMore(){
                  // 加载更多数据
-                if(!this.lastPage){
+                if(!this.lastPage&&!this.loading){
                     this.loading = true;
                     this.getList();
-                }else{
+                }else if(this.lastPage){
                     this.$toast({
                         message: '已加载全部数据',
-                        duration: 2000
+                        duration: 800
                     });
                 }
             },

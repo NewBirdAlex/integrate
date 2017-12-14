@@ -9,7 +9,7 @@
             <!--<textarea name="" :placeholder="note" @input="handleInput" v-model="inpValue"  v-if="inpType=='textarea'" id="" cols="30" rows="10"></textarea>-->
 
             <input :type="inputType" :placeholder="note"  @input="$emit('input', $event.target.value)" :value="value"  v-if="inpType=='input'" >
-            <textarea name="" :placeholder="note"  @input="$emit('input', $event.target.value)" :value="value"  v-if="inpType=='textarea'" id="" cols="30" rows="10"></textarea>
+            <textarea name="" class="lh40" :placeholder="note"  @input="$emit('input', $event.target.value)" :value="value"  v-if="inpType=='textarea'" id="" cols="30" rows="10"></textarea>
         </div>
     </div>
 </template>

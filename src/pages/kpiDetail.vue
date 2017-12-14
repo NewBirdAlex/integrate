@@ -4,15 +4,23 @@
             <p class="fs30">{{orderDetail.title}}</p>
             <p class="fs24 gray marginTop">{{orderDetail.companyName}} 布于 {{orderDetail.createDate}}</p>
             <div class="gray">
-                <span class="marginRight">每天可考核 {{orderDetail.ifOnly}} 次</span>
-                <i class="icon iconfont icon-renwu1"></i>1220
-                <span class="fr blue" v-if="!orderDetail.isRead">未考核</span>
-                <span class="fr" v-if="orderDetail.isRead">已考核</span>
+                <!--<span class="marginRight">每天可考核 {{orderDetail.ifOnly}} 次</span>-->
+                <span class="marginRight"v-if="orderDetail.ifOnly==1">每天一次</span>
+                <span class="marginRight"v-if="orderDetail.ifOnly==2">每周一次</span>
+                <span class="marginRight"v-if="orderDetail.ifOnly==3"> 每月一次</span>
+                <span class="marginRight"v-if="orderDetail.ifOnly==4">每季一次</span>
+                <span class="marginRight"v-if="orderDetail.ifOnly==5">每年一次</span>
+                <span class="marginRight"v-if="orderDetail.ifOnly==6"> 无限制 </span>
+                <span class="marginRight"v-if="orderDetail.ifOnly==7">仅限一次</span>
+                <i class="icon iconfont icon-renwu1"></i>{{orderDetail.sums}}
+
+                <span class="fr blue" v-if="orderDetail.isRead">已考核</span>
+                <span class="fr red" v-else>未考核</span>
             </div>
         </div>
         <div v-for="(item,index) in questions" :key="index">
             <div class="paddingAll fs30 lh40">
-                {{index+1}}.{{item.context}}<span class="red">*</span>
+                {{index+1}}.{{item.context}}<span class="red" style="vertical-align: middle;">*</span>
                 <span class="gray">（答对得{{item.score}}分）</span>
             </div>
             <div class="marginLeft marginRight bgWhite borderRadius fs28">

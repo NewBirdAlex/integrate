@@ -38,8 +38,8 @@
 
             <div class="marginTop"></div>
 
-            <subTitle :content="$route.params.type==1?'表扬员工':'奖扣员工'" v-if="$route.params.type==1" :subWord="'（可用积分'+baseInf.flowScore+')'" :need="true"></subTitle>
-            <subTitle :content="$route.params.type==1?'表扬员工':'奖扣员工'" v-else :subWord="''" :need="true"></subTitle>
+            <subTitle :content="$route.params.type==1?'表扬可用积分':'奖扣员工'" v-if="$route.params.type==1" :subWord="'（可用积分'+baseInf.flowScore+')'" :need="true"></subTitle>
+            <subTitle :content="$route.params.type==1?'表扬可用积分':'奖扣员工'" v-else :subWord="''" :need="true"></subTitle>
 
             <choosePeople v-for="(item,index) in peopleList"
                           v-if="$route.params.type==1"
@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            <div class="bgWhite paddingAll lh40 fs28" v-if="$route.params.type==1">
+            <div class="bgWhite paddingAll lh40 fs28" v-if="$route.params.type==1&&peopleList.length">
                 <strong>全选积分</strong>
                 <span class="gray">(选择可批量修改申请的积分)</span>
                 <span class="fr marginRight cl" :class="{'border':!selAll}" @click="selAll=!selAll"><i class="icon iconfont icon-gouxuan blue fs36" v-if="selAll"></i></span>
@@ -270,7 +270,7 @@
                         need: true,
                         ph: "请输入内容",
                         content: "",
-                        type: 'input',
+                        type: 'textarea',
                         selRange:[]
                     }
                 ]
@@ -288,7 +288,7 @@
                         need: true,
                         ph: "请输入内容",
                         content: "",
-                        type: 'input',
+                        type: 'textarea',
                         selRange:[]
                     }
                 ]
