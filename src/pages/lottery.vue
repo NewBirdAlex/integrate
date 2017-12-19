@@ -264,7 +264,7 @@
             </div>
         </div>
 
-        <div class="wp1 marginAll myLottery marginTop marginBottom borderRadius">
+        <div class="wp1 marginAll myLottery marginTop marginBottom borderRadius" v-if="recordAL&&recordAL.length">
             <div class="wp2 spc borderRadius">
                 <router-link tag='div' to='/lotteryRec?type=me' class="title">中奖记录</router-link>
                 <table class="cjTable recode-a-l">

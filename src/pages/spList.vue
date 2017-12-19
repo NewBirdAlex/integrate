@@ -230,7 +230,7 @@
                 showWrap:true,
                 showSearch:false,
                 pageNumber:1,
-                pageSize:10,
+                pageSize:20,
                 lastPage:false,
                 loading:false,
                 orderList:[],
@@ -414,7 +414,10 @@
             }
 
             this.init();
-            this.getList();
+            setTimeout(()=>{
+                this.getList();
+            },300)
+
             this.showWrap=false;
 
             //get history
