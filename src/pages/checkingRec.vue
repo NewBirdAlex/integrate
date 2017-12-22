@@ -133,7 +133,9 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-
+    ul{
+        padding-bottom: 1rem;
+    }
     .specilIcon {
         position: fixed;
         left: 50%;

@@ -14,13 +14,17 @@
                     infinite-scroll-disabled="loading"
                     infinite-scroll-immediate-check="true"
                     infinite-scroll-distance="10">
-                <li v-for="(item,index) in list" :key="index">
+                <li v-for="(item,index) in list" :key="index" @click="go(item)">
                     <div class="paddingAll borderBottom">
                         <div class="showdt">
-                            <router-link tag="div" :to="'/manageDiary/'+item.appUserId" class="left">
+                            <!--<router-link tag="div" :to="'/manageDiary/'+item.appUserId" class="left">-->
+                                <!--<img :src="item.userAvatar" v-if="item.userAvatar" alt="">-->
+                                <!--<img src="../assets/img/defaultHead.png" alt="" v-else >-->
+                            <!--</router-link>-->
+                            <div class="left">
                                 <img :src="item.userAvatar" v-if="item.userAvatar" alt="">
                                 <img src="../assets/img/defaultHead.png" alt="" v-else >
-                            </router-link>
+                            </div>
                             <div class="right">
                                 <h4 class="lh40">
                                     <strong>{{item.userName}}</strong>
@@ -161,11 +165,49 @@
             this.getList();
         },
         methods:{
+            go(item){
+                console.log(item)
+                let that = this;
+                switch (item.rootId){
+                    case 1:
+                        that.$router.push('/baseInfor/'+item.appUserId);
+                        break;
+                    case 2:
+                        that.$router.push('/baseInfor/'+item.appUserId);
+                        break;
+                    case 3:
+                        that.$router.push('/baseInfor/'+item.appUserId);
+                        break;
+                    case 4:
+                        that.$router.push('/baseInfor/'+item.appUserId);
+                        break;
+                    case 5:
+                        that.$router.push('/checkingIn/checkingRec');
+                        break;
+                    case 7:
+                        that.$router.push('/workDiary/diary/'+item.approveId+'/'+true);
+                        break;
+                    case 12:
+                        that.$router.push('/orderDetail/'+item.approveId);
+                        break;
+                    case 14:
+                        that.$router.push('/love');
+                        break;
+                    case 19:
+                        that.$router.push('/checkingIn/checkingRec');
+                        break;
+                    case 21:
+                        that.$router.push('/orderDetail/'+item.approveId);
+                        break;
+                    case 25:
+                        break;
+                }
+            },
             loadMore() {
                 if(!this.lastPage&&!this.loading){
                     this.loading = true;
                     this.getList();
-                }else{
+                }else if(this.lastPage){
                     this.$toast({
                         message: '没有更多数据了',
                         duration: 2000

@@ -5,15 +5,15 @@
             <span :class="{active:!spType}" @click="changeType">我发出的</span>
         </div>
         <div v-if="false" class="sel">
-            <span class="filterType "  @click="handlehide('search')">
+            <span class="filterType " @click="handlehide('search')">
                 <i class="icon iconfont icon-sousuo"></i>
                 搜索
             </span>
-            <span class="filterType"  @click="handlehide('filter')">
+            <span class="filterType" @click="handlehide('filter')">
                 <i class="icon iconfont icon-shaixuan"></i>
                 筛选
             </span>
-            <div class="filter" ref="myFilter" :style="{height:filterHeight+'px'}"  v-show="showWrap">
+            <div class="filter" ref="myFilter" :style="{height:filterHeight+'px'}" v-show="showWrap">
                 <div class="sel_type" v-if="!showSearch">
                     <p class="gray">积分类型</p>
                     <span>行为分</span>
@@ -74,39 +74,44 @@
 
         <myInfinite :loading="loading" @getList="getList">
             <li v-for="(item,index) in list">
-                <div class="paddingTop paddingLeft paddingRight bgWhite marginBottom" >
-                    <router-link tag="div" :to="'/workDiary/diary/'+item.id+'/'+spType" class="overflow">
-                        <img :src="item.userAvatar" v-if="item.userAvatar" class="marginRight headPicture fl" alt="">
-                        <img src="../assets/img/defaultHead.png" v-else class="marginRight headPicture fl" alt="">
-                        <span class="fr" v-if="spType">
+                <div class="paddingTop paddingLeft paddingRight bgWhite marginBottom">
+                    <!--<router-link tag="div" :to="'/workDiary/diary/'+item.id+'/'+spType" class="overflow">-->
+                    <router-link tag="div" :to="'/workDiary/diary/'+item.id+'/'+spType">
+                        <div class="overflow">
+                            <img :src="item.userAvatar" v-if="item.userAvatar" class="marginRight headPicture fl" alt="">
+                            <img src="../assets/img/defaultHead.png" v-else class="marginRight headPicture fl" alt="">
+                            <span class="fr" v-if="spType">
                              <span class="fr unread fs30 borderRadius" v-if="!item.isread">未读</span>
                             <span class="fr read fs30 borderRadius active" v-else>已读</span>
                         </span>
 
-                        <div class="lh40">
-                            <p class="fs30">{{item.userName}}</p>
-                            <p class="gray fs26">{{item.departmentName}}</p>
+                            <div class="lh40">
+                                <p class="fs30">{{item.userName}}</p>
+                                <p class="gray fs26">{{item.departmentName}}</p>
+                            </div>
+                        </div>
+                        <div class="fs30 lh40 marginTop borderBottom paddingBottom wp">
+                            <div class="overflow">
+                                <div class="left fl gray">奖励积分:</div>
+                                <div class="right fl">
+                                    {{item.addScore}}分
+                                </div>
+                            </div>
+                            <div class="overflow" v-for="(obj ,index2) in JSON.parse(item.content)">
+                                <div class="left fl gray">{{obj.title}}:</div>
+                                <div class="right fl">
+                                    {{obj.content}}
+                                </div>
+                            </div>
                         </div>
                     </router-link>
-                    <div class="fs30 lh40 marginTop borderBottom paddingBottom wp">
-                        <div class="overflow">
-                            <div class="left fl gray">奖励积分:</div>
-                            <div class="right fl">
-                                {{item.addScore}}分
-                            </div>
-                        </div>
-                        <div class="overflow" v-for="(obj ,index2) in JSON.parse(item.content)">
-                            <div class="left fl gray">{{obj.title}}:</div>
-                            <div class="right fl">
-                                {{obj.content}}
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="paddingAll gray fs26">
                         <span>{{item.createDate}}</span>
                         <span class="fr">
-                    <i class="icon iconfont icon-aixin-copy" :class="{'red':item.likeCount}" @click="makeAwsome(item)"></i> {{item.likeCount||0}}
-                </span>
+                            <i class="icon iconfont icon-aixin-copy" :class="{'red':item.likeCount}"
+                               @click="makeAwsome(item)"></i> {{item.likeCount || 0}}
+                        </span>
                     </div>
                 </div>
             </li>
@@ -116,89 +121,96 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-    .wp>div{
+
+    .wp > div {
         margin-top: 0.1rem;
     }
-    .lh50{
+
+    .lh50 {
         line-height: 0.5rem;
     }
-    .left{
+
+    .left {
         width: 30%;
         .fs28;
     }
-    .right{
+
+    .right {
         width: 70%;
     }
-    .read{
+
+    .read {
         padding: 0.15rem 0.3rem;
         background: @grayBg;
         color: #646464;
     }
-    .unread{
+
+    .unread {
         padding: 0.15rem 0.3rem;
         background: @blue;
         color: white;
     }
-    .search{
+
+    .search {
         text-align: left;
 
-        .st{
+        .st {
             .paddingAll;
             overflow: hidden;
             line-height: 0.6rem;
-            .bgWhite{
+            .bgWhite {
                 float: left;
                 width: 6rem;
                 font-size: @fs26;
                 border-radius: 8px 8px 8px 8px;
                 line-height: 0.6rem;
                 height: 0.6rem;
-                i{
+                i {
                     font-size: @fs36;
                     margin: 0 0.2rem;
                 }
-                input{
+                input {
                     border: none;
                     outline: none;
                     width: 5rem;
                 }
             }
         }
-        .sh{
+        .sh {
             line-height: 0.4rem;
-            .overflow{
-                span{
+            .overflow {
+                span {
                     .grayBg;
                     border-radius: 6px 6px 6px 6px;
-                    padding:0.1rem 0.2rem;
+                    padding: 0.1rem 0.2rem;
                     float: left;
                     margin: 0.1rem;
                 }
             }
         }
-        .sn{
-            .snt{
+        .sn {
+            .snt {
                 .borderBottom;
                 position: relative;
                 .tac;
                 line-height: 0;
                 margin: 1rem 0.2rem;
 
-                span{
+                span {
                     position: relative;
                     background: white;
                     z-index: 2;
                     padding: 0 0.3rem;
                 }
             }
-            .snc{
+            .snc {
                 .tac;
-                span{
+                span {
                     display: inline-block;
                     line-height: 0.7rem;
-                    margin:0 0.2rem;
+                    margin: 0 0.2rem;
                     .gray;
-                    i{
+                    i {
                         font-size: 0.6rem;
                         display: block;
                     }
@@ -219,12 +231,13 @@
             width: 35%;
             margin: 0 5%;
         }
-        .active{
-            border-bottom:2px solid @blue;
-            color:@blue;
+        .active {
+            border-bottom: 2px solid @blue;
+            color: @blue;
         }
     }
-    .sel{
+
+    .sel {
         height: 0.9rem;
         line-height: 0.9rem;
         background: @grayBg;
@@ -232,18 +245,18 @@
         font-size: @fs30;
         .borderBottom;
         position: relative;
-        .filter{
+        .filter {
             position: absolute;
-            top:0;
-            left:0;
+            top: 0;
+            left: 0;
             width: 100%;
             z-index: 100;
             /*display: none;*/
             background: white;
-            .sel_type{
+            .sel_type {
                 .paddingAll;
                 text-align: left;
-                span{
+                span {
                     width: 3rem;
                     height: 0.8rem;
                     .tac;
@@ -252,29 +265,29 @@
                     background-color: rgba(240, 240, 240, 1);
                     border-radius: 6px 6px 6px 6px;
                     margin-bottom: 0.2rem;
-                    &:nth-child(odd){
-                        float:right;
+                    &:nth-child(odd) {
+                        float: right;
                     }
-                    &:nth-child(even){
-                        float:left;
+                    &:nth-child(even) {
+                        float: left;
                     }
                 }
-                .active{
+                .active {
                     background: @blue;
                     color: white;
                 }
-                .confBtn{
+                .confBtn {
                     position: absolute;
                     bottom: 0;
-                    left:0;
+                    left: 0;
                     width: 100%;
-                    margin:0;
+                    margin: 0;
                 }
             }
         }
-        .filterType{
+        .filterType {
             float: left;
-            width:50%;
+            width: 50%;
             display: inline-block;
             color: @gray;
         }
@@ -282,19 +295,20 @@
 </style>
 <script>
     import myInfinite from '../components/myInfinite.vue'
+
     export default {
         data() {
             return {
-                spType:true,
-                filterHeight:0,
-                showWrap:true,
-                showSearch:false,
+                spType: true,
+                filterHeight: 0,
+                showWrap: true,
+                showSearch: false,
                 pageNumber: 1,
                 pageSize: 10,
                 lastPage: false,
                 loading: false,
-                list:[],
-                searchHistory:[
+                list: [],
+                searchHistory: [
                     '品德积分',
                     '人气奖',
                     'FG123353525631521',
@@ -304,49 +318,49 @@
                 ]
             }
         },
-        methods:{
-            init(){
+        methods: {
+            init() {
                 //init height
                 this.filterHeight = document.documentElement.clientHeight - this.$refs.myFilter.getBoundingClientRect().top;
             },
-            changeType(){
-                this.spType=!this.spType;
+            changeType() {
+                this.spType = !this.spType;
                 this.reset();
                 this.getList();
             },
-            reset(){
-                this.pageNumber=1;
-                this.lastPage=false;
-                this.list=[];
+            reset() {
+                this.pageNumber = 1;
+                this.lastPage = false;
+                this.list = [];
             },
-            handlehide(msg){
-                if(msg=='search'){
-                    this.showSearch=this.showWrap=true;
-                }else{
-                    this.showSearch=false;
-                    this.showWrap=true;
+            handlehide(msg) {
+                if (msg == 'search') {
+                    this.showSearch = this.showWrap = true;
+                } else {
+                    this.showSearch = false;
+                    this.showWrap = true;
                 }
             },
-            go(){
+            go() {
 //                this.$router.push('/workDiary/diary');
             },
-            makeAwsome(item){
+            makeAwsome(item) {
                 let that = this;
                 this.$http.post('/dailyRecord/goodDaily', {
                     addUserId: item.userId,
-                    id:item.id,
+                    id: item.id,
                 })
                     .then(function (response) {
-                        if(response.data.code=='200000'){
-                            item.likeCount+=1;
+                        if (response.data.code == '200000') {
+                            item.likeCount += 1;
                         }
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
             },
-            getList(){
-                if(this.lastPage){
+            getList() {
+                if (this.lastPage) {
                     this.$toast({
                         message: '没有更多数据了',
                         duration: 2000
@@ -354,10 +368,10 @@
                     return
                 }
                 let that = this;
-                var type=1;
-                this.spType? type=2:type=1;
+                var type = 1;
+                this.spType ? type = 2 : type = 1;
                 this.$http.post('/dailyRecord/listJson', {
-                    departmentId:'',
+                    departmentId: '',
                     jobId: '',
                     pageNumber: this.pageNumber,
                     pageSize: this.pageSize,
@@ -377,12 +391,12 @@
                     });
             }
         },
-        mounted(){
+        mounted() {
 //            this.init();
             this.getList();
-            this.showWrap=false;
+            this.showWrap = false;
         },
-        components:{
+        components: {
             myInfinite
         }
     }

@@ -261,6 +261,9 @@
                 this.center.lng = 116.404
                 this.center.lat = 39.915
                 this.zoom = 15
+                setTimeout(function(){
+                    document.getElementsByClassName('BMap_geolocationIcon')[0].click();
+                },1000)
 
             },
             handleConfirm(data){
@@ -316,9 +319,7 @@
             let that = this;
             this.countTime();
             this.getClockIn();
-            setTimeout(function(){
-                document.getElementsByClassName('BMap_geolocationIcon')[0].click();
-            },1000)
+
         },
         beforeDestroy(){
             clearInterval(timer);

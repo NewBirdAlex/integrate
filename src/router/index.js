@@ -495,7 +495,7 @@ const router = new Router({
             }
         },
         {
-            path: '/orderDetail/:id/:spType',
+            path: '/orderDetail/:id',
             name: 'OrderDetail',
             component: OrderDetail,
             meta:{

@@ -68,7 +68,7 @@
                     infinite-scroll-disabled="loading"
                     infinite-scroll-immediate-check="true"
                     infinite-scroll-distance="10">
-                <router-link tag ='li' :to="'/orderDetail/'+item.id+'/'+$route.params.type" v-for="(item,index) in orderList" :key="index">
+                <router-link tag ='li' :to="'/orderDetail/'+item.id" v-for="(item,index) in orderList" :key="index">
 
                     <showList :data="item"></showList>
                 </router-link>
