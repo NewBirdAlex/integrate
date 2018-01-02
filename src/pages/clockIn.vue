@@ -1,14 +1,20 @@
 <template>
     <div>
         <!--<div class="top  fs30 tac">-->
-            <!--<span :class="{'active':chooseNum==0}" @click="chooseNum=0">内勤</span>-->
-            <!--<span :class="{'active':chooseNum==1}" @click="chooseNum=1">外勤</span>-->
+        <!--<span :class="{'active':chooseNum==0}" @click="chooseNum=0">内勤</span>-->
+        <!--<span :class="{'active':chooseNum==1}" @click="chooseNum=1">外勤</span>-->
         <!--</div>-->
+        <div class="newTop  fs30 tac">
+            <span :class="{'active':chooseNum==1}" @click="changeChooseNum(1)">内勤</span>
+            <span :class="{'active':chooseNum==2}" @click="changeChooseNum(2)">外勤</span>
+        </div>
         <div class="bgWhite paddingAll overflow borderBottom">
             <img src="../assets/img/head.png" class="headPicture fl marginRight" alt="">
             <div class="fl lh" style="padding-top: 0.1rem">
                 <p class="fs30"><strong>{{userMessage.userName}}</strong></p>
-                <p class="fs28 gray">{{userMessage.departmentName||'暂无考勤组'}}</p>
+                <p class="fs28 gray" v-if="clockInformation.groupName">{{clockInformation.groupName}}</p>
+                <p class="fs28 red" v-else>暂无此考勤组信息,请切换考勤组</p>
+
             </div>
             <div class="fr tm" @click="openDate">
                 <span v-if="rightTime">{{rightTime}}</span>
@@ -77,6 +83,18 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
+    .newTop{
+        .overflow;
+        span{
+            width: 50%;
+            .fl;
+            padding:0.3rem 0;
+            &.active{
+                background: @blue;
+                color:white;
+            }
+        }
+    }
     .blackBg{
         background: #ccc!important;
     }
@@ -183,7 +201,7 @@
     }
 </style>
 <script>
-//    import {MP} from '../lib/mp.js'
+    //    import {MP} from '../lib/mp.js'
     import {BaiduMap,BmGeolocation} from 'vue-baidu-map'
 
     let timer = null;
@@ -192,9 +210,9 @@
         data() {
             return {
                 time:'',
-                chooseNum:0,
+                chooseNum:1,
                 rightTime:'',
-                ak:'jzbCq3Pg2pZ0wb2A5c6weIO62n2fdlh3&s=1',
+                ak:'jzbCq3Pg2pZ0wb2A5c6weIO62n2fdlh3',
                 center: {lng: 0, lat: 0},
                 zoom: 15,
                 pickerVisible:'',
@@ -205,6 +223,7 @@
                 latitude:'',
                 longitude:'',
                 checkList:[],
+                clockInformation:{},
                 startTime:'',
                 endTime:'',
                 couldClick:false,
@@ -226,8 +245,14 @@
             ])
         },
         methods:{
+            changeChooseNum(num){
+                this.checkList=[];
+                this.chooseNum = num;
+                this.clockInformation = {};
+                this.getClockIn();
+
+            },
             getLocation(location){
-                this.couldClick = true;
                 this.latitude = location.point.lat;
                 this.longitude = location.point.lng;
                 let address = location.addressComponent;
@@ -246,9 +271,13 @@
                     checkRemark: this.checkRemark,
                     latitude: String(this.latitude),
                     longitude: String(this.longitude),
+                    id:this.clockInformation.id
                 })
                     .then(function (response) {
-                        if(response.data.code!='200000') return
+                        if(response.data.code!='200000') {
+                            that.couldClick = true;
+                            return
+                        }
                         that.$toast('成功打卡，元气满满');
                         that.getClockIn();
                     })
@@ -257,10 +286,9 @@
                     });
             },
             handler({BMap, map}){
-                console.log(BMap, map)
-                this.center.lng = 116.404
-                this.center.lat = 39.915
-                this.zoom = 15
+                this.center.lng = 116.404;
+                this.center.lat = 39.915;
+                this.zoom = 15  ;
                 setTimeout(function(){
                     document.getElementsByClassName('BMap_geolocationIcon')[0].click();
                 },1000)
@@ -290,14 +318,18 @@
                 //check clock in information
                 let that = this;
                 this.$http.post('/dailyCheck/getCheckDetail', {
-                    selectTime:this.rightTime
+                    selectTime:this.rightTime,
+                    type:this.chooseNum
                 })
                     .then(function (response) {
+                        if(response.data.code == 500000) {
+                            that.couldClick=false;
+                            return
+                        }
                         that.checkList = response.data.data.checkList;
+                        that.clockInformation = response.data.data;
                         that.startTime = response.data.data.startTime;
                         that.endTime = response.data.data.endTime;
-                        console.log(that.rightTime)
-                        console.log(that.now)
                         if(that.rightTime!=that.now&&that.rightTime){
                             //today or not
                             setTimeout(function(){that.couldClick=false;},500)
