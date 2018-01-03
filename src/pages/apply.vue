@@ -189,12 +189,6 @@
         color: #323232;
         background: #fafafa;
     }
-    .wrap{
-
-    }
-    .icon{
-        /*<!--font-size: @fs30!important;-->*/
-    }
     .cl{
         .fr;
         width: 0.4rem;

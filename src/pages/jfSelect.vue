@@ -155,10 +155,10 @@
         },
         methods: {
             selModelType(item){
-                  this.modelType=item.id;
-                  this.type=item.type;
-                  this.goReset=true;
-                  this.chooseMissionType();
+                this.modelType=item.id;
+                this.type=item.type;
+                this.goReset=true;
+                this.chooseMissionType();
             },
             serchList(){
                 // key word search

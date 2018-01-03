@@ -267,7 +267,7 @@
                 showStaff: false,
                 showApartment: true,//click show apartment or joblist
                 pageNumber: 1,
-                pageSize: 20,
+                pageSize: 10,
                 apartmentNum: 1,
                 apartmentSize: 20,
                 jobNum: 1,
@@ -452,6 +452,7 @@
                 })
                     .then(function (response) {
                         that.allLoaded = false;
+                        that.pageNumber+=1;
                         that.staffList = that.staffList.concat(response.data.data.content);
                         that.staffList.forEach(item => item.pick = false);// click or not
                         if (response.data.data.last) {  //no more data
