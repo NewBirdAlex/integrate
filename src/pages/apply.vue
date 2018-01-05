@@ -56,6 +56,7 @@
                           @changePoint="changePoint">
                 <span @click="delPerson(index)" class="marginLeft"><i class="icon iconfont icon-shanchu fs36 gray" ></i></span>
             </choosePeople>
+
             <div class="paddingAll bgWhite fs30 lh50" v-if="$route.params.mission=='true'">
                 <img class="headPicture"  :src="userMessage.userAvatar" alt="">
                 <span>{{userMessage.userName}}</span>
@@ -97,8 +98,6 @@
 </template>
 <style scoped lang="less">
     @import "../assets/css/common.less";
-    /*@import "../assets/font/font1/iconfont.css";*/
-
 
     .wrap2{
         position: relative;

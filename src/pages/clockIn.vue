@@ -317,6 +317,8 @@
             getClockIn(){
                 //check clock in information
                 let that = this;
+                that.startTime = '';
+                that.endTime = '';
                 this.$http.post('/dailyCheck/getCheckDetail', {
                     selectTime:this.rightTime,
                     type:this.chooseNum

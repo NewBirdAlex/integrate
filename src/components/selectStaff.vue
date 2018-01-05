@@ -80,9 +80,9 @@
                                             <p class="gray marginTop">{{item.departmentName}}</p>
                                         </div>
                                         <span class="cl" :class="{'border':!item.pick}"
-                                              @click="choosePeople(item,index)">
-                                        <i class="icon iconfont icon-gouxuan blue" v-if="item.pick"></i>
-                                    </span>
+                                                  @click="choosePeople(item,index)">
+                                            <i class="icon iconfont icon-gouxuan blue" v-if="item.pick"></i>
+                                        </span>
                                     </div>
 
                                 </li>
@@ -144,6 +144,7 @@
     .listWrap {
         height: calc(~"100% - 2rem");
         overflow: scroll;
+        -webkit-overflow-scrolling : touch;
     }
 
     .obtn {
@@ -382,6 +383,7 @@
                 })
                     .then(function (response) {
                         console.log(response)
+                        that.apartmentNum+=1;
                         that.apartMentList = that.apartMentList.concat(response.data.data.content);
                         if (response.data.data.last) {
                             that.apartmentLast = true;
