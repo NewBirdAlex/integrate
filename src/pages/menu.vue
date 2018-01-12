@@ -47,38 +47,7 @@
     export default {
         data() {
             return {
-                list:[
-//                    {
-//                        name:'日报',
-//                        icon:'icon-ribao',
-//                        color:'#5cd5fc'
-//                    },
-//                    {
-//                        name:'周报',
-//                        icon:'icon-zhoubao',
-//                        color:'#5ed7a1'
-//                    },
-//                    {
-//                        name:'月报',
-//                        icon:'icon-shigongyuebao',
-//                        color:'#52aefc'
-//                    },
-//                    {
-//                        name:'季报',
-//                        icon:'icon-jibao',
-//                        color:'#ff973d'
-//                    },
-//                    {
-//                        name:'我的日记',
-//                        icon:'icon-rizhi1',
-//                        color:'#63b8ed'
-//                    },
-//                    {
-//                        name:'业绩日报',
-//                        icon:'icon-riji-',
-//                        color:'#f96f76'
-//                    },
-                ]
+                list:[]
             }
         },
         methods:{

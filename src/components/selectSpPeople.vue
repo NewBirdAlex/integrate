@@ -23,7 +23,7 @@
         </div>
 
         <select name="" :id="selId" @change="handleSelect" v-model="selValue">
-            <option :value="item" v-for="item in range">{{item}}</option>
+            <option :value="item" v-for="item in range" >{{item}}</option>
         </select>
     </div>
 </template>
@@ -95,7 +95,7 @@
             }
         },
         mounted(){
-//            this.showValue = this.point;
+            this.selValue = this.point;
         },
         props:[
             "name",
