@@ -248,7 +248,7 @@
                             	<img :src="item.luckyShopPic" v-if="item.luckyShopPic" alt="">
                             	<img src="../assets/img/qiuqiu.jpg" v-if="!item.luckyShopPic" alt="">
                             </div>
-                            <p class="paddingAll" >{{ item.luckyShopName }}</p>
+                            <p class="paddingAll overflow" style="text-overflow:ellipsis ;white-space: nowrap;width: 100%;">{{ item.luckyShopName }}</p>
                             <div class='fuck' :class="{'cover':item.light}"></div>
                         </div>
                         <div v-else class="item tac midSpace midItem">
@@ -355,21 +355,21 @@
                 }
             },
             getLuckDrawRes(){
+                if(!(this.luckList[0] && this.luckList[0].count)){
+                    this.$toast('抽奖次数已用完');
+                    return;
+                }
             	this.$http.post('/luckyRecord/userStartLuckyDraw',{
             		"pageNumber": 1,
-					"pageSize": 1000,
-					"sortOrder": "desc",
-					"sortType": "id",
-					"token": "string",
-					"userId": 0,
+					"pageSize": 1000
             	}).then(r=>{
             		if(r.data.code == "200000"){
-            		    console.log(r,'抽奖结果');
                         this.init();
                         this.canClick = false;
                         this.roll();
                         this.prize = r.data.data.luckShop;
-            		}
+            		}else{
+                    }
             	})
             },
             roll() {
@@ -409,9 +409,7 @@
             getLuckListByUser(){
             	this.$http.post('/luckUser/luckListByUser',{
 	            	pageNumber: 1,
-	            	pageSize: 8,
-	            	sortOrder: "desc",
-	            	sortType: "id",
+	            	pageSize: 8
 	            }).then(r=>{
 	                console.log(r);
 	            	this.luckList = r.data.data.luckList;
