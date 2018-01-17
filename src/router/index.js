@@ -458,8 +458,8 @@ const router = new Router({
             }
         },
         {
-            //type: 同意 拒绝 撤回    spType  待我审批， 我发起，抄送我得
-            path: '/spDetail/:type/:id/:spType',
+            //type: 同意 拒绝 撤回
+            path: '/spDetail/:type/:id',
             name: 'SpDetail',
             component: SpDetail,
             meta:{

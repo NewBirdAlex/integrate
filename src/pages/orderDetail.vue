@@ -301,8 +301,9 @@
                             console.log(error);
                         });
                 } else {
-                    this.$store.commit('saveSporder', this.orderDetail)
-                    this.$router.push('/spDetail/' + type + '/' + this.$route.params.id + '/' + this.$route.params.spType);
+                    this.$store.commit('saveSporder', this.orderDetail);
+                    console.log(this.$route.params.spType);
+                    this.$router.push('/spDetail/' + type + '/' + this.$route.params.id);
                 }
             },
             getSystem(){
