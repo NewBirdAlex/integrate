@@ -9,7 +9,7 @@
             <span :class="{'active':chooseNum==2}" @click="changeChooseNum(2)">外勤</span>
         </div>
         <div class="bgWhite paddingAll overflow borderBottom">
-            <img src="../assets/img/head.png" class="headPicture fl marginRight" alt="">
+            <img :src="userMessage.userAvatar" class="headPicture fl marginRight" alt="">
             <div class="fl lh" style="padding-top: 0.1rem">
                 <p class="fs30"><strong>{{userMessage.userName}}</strong></p>
                 <p class="fs28 gray" v-if="clockInformation.groupName">{{clockInformation.groupName}}</p>
@@ -246,11 +246,11 @@
         },
         methods:{
             changeChooseNum(num){
+                localStorage.setItem('ChooseNum',num);
                 this.checkList=[];
                 this.chooseNum = num;
                 this.clockInformation = {};
                 this.getClockIn();
-
             },
             getLocation(location){
                 this.latitude = location.point.lat;
@@ -352,8 +352,12 @@
         mounted(){
             let that = this;
             this.countTime();
-            this.getClockIn();
 
+            console.log(localStorage.getItem('ChooseNum'))
+            if(localStorage.getItem('ChooseNum')){
+                this.chooseNum=localStorage.getItem('ChooseNum');
+            }
+            this.getClockIn();
         },
         beforeDestroy(){
             clearInterval(timer);
