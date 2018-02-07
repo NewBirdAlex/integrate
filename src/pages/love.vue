@@ -191,7 +191,7 @@
                 this.$http.post('/user/canUseLoveScore', {
                 })
                     .then(function (response) {
-                        if(response.data.data.code=200000){
+                        if(response.data.code==200000){
                             that.canUseScore = response.data.data.canUseScore;
                             that.loveScore = response.data.data.loveScore;
                             that.sunScore = response.data.data.sunScore;
@@ -215,7 +215,7 @@
                     pageSize:this.pageSize
                 })
                     .then(function (response) {
-                        if(response.data.data.code=200000){
+                        if(response.data.code==200000){
                             if(that.needReset){
                                 that.reset();
                                 that.needReset = false;

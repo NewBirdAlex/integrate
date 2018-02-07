@@ -461,12 +461,10 @@
             this.init();
             this.getList();
             this.showWrap=false;
-
             //get history
             if(localStorage.getItem('spHistory')){
                 this.history = localStorage.getItem('spHistory').split(',');
             }
-
         },
         components:{
             showList

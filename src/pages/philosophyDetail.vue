@@ -17,9 +17,8 @@
             </div>
         </div>
 
-        <div v-html="detail.context" class="paddingAll bgWhite marginTop lh40">
+        <div v-html="detail.context" class="paddingAll bgWhite marginTop lh40"></div>
 
-        </div>
         <div class=" bgWhite marginTop" v-if="recordUser.length">
             <p class=" paddingAll borderBottom fs30">他们都阅读了</p>
             <div class=" paddingAll overflow">

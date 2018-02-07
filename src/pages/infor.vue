@@ -125,7 +125,7 @@
                     getInfoUserId:this.$route.params.id
                 })
                     .then(function (response) {
-                        if(response.data.code=200000){
+                        if(response.data.code==200000){
                             that.userInf = response.data.data;
                         }
                     })

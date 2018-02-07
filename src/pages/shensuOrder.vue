@@ -101,9 +101,6 @@
 <style scoped lang="less">
     @import "../assets/css/common.less";
     /*@import "../assets/font/font1/iconfont.css";*/
-    .hideChooseStaff{
-
-    }
 
     .wrap2{
         position: relative;
@@ -258,12 +255,6 @@
         font-size: 0.34rem;
         color: #323232;
         background: #fafafa;
-    }
-    .wrap{
-
-    }
-    .icon{
-        /*<!--font-size: @fs30!important;-->*/
     }
     .cl{
         .fr;

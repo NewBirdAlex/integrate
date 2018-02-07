@@ -182,7 +182,7 @@
                     getInfoUserId:this.$route.params.id
                 })
                     .then(function (response) {
-                        if(response.data.data.code=200000){
+                        if(response.data.data.code==200000){
                             that.$nextTick(()=>{
                                 that.userInf = response.data.data;
                             })

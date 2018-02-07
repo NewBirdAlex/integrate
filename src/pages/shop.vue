@@ -95,11 +95,12 @@
             <h3 class="fs34">他们都在兑</h3>
             <p class="blue fs30 marginTop">每个职位兑换分数不一样喔</p>
         </div>
+
         <div 
         	v-infinite-scroll="loadMore"
     		infinite-scroll-disabled="loading"
     		infinite-scroll-distance="10"
-        	class="overflow marginTop">
+                class="overflow marginTop">
             <div class="product" v-for="(t,i) in list">
                 <div class="img-box">
                 	<img :src="t.shopCover" v-show="t.shopCover" alt="">
